@@ -120,6 +120,7 @@ class SearchViewController: UIViewController {
             if categoryName.contains(searchItemText.text ?? "") {
                 //categoryNames에 categoryName 저장
                 categoryNames = categoryName
+                Swift.print("carData1\(categoryNames)")
             }
         }
     }

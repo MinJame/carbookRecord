@@ -28,6 +28,7 @@ class TotalViewController: UIViewController {
     var delegate : RepairCallbackDelegate?
     var year : String = "2022"
     var endDate : String = ""
+    var costs: Double = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -115,42 +116,38 @@ class TotalViewController: UIViewController {
     // db에서 데이터를 가져오는 함수
     func setCarbookDataList() {
         let carbookDataBase = CARBOOK_DAO.sharedInstance
-        Swift.print("dateList\(carDataList)")
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
             //저장에 필요한 변수들 선언
             var totalCost : Double = 0.0
             var totalDistance : Double = 0.0
-            var monthCost : Double = 0.0
-            var monthDistance : Double = 0.0
             var date : String = ""
             var month : String = ""
             //db에 있는 데이터들을 월별로 묶는다
             let groupRawData = Dictionary(grouping: list){$0["date"] as? String ?? ""}
             for (key,value) in groupRawData {
+                var monthCost : Double = 0.0
+                var monthDistance : Double = 0.0
                   date = key
-                Swift.print("values\(value)")
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
                     totalCost += item["TotalCost"] as? Double ?? 0.0
                     // totalDistance에 grouprawdata의 value값의 i번째["carbookRecordTotalDistance"]의 값을 더해준다
                     totalDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
-                    // 월별 사용금액을에 grouprawdata의 value값의 i번째["TotalCost"]의 값으로 지정한다
-                    monthCost = item["TotalCost"] as? Double ?? 0.0
-                    // 월별 주행기록을 grouprawdata의 value값의 i번째["carbookRecordTotalDistance"]의 값을 더해준다
-                    monthDistance = item["carbookRecordTotalDistance"] as? Double ?? 0.0
+                    monthCost += item["TotalCost"] as? Double ?? 0.0
+                    monthDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
                 }
+       
                 let carbookdata :Dictionary<String,Any>  = [
                     //날짜는 grouprawdata의 key 값
                     "date" : date ,
-                    //총 금액은 위에서 선언해준 totalCost
-                    "monthCost": monthCost,
-                    //총 거리는 위에서 선언해준 totalDistance
-                    "monthDistance" : monthDistance,
-                    // groupRawdata의 value값들을 items에 저장해준다
+                    "monthDistance"  : monthDistance,
+                    "monthCost" : monthCost,
                     "items": value
                 ]
+                
                 // cardataList에 carbookdata들을 더해준다
                 carDataList.append(carbookdata)
+                Swift.print("carDataList\(carbookdata)")
                 // 피커뷰에 년,월을 추가하기 위해서 db에 저장한 날짜를 가져온다
                 // db에 저장한 날짜 중에 앞에 네자리가 년도를 나타냄으로 6자리 중에서 뒤에 두자리를 제거하고 년도를 저장한다
                 year = String(date.dropLast(2))
@@ -178,6 +175,7 @@ class TotalViewController: UIViewController {
             // 저장된 데이터들을 월별로 내림차순으로 정리한다
             carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
         }
+        
        
     }
     // 이전 페이지로 이동하는 함수

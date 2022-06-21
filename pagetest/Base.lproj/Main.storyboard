@@ -1195,6 +1195,7 @@
                                             <constraint firstItem="eKT-1l-qCV" firstAttribute="leading" secondItem="kFK-JY-8Tm" secondAttribute="leading" constant="15" id="4zi-rF-byT"/>
                                             <constraint firstItem="NpE-et-8DB" firstAttribute="centerY" secondItem="eKT-1l-qCV" secondAttribute="centerY" id="9ny-Rw-cAS"/>
                                             <constraint firstItem="66u-na-peA" firstAttribute="centerY" secondItem="eKT-1l-qCV" secondAttribute="centerY" id="INK-m8-B5z"/>
+                                            <constraint firstAttribute="trailing" secondItem="NpE-et-8DB" secondAttribute="trailing" constant="15" id="LNd-MN-vLT"/>
                                             <constraint firstItem="eKT-1l-qCV" firstAttribute="top" secondItem="kFK-JY-8Tm" secondAttribute="top" constant="14.5" id="NNd-3T-nvD"/>
                                             <constraint firstItem="66u-na-peA" firstAttribute="leading" secondItem="eKT-1l-qCV" secondAttribute="trailing" constant="14" id="Pxh-J6-Eu7"/>
                                             <constraint firstItem="NpE-et-8DB" firstAttribute="leading" secondItem="66u-na-peA" secondAttribute="trailing" constant="34" id="QEz-cL-G2W"/>

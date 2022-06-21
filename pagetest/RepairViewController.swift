@@ -35,6 +35,9 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         dateDelegate = self
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+
         initTableView()
         setNotification()
         setLists()
@@ -114,8 +117,6 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     func setNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        self.view.addGestureRecognizer(tap)
     }
     // db에 정비항목을 저장해주기 위해서 정비목록을 숫자로 변환해주는 함수
     func getRePairItemTitleCode(title : String) -> String {
@@ -737,7 +738,7 @@ extension RepairViewController : UITextViewDelegate,UITextFieldDelegate {
             textView.text = "메모 250자 기입가능\n(이모티콘 불가)"
             // 텍스트뷰의 문자색을 연한 갈색으로 정한다
             textView.textColor = UIColor.lightGray
-            
+            tablelist[textView.tag].updateValue("", forKey: "memo")
         }else {
             // 만약 텍스트 뷰가 비어 있지 않다면 텍스트뷰의 데이터를 memo에 저장한다
             tablelist[textView.tag].updateValue(textView.text ?? "", forKey: "memo")
