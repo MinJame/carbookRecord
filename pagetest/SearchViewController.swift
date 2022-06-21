@@ -18,7 +18,7 @@ class SearchViewController: UIViewController {
     var dataList : [Dictionary<String,Any>] = []
     var delegate : RepairCallbackDelegate?
     var categoryNames : String = ""
-    var categoryName : String = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setDelegates()
@@ -91,37 +91,50 @@ class SearchViewController: UIViewController {
     func researchItems() {
         // db에 접속할수 있게 선언
         let carBookDatabase = CARBOOK_DAO.sharedInstance
+        var categoryName : String = ""
+        var categoryMemo : String = ""
         // db에서 텍스트 필드의 내용이 있으면 검색할수 있는 동작 구현
         if let list : [Dictionary<String,Any>] = carBookDatabase.searchCarbookDataList(name: searchItemText.text ?? "") {
             //  list라는 배열 안에 있는 것들을 i인덱스수 만큼 for문 동작
-            for i in list {
+            for item in list {
                 //searchItem에 dictionary 형으로 필요한 데이터들을 저장
                 let searchItem : Dictionary<String,Any> = [
-                    "carbookRecordRepairMode": i["carbookRecordRepairMode"] as? Int ?? 0,
-                    "carbookRecordExpendDate" : i["carbookRecordExpendDate"] as? String ?? "",
-                    "TotalCost" : i["TotalCost"] as? Double ?? 0.0,
-                    "carbookRecordTotalDistance" : i["carbookRecordTotalDistance"] as? Double ?? 0.0,
-                    "carbookRecordItemIsHidden" : i["carbookRecordItemIsHidden"] as? Int ?? 0,
-                    "carbookRecordItemExpenseMemo" : i["carbookRecordItemExpenseMemo"] as? String ?? "",
-                    "carbookRecordItemCategoryName": i["carbookRecordItemCategoryName"] as? String ?? "",
-                    "carbookRecordItemExpenseCost": i["carbookRecordItemExpenseCost"] as? Double ?? 0.0,
-                    "carbookRecordItemCategoryCode": i["carbookRecordItemCategoryCode"] as? String ?? "",
-                    "carbookRecordId" : i["carbookRecordId"] as? Int ?? 0,
-                    "COUNT" : i["COUNT"] as? Int ?? 0,
-                    "categoryCodes" : i["categoryCodes"] as? String ?? "",
-                    "categoryCodesCost" : i["categoryCodesCost"] as? String ?? ""
+                    "carbookRecordRepairMode": item["carbookRecordRepairMode"] as? Int ?? 0,
+                    "carbookRecordExpendDate" : item["carbookRecordExpendDate"] as? String ?? "",
+                    "TotalCost" : item["TotalCost"] as? Double ?? 0.0,
+                    "carbookRecordTotalDistance" : item["carbookRecordTotalDistance"] as? Double ?? 0.0,
+                    "carbookRecordItemIsHidden" : item["carbookRecordItemIsHidden"] as? Int ?? 0,
+                    "carbookRecordItemExpenseMemo" : item["carbookRecordItemExpenseMemo"] as? String ?? "",
+                    "carbookRecordItemCategoryName": item["carbookRecordItemCategoryName"] as? String ?? "",
+                    "carbookRecordItemExpenseCost": item["carbookRecordItemExpenseCost"] as? Double ?? 0.0,
+                    "carbookRecordItemCategoryCode": item["carbookRecordItemCategoryCode"] as? String ?? "",
+                    "carbookRecordId" : item["carbookRecordId"] as? Int ?? 0,
+                    "COUNT" : item["COUNT"] as? Int ?? 0,
+                    "categoryCodes" : item["categoryCodes"] as? String ?? "",
+                    "categoryCodesCost" : item["categoryCodesCost"] as? String ?? ""
                 ]
                 // searchItem들의 dataList에 합해줍니다
                 dataList.append(searchItem)
                 // 차량 정비 목록을 categoryName으로 저장
-                categoryName = i["carbookRecordItemCategoryName"] as? String ?? ""
+                categoryName = item["carbookRecordItemCategoryName"] as? String ?? ""
+                categoryMemo = item["carbookRecordItemExpenseMemo"] as? String ?? ""
+                Swift.print("searchItem\(searchItem)")
+                Swift.print("searchItem\(categoryName)")
+                // 만약 차량정비 목록이 searItemText의 내용을 가지고 있으면
+                if categoryName.contains(searchItemText.text ?? "") && !categoryMemo.contains(searchItemText.text ?? "")   {
+                    //categoryNames에 categoryName 저장
+                    categoryNames = categoryName
+                   
+                   
+                    Swift.print("carData1\(categoryNames)")
+                }
             }
-            // 만약 차량정비 목록이 searItemText의 내용을 가지고 있으면
-            if categoryName.contains(searchItemText.text ?? "") {
-                //categoryNames에 categoryName 저장
-                categoryNames = categoryName
-                Swift.print("carData1\(categoryNames)")
-            }
+//            // 만약 차량정비 목록이 searItemText의 내용을 가지고 있으면
+//            if categoryName.contains(searchItemText.text ?? "") {
+//                //categoryNames에 categoryName 저장
+//                categoryNames = categoryName
+//                Swift.print("carData1\(categoryNames)")
+//            }
         }
     }
     // 키보드가 내려가는 함수 입니다

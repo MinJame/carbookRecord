@@ -35,9 +35,6 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         dateDelegate = self
-        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        self.view.addGestureRecognizer(tap)
-
         initTableView()
         setNotification()
         setLists()
@@ -117,6 +114,8 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     func setNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
     }
     // db에 정비항목을 저장해주기 위해서 정비목록을 숫자로 변환해주는 함수
     func getRePairItemTitleCode(title : String) -> String {
@@ -242,20 +241,20 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         if let list : [Dictionary<String,Any>] = carBookDatabase.selectCarbookDataList(id: String(celId ?? 0)) {
             // 정비기록의 비어있는 첫번째 것을 제거해준다 remove 충돌소지가 있음
             tablelist.remove(at: 1)
-            // list의 value값 중에서
-            for value in list {
+            // list의 item값 중에서
+            for item in list {
                 // 불러올 정비기록들을 묶어서 저장
                 let registerCarBookRecordItem : Dictionary<String,Any> = [
-                    // id 값은 value의 _id이고
-                    "id" : value["_id"] as? Int ?? 0,
-                    // category 값은 value의 carbookRecordItemCategoryCode
-                    "Category" : value["carbookRecordItemCategoryCode"] as? String ?? "",
-                    // cost 값은 value의 carbookRecordItemExpenseCost
-                    "cost" : value["carbookRecordItemExpenseCost"] as? Double ?? 0.0,
-                    // memo는 value의 carbookRecordItemExpenseMemo
-                    "memo" : value["carbookRecordItemExpenseMemo"] as? String ?? "",
+                    // id 값은 item의 _id이고
+                    "id" : item["_id"] as? Int ?? 0,
+                    // category 값은 item의 carbookRecordItemCategoryCode
+                    "Category" : item["carbookRecordItemCategoryCode"] as? String ?? "",
+                    // cost 값은 item의 carbookRecordItemExpenseCost
+                    "cost" : item["carbookRecordItemExpenseCost"] as? Double ?? 0.0,
+                    // memo는 item의 carbookRecordItemExpenseMemo
+                    "memo" : item["carbookRecordItemExpenseMemo"] as? String ?? "",
                     // isHidden은 carbookRecordItemIsHidden이며
-                    "isHidden" : value["carbookRecordItemIsHidden"] as? Int ?? 0,
+                    "isHidden" : item["carbookRecordItemIsHidden"] as? Int ?? 0,
                     // Type 값은 3이다
                     "Type" : 3
                 ]
