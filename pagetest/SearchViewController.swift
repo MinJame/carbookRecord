@@ -194,12 +194,13 @@ extension SearchViewController : UITableViewDataSource {
         // 만약 item의 carbookRecordItemCategoryCode의 문자형이면 categoryName에 저장하고
         if let categoryName = item["carbookRecordItemCategoryCode"] as? String {
             // 아이템의 "COUNT"를 items로 저장
+            var memos = item["carbookRecordItemExpenseMemo"] as? String ?? ""
             let items = item["COUNT"] as? Int ?? 0
             // 만약 items가 2보다 크거나 같으면
             if items >= 2{
                 // repairItemTitleLabel는 categoryName을 정비목록으로 바꾸고 추가로 정비목록 갯수를 뺀 것의 숫자를 표기
                 // 만약 categoryname이 비어 있지 않으면
-                if categoryNames != "" {
+                if categoryNames != "" && !memos.contains(searchItemText.text ?? "") {
                     //cell.repairItemTitlelabel에 categorynames를 사용
                     cell.rePairItemTitleLabel.text = categoryNames + (" 외 \((item["COUNT"] as? Int ?? 1)-1)건")
                 }else {
