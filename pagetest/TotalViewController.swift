@@ -23,6 +23,7 @@ class TotalViewController: UIViewController {
     @IBOutlet weak var yearTotalExpenseCostLabel: UILabel!
     var years : [String] = []
     var months : [String] = []
+    var dates : [Dictionary<String,Any>] = []
     var sectionId : Int = 0
     var carDataList : [Dictionary<String,Any>] = []
     var delegate : RepairCallbackDelegate?
@@ -79,6 +80,7 @@ class TotalViewController: UIViewController {
     
     // 뷰 상단에 년도 클릭시 피커뷰를 호출한후 선택한 달로 이동할 수 있게 한다
     func selectMonthView(){
+        yearField.tintColor = .clear
         // 피커뷰를 생성
         let pickerView = UIPickerView()
         pickerView.delegate = self
@@ -115,6 +117,7 @@ class TotalViewController: UIViewController {
         /// 피커뷰 내린다
         yearField.resignFirstResponder()
     }
+    //    // db에서 데이터를 전부 가져오는 함수
     func setCarbookDateList(){
         let carbookDataBase = CARBOOK_DAO.sharedInstance
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
@@ -132,21 +135,29 @@ class TotalViewController: UIViewController {
                 // 만약 날짜 중에 동일한 년도가 없는경우에만 합해서 스트링 배열에 합해준다
                 if !years.contains(year) {
                     years.append(year)
-////                    또한 스트링 배열에 데이터들을 오름차순으로 저장한다
-//                    if !months.contains(month) {
-//                        months.append(month)
-//                        // 또한 스트링 배열에 데이터들을 오름차순으로 저장한다
-//                        months = months.sorted {$0 > $1}
-//
-//                    }
+                    
                     years = years.sorted {$0 > $1}
                 }
+                
+          
+                let newdate :Dictionary<String,Any>  = [
+                    //날짜는 grouprawdata의 key 값
+                    "year" : year ,
+      
+                    "month": month
+                ]
+                
+                // cardataList에 carbookdata들을 더해준다
+                dates.append(newdate)
+                
+    
             }
+            Swift.print("years\(dates)")
             Swift.print("years\(date)")
         }
     }
     
-    // db에서 데이터를 가져오는 함수
+    // db에서 데이터를 년도 별로 가져오는 함수
     func setCarbookDataList() {
         let carbookDataBase = CARBOOK_DAO.sharedInstance
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeyearCarBookDataList(StartDate: year) {
