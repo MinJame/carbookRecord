@@ -36,6 +36,7 @@ class TotalViewController: UIViewController {
         selectMonthView()
         initTableView()
         completeCallback()
+        setCarbookDateList()
     }
     // 테이블뷰 기본 세팅
     func initTableView() {
@@ -75,7 +76,7 @@ class TotalViewController: UIViewController {
             return "엔진오일 및 오일 필터"
         }
     }
-
+    
     // 뷰 상단에 년도 클릭시 피커뷰를 호출한후 선택한 달로 이동할 수 있게 한다
     func selectMonthView(){
         // 피커뷰를 생성
@@ -106,6 +107,7 @@ class TotalViewController: UIViewController {
         totalTableView.scrollToRow(at: indexPath, at: UITableView.ScrollPosition.top, animated:true)
         /// 피커뷰 내린다
         yearField.resignFirstResponder()
+        completeCallback()
     }
     
     // 피커뷰 취소 버튼 클릭시 동작함수
@@ -113,21 +115,51 @@ class TotalViewController: UIViewController {
         /// 피커뷰 내린다
         yearField.resignFirstResponder()
     }
+    func setCarbookDateList(){
+        let carbookDataBase = CARBOOK_DAO.sharedInstance
+        if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
+            let groupRawData = Dictionary(grouping: list){$0["date"] as? String ?? ""}
+            var date : String = ""
+            var month : String = ""
+            // 피커뷰에 년,월을 추가하기 위해서 db에 저장한 날짜를 가져온다
+            for (key,value) in groupRawData {
+                
+                date = key
+                // db에 저장한 날짜 중에 앞에 네자리가 년도를 나타냄으로 6자리 중에서 뒤에 두자리를 제거하고 년도를 저장한다
+                year = String(date.dropLast(2))
+                // db에 저장한 날짜 중에 뒤에 두자리가 월를 나타냄으로 6자리 중에서 앞에 네자리를 제거하고 월를 저장한다
+                month = String(date.dropFirst(4))
+                // 만약 날짜 중에 동일한 년도가 없는경우에만 합해서 스트링 배열에 합해준다
+                if !years.contains(year) {
+                    years.append(year)
+////                    또한 스트링 배열에 데이터들을 오름차순으로 저장한다
+//                    if !months.contains(month) {
+//                        months.append(month)
+//                        // 또한 스트링 배열에 데이터들을 오름차순으로 저장한다
+//                        months = months.sorted {$0 > $1}
+//
+//                    }
+                    years = years.sorted {$0 > $1}
+                }
+            }
+            Swift.print("years\(date)")
+        }
+    }
+    
     // db에서 데이터를 가져오는 함수
     func setCarbookDataList() {
         let carbookDataBase = CARBOOK_DAO.sharedInstance
-        if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
+        if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeyearCarBookDataList(StartDate: year) {
             //저장에 필요한 변수들 선언
             var totalCost : Double = 0.0
             var totalDistance : Double = 0.0
             var date : String = ""
-            var month : String = ""
             //db에 있는 데이터들을 월별로 묶는다
             let groupRawData = Dictionary(grouping: list){$0["date"] as? String ?? ""}
             for (key,value) in groupRawData {
                 var monthCost : Double = 0.0
                 var monthDistance : Double = 0.0
-                  date = key
+                date = key
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
                     totalCost += item["TotalCost"] as? Double ?? 0.0
@@ -136,7 +168,7 @@ class TotalViewController: UIViewController {
                     monthCost += item["TotalCost"] as? Double ?? 0.0
                     monthDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
                 }
-       
+                
                 let carbookdata :Dictionary<String,Any>  = [
                     //날짜는 grouprawdata의 key 값
                     "date" : date ,
@@ -147,26 +179,7 @@ class TotalViewController: UIViewController {
                 
                 // cardataList에 carbookdata들을 더해준다
                 carDataList.append(carbookdata)
-                Swift.print("carDataList\(carbookdata)")
-                // 피커뷰에 년,월을 추가하기 위해서 db에 저장한 날짜를 가져온다
-                // db에 저장한 날짜 중에 앞에 네자리가 년도를 나타냄으로 6자리 중에서 뒤에 두자리를 제거하고 년도를 저장한다
-                year = String(date.dropLast(2))
-                // db에 저장한 날짜 중에 뒤에 두자리가 월를 나타냄으로 6자리 중에서 앞에 네자리를 제거하고 월를 저장한다
-                month = String(date.dropFirst(4))
-                // 만약 날짜 중에 동일한 년도가 없는경우에만 합해서 스트링 배열에 합해준다
-                if !years.contains(year) {
-                    years.append(year)
-                    // 또한 스트링 배열에 데이터들을 오름차순으로 저장한다
-                    years = years.sorted {$0 > $1}
-
-                }
-                // 만약 날짜 중에 동일한 월이 없는경우에만 합해서 스트링 배열에 합해준다
-                if !months.contains(month) {
-                    months.append(month)
-                    // 또한 스트링 배열에 데이터들을 오름차순으로 저장한다
-                    months = months.sorted {$0 > $1}
-
-                }
+                
             }
             // yearTotalExpenseCostLabel에 monthCost 적용
             yearTotalExpenseCostLabel.text = String(format: "%.f",totalCost)
@@ -176,7 +189,7 @@ class TotalViewController: UIViewController {
             carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
         }
         
-       
+        
     }
     // 이전 페이지로 이동하는 함수
     @IBAction func dismissView(_ sender: Any) {
@@ -209,7 +222,7 @@ extension TotalViewController: UITableViewDataSource {
         let date = String(dates.dropFirst(4))
         //헤더뷰의 monthlabel에 date값 저장
         headerView?.monthLabel.text = date
-       // 헤더뷰의 totalDisacneLabel에 cardatalist[section]에["totalDistance"]값이 더블형인데 스트링형으로 변환해서 보여준다
+        // 헤더뷰의 totalDisacneLabel에 cardatalist[section]에["totalDistance"]값이 더블형인데 스트링형으로 변환해서 보여준다
         headerView?.totalDistacneLabel.text = String(format: "%.f",carDataList[section]["monthDistance"] as? Double ?? "")
         //헤더뷰의 totalCostLabel에 cardatalist[section]에["totalCost"]값이 더블형인데 스트링형으로 변환해서 보여준다
         headerView?.totalCostLabel.text = String(format: "%.f",carDataList[section]["monthCost"] as? Double ?? "")
@@ -382,22 +395,22 @@ extension TotalViewController: UITableViewDataSource {
             let carBookDataBase = CARBOOK_DAO.sharedInstance
             _ = carBookDataBase.deleteCarBookData(deleteId: Id)
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
-                completeCallback()
+            completeCallback()
         })
         let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
         
         alert.addAction(updateData)
         alert.addAction(deleteData)
         alert.addAction(cancel)
-   
+        
         self.present(alert, animated: true, completion: nil)
+        
+    }
     
-}
-
-func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return UITableView.automaticDimension
-    
-}
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+        
+    }
 }
 
 extension UIStackView {
@@ -466,6 +479,9 @@ extension TotalViewController:UIPickerViewDelegate,UIPickerViewDataSource {
         switch component {
         case 0:
             Swift.print("years")
+            yearField.text = "\(years[row])년"
+            year = "\(years[row])"
+            
         case 1:
             // 해당 월 선택시 선택된 월로 갈수 있게 열의 값을 sectionId에 저장
             sectionId = row
