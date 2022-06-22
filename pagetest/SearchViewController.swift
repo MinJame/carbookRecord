@@ -92,6 +92,7 @@ class SearchViewController: UIViewController {
         let carBookDatabase = CARBOOK_DAO.sharedInstance
         var categoryName : String = ""
         var categoryMemo : String = ""
+        var categoryCodes : String = ""
         // db에서 텍스트 필드의 내용이 있으면 검색할수 있는 동작 구현
         if let list : [Dictionary<String,Any>] = carBookDatabase.searchCarbookDataList(name: searchItemText.text ?? "") {
             //  list라는 배열 안에 있는 것들을 i인덱스수 만큼 for문 동작
@@ -115,25 +116,18 @@ class SearchViewController: UIViewController {
                 // searchItem들의 dataList에 합해줍니다
                 dataList.append(searchItem)
                 // 차량 정비 목록을 categoryName으로 저장
-                categoryName = item["carbookRecordItemCategoryName"] as? String ?? ""
+                categoryCodes = item["categoryCodes"] as? String ?? ""
                 categoryMemo = item["carbookRecordItemExpenseMemo"] as? String ?? ""
-                Swift.print("searchItem\(searchItem)")
-                Swift.print("searchItem\(categoryName)")
+                let codeList = categoryCodes.components(separatedBy: ",")
+                for (index,value) in codeList.enumerated() {
+                    categoryName = getCodeText(Code: value)
+                }
                 // 만약 차량정비 목록이 searItemText의 내용을 가지고 있으면
                 if categoryName.contains(searchItemText.text ?? "") && !categoryMemo.contains(searchItemText.text ?? "")   {
                     //categoryNames에 categoryName 저장
                     categoryNames = categoryName
-                   
-                   
-                    Swift.print("carData1\(categoryNames)")
                 }
             }
-//            // 만약 차량정비 목록이 searItemText의 내용을 가지고 있으면
-//            if categoryName.contains(searchItemText.text ?? "") {
-//                //categoryNames에 categoryName 저장
-//                categoryNames = categoryName
-//                Swift.print("carData1\(categoryNames)")
-//            }
         }
     }
     // 키보드가 내려가는 함수 입니다
@@ -194,7 +188,7 @@ extension SearchViewController : UITableViewDataSource {
         // 만약 item의 carbookRecordItemCategoryCode의 문자형이면 categoryName에 저장하고
         if let categoryName = item["carbookRecordItemCategoryCode"] as? String {
             // 아이템의 "COUNT"를 items로 저장
-            var memos = item["carbookRecordItemExpenseMemo"] as? String ?? ""
+            let memos = item["carbookRecordItemExpenseMemo"] as? String ?? ""
             let items = item["COUNT"] as? Int ?? 0
             // 만약 items가 2보다 크거나 같으면
             if items >= 2{
