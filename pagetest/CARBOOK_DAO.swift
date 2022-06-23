@@ -261,7 +261,7 @@ class CARBOOK_DAO {
         let carbookDB = FMDatabase(path: databaseURL?.path)
         if carbookDB.open(){
 
-            let querySQL = "SELECT carbookRecordExpendDate , substr(carbookRecordExpendDate,0,5) as 'year',substr(carbookRecordExpendDate,5,2) as 'month' FROM CARBOOKRECORD"
+            let querySQL = "SELECT * , substr(carbookRecordExpendDate,0,5) as 'year',substr(carbookRecordExpendDate,5,2) as 'month' FROM CARBOOKRECORD Where carbookRecordIsHidden = 0 ORDER BY year DESC"
        
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []
@@ -269,8 +269,6 @@ class CARBOOK_DAO {
                 var dict : Dictionary<String, Any> = [:]
                 while result.next() {
                     dict = result.resultDictionary as! [String : Any]
-                    Swift.print("items:\(result)")
-                    Swift.print("insertSQL:\(dictArray)")
                     dictArray?.append(dict)
                 }
                 

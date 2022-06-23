@@ -32,6 +32,7 @@ class TotalViewController: UIViewController {
     var delegate : RepairCallbackDelegate?
     var year : String = "2022"
     var costs: Double = 0.0
+    let pickerView = UIPickerView()
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -84,7 +85,7 @@ class TotalViewController: UIViewController {
     func selectMonthView(){
         yearField.tintColor = .clear
         // 피커뷰를 생성
-        let pickerView = UIPickerView()
+        
         pickerView.delegate = self
         pickerView.dataSource = self
         //피커뷰에 추가될 툴바를 생성
@@ -126,26 +127,23 @@ class TotalViewController: UIViewController {
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
             let groupRawData = Dictionary(grouping: list){$0["year"] as? String ?? ""}
             var date : String = ""
-            var month : String = ""
-  
             // 피커뷰에 년,월을 추가하기 위해서 db에 저장한 날짜를 가져온다
             for (key,value) in groupRawData {
                 var monthss: [String] = []
                 for i in value {
-                    
                     if !monthss.contains(i["month"] as? String ?? ""){
-                    monthss.append(i["month"] as? String ?? "")
+                        monthss.append(i["month"] as? String ?? "")
                     }
                 }
                 date = key
                 // db에 저장한 날짜 중에 앞에 네자리가 년도를 나타냄으로 6자리 중에서 뒤에 두자리를 제거하고 년도를 저장한다
- 
                 selectdates.append(dates(year: date, month: monthss))
                 // cardataList에 carbookdata들을 더해준다
-             
+                
             }
+            selectdates = selectdates.sorted {$0.year as? String ?? "" > $1.year as? String ?? ""}
             
-         
+            Swift.print("selectdates\(selectdates)")
         }
     }
     
@@ -454,28 +452,43 @@ extension TotalViewController:UIPickerViewDelegate,UIPickerViewDataSource {
     }
     //피커뷰 구성요소 중 첫번째와 두번째의 갯수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-
-        if component == 0 {
+        
+        switch component {
+        case 0 :
             return selectdates.count
-        } else {
-            var selectedCity = pickerView.selectedRow(inComponent: 0)
-            return selectdates[selectedCity].month.count
+        case 1:
+//            var selectedCity = pickerView.selectedRow(inComponent: 0)
+            return selectdates[sectionId].month.count
+        default:
+            return 0
         }
+        //        if component == 0 {
+        //            return selectdates.count
+        //        } else {
+        //            var selectedCity = pickerView.selectedRow(inComponent: 0)
+        //            return selectdates[selectedCity].month.count
+        //        }
     }
     //피커뷰 구성요소 중 첫번째와 두번째의 선언
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-
-        if component == 0 {
+        
+        switch component {
+        case 0 :
+            var num = selectdates[row].year.count
             return "\(selectdates[row].year)년"
-        } else {
-            let selectedCity = pickerView.selectedRow(inComponent: 0)
-            return "\(selectdates[selectedCity].month[row])월"
+        case 1:
+            var num = selectdates[sectionId].month[row].count
+            Swift.print("newss\(selectdates[sectionId].month[row])")
+            return "\(selectdates[sectionId].month[row])월"
+        default:
+            return nil
         }
 
+        
     }
     // 피커뷰 안의 값을 선택했을때
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-    
+        
         if component == 0 {
             pickerView.selectRow(0, inComponent: 1, animated: false)
             year = selectdates[row].year
@@ -484,6 +497,7 @@ extension TotalViewController:UIPickerViewDelegate,UIPickerViewDataSource {
         }
         sectionId = pickerView.selectedRow(inComponent: 0)
         rowId = pickerView.selectedRow(inComponent: 1)
+        Swift.print("num\(sectionId)")
          pickerView.reloadComponent(1)
     }
     
