@@ -121,20 +121,28 @@ class TotalViewController: UIViewController {
     func setCarbookDateList(){
         let carbookDataBase = CARBOOK_DAO.sharedInstance
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
-            let groupRawData = Dictionary(grouping: list){$0["date"] as? String ?? ""}
+            let groupRawData = Dictionary(grouping: list){$0["year"] as? String ?? ""}
             var date : String = ""
             var month : String = ""
+            Swift.print("groupRawData\(list)")
+            Swift.print("groupRawData\(groupRawData)")
             // 피커뷰에 년,월을 추가하기 위해서 db에 저장한 날짜를 가져온다
             for (key,value) in groupRawData {
-                
+                var monthss: [String] = []
+                for i in value {
+                    
+                    if !monthss.contains(i["month"] as? String ?? ""){
+                    monthss.append(i["month"] as? String ?? "")
+                    }
+                }
                 date = key
                 // db에 저장한 날짜 중에 앞에 네자리가 년도를 나타냄으로 6자리 중에서 뒤에 두자리를 제거하고 년도를 저장한다
                 year = String(date.dropLast(2))
                 // db에 저장한 날짜 중에 뒤에 두자리가 월를 나타냄으로 6자리 중에서 앞에 네자리를 제거하고 월를 저장한다
                 month = String(date.dropFirst(4))
                 // 만약 날짜 중에 동일한 년도가 없는경우에만 합해서 스트링 배열에 합해준다
-                if !years.contains(year) {
-                    years.append(year)
+                if !years.contains(date) {
+                    years.append(date)
                     
                     years = years.sorted {$0 > $1}
                 }
@@ -142,9 +150,8 @@ class TotalViewController: UIViewController {
           
                 let newdate :Dictionary<String,Any>  = [
                     //날짜는 grouprawdata의 key 값
-                    "year" : year ,
-      
-                    "month": month
+                    "year" : date ,
+                    "month": monthss
                 ]
                 
                 // cardataList에 carbookdata들을 더해준다
@@ -153,7 +160,7 @@ class TotalViewController: UIViewController {
     
             }
             Swift.print("years\(dates)")
-            Swift.print("years\(date)")
+//            Swift.print("years\(monthss)")
         }
     }
     
@@ -462,27 +469,74 @@ extension TotalViewController:UIPickerViewDelegate,UIPickerViewDataSource {
     }
     //피커뷰 구성요소 중 첫번째와 두번째의 갯수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch component {
-        case 0:
-            // 구성요소의 첫번째(왼쪽)는 년도 갯수
-            return years.count
-        case 1:
-            // 구성요소의 두번째(오른쪽)는 월 갯수
-            return months.count
-        default:
-            return 0
+        
+        
+//        switch component {
+//        case 0:
+//            // 구성요소의 첫번째(왼쪽)는 년도 갯수
+//            return years.count
+//        case 1:
+//            // 구성요소의 두번째(오른쪽)는 월 갯수
+//            return months.count
+//        default:
+//            return 0
+        var data = dates[component]
+        var ideas = data["year"] as? String ?? ""
+        var ideass = data["month"] as? [String] ?? []
+        var monthdates: [String] = []
+        var yeardates : [String] = []
+        yeardates.append(ideas)
+        yeardates = yeardates.sorted {$0 > $1}
+        Swift.print("yeardates\(ideas)")
+        Swift.print("yeardates\(yeardates.count)")
+        if component == 0 {
+            return data.count
+        } else {
+            let selectedCity = pickerView.selectedRow(inComponent: 0)
+            return ideass.count
         }
+        
+//        switch component {
+//        case 0:
+//            // 구성요소의 첫번째(왼쪽)는 년도 갯수
+//            var data = dates[component]["year"] as? String ?? ""
+//            Swift.print("data\(dates.count)")
+//            return dates.count
+//        default:
+//            return 0
+//        }
     }
     //피커뷰 구성요소 중 첫번째와 두번째의 선언
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch component {
-        case 0:
-            return "\(years[row])년"
-        case 1:
-            return "\(months[row])월"
-        default:
-            return ""
+        
+        var data = dates[component]
+        var ideas = data["year"] as? String ?? ""
+        var ideass = data["month"] as? [String] ?? []
+        var monthdates: [String] = []
+        var yeardates : [String] = []
+        yeardates.append(ideas)
+        yeardates = yeardates.sorted {$0 > $1}
+        Swift.print("monthdates\(ideass)")
+        if component == 0 {
+            return "\(yeardates[row])년"
+        } else {
+            let selectedCity = pickerView.selectedRow(inComponent: 0)
+            Swift.print("\(ideass)")
+            return "\(ideass)년"
         }
+//        switch component {
+//        case 0:
+//            var data = dates[row]
+//            var ideas = data["year"] as? String ?? ""
+//            var yeardates : [String] = []
+//            yeardates.append(ideas)
+//            yeardates = yeardates.sorted {$0 > $1}
+//            Swift.print("data1\(ideas)")
+//            Swift.print("data2\(yeardates)")
+//            return "\(yeardates)년"
+//        default:
+//            return ""
+//        }
     }
     // 피커뷰 안의 값을 선택했을때
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
