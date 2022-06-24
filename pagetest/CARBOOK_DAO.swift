@@ -261,7 +261,7 @@ class CARBOOK_DAO {
         let carbookDB = FMDatabase(path: databaseURL?.path)
         if carbookDB.open(){
 
-            let querySQL = "SELECT * , substr(carbookRecordExpendDate,0,5) as 'year',substr(carbookRecordExpendDate,5,2) as 'month' FROM CARBOOKRECORD Where carbookRecordIsHidden = 0 ORDER BY year DESC"
+            let querySQL = "SELECT DISTINCT substr(carbookRecordExpendDate,0,5) as 'year',substr(carbookRecordExpendDate,5,2) as 'month' FROM CARBOOKRECORD Where carbookRecordIsHidden = 0 ORDER BY year, month DESC, month DESC"
        
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []
@@ -282,13 +282,14 @@ class CARBOOK_DAO {
         }
     }
     
-    func selectRangeyearCarBookDataList(StartDate : String) -> [Dictionary<String, Any>]?{
+    func selectRangeyearCarBookDataList(year : String?) -> [Dictionary<String, Any>]?{
         let carbookDB = FMDatabase(path: databaseURL?.path)
         if carbookDB.open(){
             
-            let querySQL =  "SELECT * , substr(carbookRecordExpendDate,0,7) as 'date' FROM CARBOOKRECORD as 'A' JOIN(SELECT carbookRecordId,carbookRecordItemCategoryCode,carbookRecordItemExpenseMemo , carbookRecordItemCategoryName,COUNT(*) as 'COUNT', SUM(carbookRecordItemExpenseCost) as 'TotalCost',group_concat(carbookRecordItemCategoryCode,',') as'categoryCodes',group_concat(carbookRecordItemCategoryName,',') as'categoryCodesName',group_concat(carbookRecordItemExpenseMemo,',') as'carbookRecordItemMemos',group_concat(carbookRecordItemExpenseCost,',') as 'categoryCodesCost' FROM CARBOOKRECORDITEM WHERE carbookRecordItemIsHidden = 0 GROUP BY carbookRecordId ) as 'B' ON(A._id = B.carbookRecordId) AND A.carbookRecordIsHidden = 0 WHERE date Like '%\(StartDate)%'  GROUP BY carbookRecordId ORDER BY A.carbookRecordExpendDate DESC"
-
-       
+            let yearSearchQuery = year != nil ? "WHERE date Like '\(year!)%'" : ""
+            
+            let querySQL =  "SELECT * , substr(carbookRecordExpendDate,0,7) as 'date' FROM CARBOOKRECORD as 'A' JOIN(SELECT carbookRecordId,carbookRecordItemCategoryCode,carbookRecordItemExpenseMemo , carbookRecordItemCategoryName,COUNT(*) as 'COUNT', SUM(carbookRecordItemExpenseCost) as 'TotalCost',group_concat(carbookRecordItemCategoryCode,',') as'categoryCodes',group_concat(carbookRecordItemCategoryName,',') as'categoryCodesName',group_concat(carbookRecordItemExpenseMemo,',') as'carbookRecordItemMemos',group_concat(carbookRecordItemExpenseCost,',') as 'categoryCodesCost' FROM CARBOOKRECORDITEM WHERE carbookRecordItemIsHidden = 0 GROUP BY carbookRecordId ) as 'B' ON(A._id = B.carbookRecordId) AND A.carbookRecordIsHidden = 0 \(yearSearchQuery) GROUP BY carbookRecordId ORDER BY A.carbookRecordExpendDate DESC"
+            
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []
             if let result : FMResultSet = carbookDB.executeQuery(querySQL, withArgumentsIn: []) {

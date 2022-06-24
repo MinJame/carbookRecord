@@ -362,7 +362,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             let _ = carBookDataBase.deleteCarBookDataItem(deleteIds: deleteIds)
             
             self.dismiss(animated: true) {
-                self.repairDelegate?.completeCallback()
+                self.repairDelegate?.setRepairData(year: nil)
             }
         }
        
@@ -441,7 +441,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             _ = carBookDataBase.insertCarbookItems(carbookDataItems: insertcarBookDataItemList)
             // 동작 후 메인 페이지로 이동
             self.dismiss(animated: true){
-                self.repairDelegate?.completeCallback()
+                self.repairDelegate?.setRepairData(year: nil)
             }
         }
         

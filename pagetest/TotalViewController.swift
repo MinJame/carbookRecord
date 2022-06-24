@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol RepairCallbackDelegate{
-    func completeCallback()
+    func setRepairData(year : String?)
 }
 struct dates {
     let year: String
@@ -25,21 +25,18 @@ class TotalViewController: UIViewController {
     @IBOutlet weak var totalTableView: UITableView!
     @IBOutlet weak var yearTotalDistanceLabel: UILabel!
     @IBOutlet weak var yearTotalExpenseCostLabel: UILabel!
-    var selectdates : [dates] = []
-    var sectionId : Int = 0
-    var rowId : Int = 0
+    var searchDates : [dates] = []
+    var selectDate : (yearRow : Int, monthRow: Int) = (0,0)
     var carDataList : [Dictionary<String,Any>] = []
     var delegate : RepairCallbackDelegate?
-    var year : String = "2022"
-    var costs: Double = 0.0
     let pickerView = UIPickerView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
         // 피커뷰 동작 할수 있게 함수 선언
         selectMonthView()
         initTableView()
-        completeCallback()
         setCarbookDateList()
     }
     // 테이블뷰 기본 세팅
@@ -85,7 +82,6 @@ class TotalViewController: UIViewController {
     func selectMonthView(){
         yearField.tintColor = .clear
         // 피커뷰를 생성
-        
         pickerView.delegate = self
         pickerView.dataSource = self
         //피커뷰에 추가될 툴바를 생성
@@ -107,13 +103,14 @@ class TotalViewController: UIViewController {
     
     // 피커뷰 적용 버튼 클릭 동작함수
     @objc func onPickDone() {
-        // 피커뷰에서 월을 선택할 경우 선택한 월로 이동하게 하기 위해 위치선언
-        let indexPath = IndexPath(row: rowId, section: 0)
-        // 테이블뷰을 선택한 월로 스크롤해서 도착하게 한다
-        totalTableView.scrollToRow(at: indexPath, at: UITableView.ScrollPosition.top, animated:true)
-        /// 피커뷰 내린다
         yearField.resignFirstResponder()
-        completeCallback()
+        yearField.text = searchDates[selectDate.yearRow].year + "년"
+        setRepairData(year: searchDates[selectDate.yearRow].year)
+        
+        let indexPath = IndexPath(row: 0, section: selectDate.monthRow)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+            self.totalTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
     }
     
     // 피커뷰 취소 버튼 클릭시 동작함수
@@ -126,31 +123,21 @@ class TotalViewController: UIViewController {
         let carbookDataBase = CARBOOK_DAO.sharedInstance
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
             let groupRawData = Dictionary(grouping: list){$0["year"] as? String ?? ""}
-            var date : String = ""
-            // 피커뷰에 년,월을 추가하기 위해서 db에 저장한 날짜를 가져온다
             for (key,value) in groupRawData {
-                var monthss: [String] = []
-                for i in value {
-                    if !monthss.contains(i["month"] as? String ?? ""){
-                        monthss.append(i["month"] as? String ?? "")
-                    }
+                let months = value.map { (dic) -> String in
+                    return dic["month"] as? String ?? ""
                 }
-                date = key
-                // db에 저장한 날짜 중에 앞에 네자리가 년도를 나타냄으로 6자리 중에서 뒤에 두자리를 제거하고 년도를 저장한다
-                selectdates.append(dates(year: date, month: monthss))
-                // cardataList에 carbookdata들을 더해준다
-                
+                searchDates.append(dates(year: key, month: months))
             }
-            selectdates = selectdates.sorted {$0.year as? String ?? "" > $1.year as? String ?? ""}
-            
-            Swift.print("selectdates\(selectdates)")
+            searchDates = searchDates.sorted{$0.year > $1.year}
         }
+        setRepairData(year: searchDates.first?.year)
     }
     
     // db에서 데이터를 년도 별로 가져오는 함수
-    func setCarbookDataList() {
+    func setCarbookDataList(year : String?) {
         let carbookDataBase = CARBOOK_DAO.sharedInstance
-        if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeyearCarBookDataList(StartDate: year) {
+        if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeyearCarBookDataList(year: year) {
             //저장에 필요한 변수들 선언
             var totalCost : Double = 0.0
             var totalDistance : Double = 0.0
@@ -396,7 +383,7 @@ extension TotalViewController: UITableViewDataSource {
             let carBookDataBase = CARBOOK_DAO.sharedInstance
             _ = carBookDataBase.deleteCarBookData(deleteId: Id)
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
-            completeCallback()
+            setRepairData(year: nil)
         })
         let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
         
@@ -435,11 +422,11 @@ extension Double {
 }
 
 extension TotalViewController : RepairCallbackDelegate {
-    func completeCallback() {
+    func setRepairData(year : String?) {
         // 먼저 기존의 데이터를 전부 지웁니다.
         self.carDataList.removeAll()
         // 내부 db에서 데이터를 불러옵니다
-        self.setCarbookDataList()
+        self.setCarbookDataList(year: year)
         // 불러온 데이터를 테이블뷰에서 리로드해서 보여줍니다.
         self.totalTableView.reloadData()
     }
@@ -452,54 +439,35 @@ extension TotalViewController:UIPickerViewDelegate,UIPickerViewDataSource {
     }
     //피커뷰 구성요소 중 첫번째와 두번째의 갯수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
         switch component {
         case 0 :
-            return selectdates.count
+            return searchDates.count
         case 1:
-//            var selectedCity = pickerView.selectedRow(inComponent: 0)
-            return selectdates[sectionId].month.count
+            return searchDates[selectDate.yearRow].month.count
         default:
             return 0
         }
-        //        if component == 0 {
-        //            return selectdates.count
-        //        } else {
-        //            var selectedCity = pickerView.selectedRow(inComponent: 0)
-        //            return selectdates[selectedCity].month.count
-        //        }
     }
     //피커뷰 구성요소 중 첫번째와 두번째의 선언
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
         switch component {
         case 0 :
-            var num = selectdates[row].year.count
-            return "\(selectdates[row].year)년"
+            return "\(searchDates[row].year)년"
         case 1:
-            var num = selectdates[sectionId].month[row].count
-            Swift.print("newss\(selectdates[sectionId].month[row])")
-            return "\(selectdates[sectionId].month[row])월"
+            return "\(searchDates[selectDate.yearRow].month[row])월"
         default:
             return nil
         }
-
-        
     }
     // 피커뷰 안의 값을 선택했을때
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
         if component == 0 {
-            pickerView.selectRow(0, inComponent: 1, animated: false)
-            year = selectdates[row].year
-            Swift.print("년도\(year)")
-            yearField.text = "\(year)년"
+            selectDate.yearRow = row
+            selectDate.monthRow = 0
+            pickerView.reloadComponent(1)
+        }else {
+            selectDate.yearRow = pickerView.selectedRow(inComponent: 0)
+            selectDate.monthRow = pickerView.selectedRow(inComponent: 1)
         }
-        sectionId = pickerView.selectedRow(inComponent: 0)
-        rowId = pickerView.selectedRow(inComponent: 1)
-        Swift.print("num\(sectionId)")
-         pickerView.reloadComponent(1)
     }
-    
-    
 }

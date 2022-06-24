@@ -22,7 +22,7 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         setDelegates()
         initTableView()
-        self.delegate?.completeCallback()
+        self.delegate?.setRepairData(year: nil)
     }
     
     func setDelegates() {
