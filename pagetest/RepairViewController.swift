@@ -41,6 +41,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         setBtn()
         // 만약 celId가 있으면 getcarBookData 함수를 실행한다
         if celId != nil {
+            finishButton.titleLabel?.text = "수정"
             getCarBookData()
         }
     }
@@ -311,6 +312,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 만약 repairList의 갯수와 테이블리스트의 갯수가 같지 않으면
         if rePairList.count != tablelist.count-1 {
             // 동일항목은 등록불가합니다 라는 알림 창이 발생하게 한다
+           
             let alert = UIAlertController(title: "동일항목", message: "등록불가합니다", preferredStyle: .alert)
             let cancel = UIAlertAction.init(title: "확인", style: .cancel, handler: nil)
             alert.addAction(cancel)
@@ -360,7 +362,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             let _ = carBookDataBase.modifyCarBookDataItem(carbookDataItem: updatecarBookDataList)
             // 삭제한 정비기록 데이터들을 db에 저장
             let _ = carBookDataBase.deleteCarBookDataItem(deleteIds: deleteIds)
-            
+           
             self.dismiss(animated: true) {
                 self.repairDelegate?.setRepairData(year: nil)
             }
@@ -449,7 +451,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     // 정비한 기록들을 저장하기 위한 버튼
     @IBAction func saveDataButton(_ sender: Any) {
         // 전체기록 페이지에서 정비기록을 클릭후 정비기록 페이지 들어온 경우와 정비기록 페이지로 들어와서 데이터 저장하는 것을 구분하기 위한 if문
-        if celId != nil { 
+        if celId != nil {
             updateData()
         }  else {
             insertDatas()

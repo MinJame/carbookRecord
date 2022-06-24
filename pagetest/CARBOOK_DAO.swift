@@ -261,7 +261,7 @@ class CARBOOK_DAO {
         let carbookDB = FMDatabase(path: databaseURL?.path)
         if carbookDB.open(){
 
-            let querySQL = "SELECT DISTINCT substr(carbookRecordExpendDate,0,5) as 'year',substr(carbookRecordExpendDate,5,2) as 'month' FROM CARBOOKRECORD Where carbookRecordIsHidden = 0 ORDER BY year, month DESC, month DESC"
+            let querySQL = "SELECT DISTINCT substr(carbookRecordExpendDate,0,5) as 'year',substr(carbookRecordExpendDate,5,2) as 'month' FROM CARBOOKRECORD Where carbookRecordIsHidden = 0 ORDER BY year DESC, month DESC"
        
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []

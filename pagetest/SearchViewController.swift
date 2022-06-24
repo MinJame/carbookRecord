@@ -112,7 +112,7 @@ class SearchViewController: UIViewController {
                     "carbookRecordId" : item["carbookRecordId"] as? Int ?? 0,
                     "COUNT" : item["COUNT"] as? Int ?? 0,
                     "categoryCodes" : item["categoryCodes"] as? String ?? "",
-                    "categoryCodesCost" : item["categoryCodesCost"] as? String ?? ""
+                    "categoryCodesCost" : item["categoryCodesCost"] as? String ?? "",
                 ]
                 // searchItem들의 dataList에 합해줍니다
                 dataList.append(searchItem)
@@ -128,6 +128,7 @@ class SearchViewController: UIViewController {
                     //categoryNames에 categoryName 저장
                     categoryNames = categoryName
                 }
+                Swift.print("dataList\(dataList)")
             }
         }
     }

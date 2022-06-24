@@ -131,6 +131,7 @@ class TotalViewController: UIViewController {
             }
             searchDates = searchDates.sorted{$0.year > $1.year}
         }
+        yearField.text = (searchDates.first?.year ?? "") + "년" 
         setRepairData(year: searchDates.first?.year)
     }
     
