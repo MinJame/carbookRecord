@@ -29,10 +29,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QyL-gk-nFR">
-                                <rect key="frame" x="0.0" y="0.0" width="669" height="75"/>
+                                <rect key="frame" x="0.0" y="0.0" width="669" height="72"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0SB-lv-EtI">
-                                        <rect key="frame" x="28" y="23.5" width="30" height="28.5"/>
+                                        <rect key="frame" x="28" y="22" width="30" height="28.5"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="7N0-On-hSh"/>
                                             <constraint firstAttribute="width" secondItem="0SB-lv-EtI" secondAttribute="height" multiplier="1:1" id="nmu-oJ-K4A"/>
@@ -47,7 +47,7 @@
                                         </imageReference>
                                     </imageView>
                                     <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZeT-fv-jsp">
-                                        <rect key="frame" x="90" y="20.5" width="564" height="34"/>
+                                        <rect key="frame" x="90" y="20.5" width="564" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="장소 추가 하기">
                                             <imageReference key="image" image="arrowtriangle.down.fill" catalog="system" symbolScale="medium" renderingMode="hierarchical-single">
@@ -72,14 +72,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3fx-hs-8d6">
-                                <rect key="frame" x="0.0" y="76" width="669" height="1"/>
+                                <rect key="frame" x="0.0" y="73" width="669" height="1"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="drL-zT-o2Y"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gRb-1t-B4A">
-                                <rect key="frame" x="0.0" y="77" width="669" height="76"/>
+                                <rect key="frame" x="0.0" y="74" width="669" height="79"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ool-Mm-Q30">
                                         <rect key="frame" x="29" y="20.5" width="30" height="29"/>
@@ -97,7 +97,7 @@
                                         </imageReference>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HKU-K9-kR6">
-                                        <rect key="frame" x="91" y="20" width="113.5" height="30"/>
+                                        <rect key="frame" x="91" y="20" width="111" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="4uT-zp-Hay"/>
                                         </constraints>
@@ -189,18 +189,18 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" tag="101" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4X8-Dy-zyb">
+                                    <label opaque="NO" userInteractionEnabled="NO" tag="101" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="가까운 거리기준" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4X8-Dy-zyb">
                                         <rect key="frame" x="82" y="56.5" width="130" height="27"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="130" id="3ZW-75-kwT"/>
                                             <constraint firstAttribute="height" constant="27" id="obR-P5-K9f"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JBS-1t-mj1">
-                                        <rect key="frame" x="605" y="-3.5" width="62" height="44"/>
+                                        <rect key="frame" x="607.5" y="-3.5" width="59.5" height="44"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="변경">
                                             <imageReference key="image" image="arrowtriangle.down.fill" catalog="system" symbolScale="small" renderingMode="hierarchical-single">
@@ -210,11 +210,11 @@
                                                     <color systemColor="tertiaryLabelColor"/>
                                                 </hierarchicalColors>
                                             </imageReference>
-                                            <color key="baseForegroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fy3-sW-HcF">
-                                        <rect key="frame" x="567" y="57.5" width="100" height="25"/>
+                                        <rect key="frame" x="571" y="57.5" width="96" height="25"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="장소없음">
                                             <imageReference key="image" image="delete.left" catalog="system" renderingMode="hierarchical-single">
@@ -231,7 +231,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fTH-jP-Jkw">
-                                        <rect key="frame" x="228" y="53" width="50" height="34"/>
+                                        <rect key="frame" x="228" y="54.5" width="45" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain">
                                             <imageReference key="image" image="questionmark.circle" catalog="system" renderingMode="hierarchical-single">
@@ -270,7 +270,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a5f-R0-ya3">
                                 <rect key="frame" x="0.0" y="86.5" width="669" height="1"/>
                                 <viewLayoutGuide key="safeArea" id="Ey1-OA-cyy"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="systemGray3Color"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="vnD-mz-lqC"/>
                                 </constraints>
@@ -375,6 +375,7 @@
                 <outlet property="changeDistancesButtons" destination="HKU-K9-kR6" id="83v-3G-iTn"/>
                 <outlet property="changeVIew" destination="fy3-sW-HcF" id="EGx-cF-aCd"/>
                 <outlet property="findPlace" destination="JBS-1t-mj1" id="jpc-y8-s1D"/>
+                <outlet property="oilStationLabel" destination="T9I-m3-k2n" id="MIh-bu-sZ5"/>
                 <outlet property="oillocaselectView" destination="Dg5-Ep-ufO" id="X5d-Ht-m3w"/>
                 <outlet property="oillocationaddView" destination="eG8-vS-2LZ" id="Y25-p6-hQi"/>
                 <outlet property="rePairConnectView" destination="m0d-zl-QMh" id="DVC-Vc-nEG"/>
@@ -395,6 +396,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray3Color">
+            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tertiaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>

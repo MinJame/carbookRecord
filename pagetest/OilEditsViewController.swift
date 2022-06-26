@@ -127,17 +127,20 @@ extension OilEditsViewController: UITableViewDataSource {
         
         switch oilItems[indexPath.row] {
         case "INFO1" :
-            let cell =  OilTableView.dequeueReusableCell(withIdentifier: "repairlocateTableViewCellID")
+            let cell : repairlocateTableViewCell  = OilTableView.dequeueReusableCell(withIdentifier: "repairlocateTableViewCellID", for: indexPath) as! repairlocateTableViewCell
             
-            if let btnchangeStation = cell?.contentView.viewWithTag(100) as? UIButton {
-                btnchangeStation.addTarget(self, action: #selector(addBtnAction(_ :)), for: .touchUpInside)
-            }
             
-            if let btnaddStation = cell?.contentView.viewWithTag(103) as? UIButton {
-                btnaddStation.addTarget(self, action: #selector(addBtnAction(_ :)), for: .touchUpInside)
-            }
+            cell.oi
+           
+//            if let btnchangeStation = cell?.contentView.viewWithTag(100) as? UIButton {
+//                btnchangeStation.addTarget(self, action: #selector(addBtnAction(_ :)), for: .touchUpInside)
+//            }
+//            
+//            if let btnaddStation = cell?.contentView.viewWithTag(103) as? UIButton {
+//                btnaddStation.addTarget(self, action: #selector(addBtnAction(_ :)), for: .touchUpInside)
+//            }
             
-            return cell!
+            return cell
         case "INFO2" :
             let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID")
             

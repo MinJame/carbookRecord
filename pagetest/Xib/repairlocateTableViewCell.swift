@@ -10,6 +10,7 @@ import UIKit
 
 class repairlocateTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var oilStationLabel: UILabel!
     @IBOutlet weak var changeDistancesButtons: UIButton!
     @IBOutlet weak var changeDistanceButton: UIButton!
     @IBOutlet weak var addOilPlacebutton: UIButton!
@@ -25,8 +26,9 @@ class repairlocateTableViewCell: UITableViewCell {
         addOilPlacebutton.layer.borderWidth = 2
         addOilPlacebutton.layer.borderColor = UIColor.lightGray.cgColor
         addOilPlacebutton.layer.cornerRadius = 10
-        rePairStationDistance.text =
-        UserDefaults.standard.string(forKey: "distance")
+        findPlace.layer.borderColor  = UIColor.black.cgColor
+        findPlace.layer.borderWidth = 0.5
+        rePairStationDistance.text = UserDefaults.standard.string(forKey: "distance")
         changeDistanceButton.setTitle(UserDefaults.standard.string(forKey: "distacnes"), for: .normal)
         changeDistanceButton.setTitleColor(.black, for: .normal)
         changeDistancesButtons.setTitle(UserDefaults.standard.string(forKey: "distacnes"), for: .normal)
