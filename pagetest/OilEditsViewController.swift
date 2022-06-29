@@ -10,18 +10,21 @@ import UIKit
 
 class OilEditsViewController: UIViewController,UITextViewDelegate {
     
+    @IBOutlet weak var todayDayLabel: UILabel!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var OilTableView: UITableView!
     var tablelist : [Dictionary<String,Any>] = []
     var repairDelegate : RepairCallbackDelegate?
+    var dateDelegate : selectDateDelegate?
+    var startDate : Date?
+    var finishDate : Date?
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemCyan
-
-        initTitle()
+        dateDelegate = self
         initTableViews()
         setNotification()
         setItems()
+        initTitle()
     }
     func initTableViews() {
         
@@ -40,37 +43,34 @@ class OilEditsViewController: UIViewController,UITextViewDelegate {
         
         let cell4: UINib = UINib(nibName: "directInputTableViewCell", bundle: nil)
         OilTableView.register(cell4, forCellReuseIdentifier: "directInputTableViewCellID")
+        OilTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         
     }
     
     func setItems(){
         tablelist = [
             ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false],
-            ["Type": 2],
+            ["Type": 2,"Memo" :"","Cost" : 0,"Fuel": 0],
             ["Type": 3],
             ["Type": 4],
             // ["Type": 2],
             // cellId 있는 경우와 없는 경우 구분
 
         ]
-    }
+    
     func initTitle() {
-        // 내비게이션 타이틀 레이블
-        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 80))
-        // 내비게이션 타이틀 레이블
-        let nTitle = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
-        
-        // 타이틀 속성
-        
-        nTitle.textAlignment = .center
-        nTitle.font = UIFont.systemFont(ofSize: 15)
-        nTitle.text = "주유기록"
-        nTitle.textColor = .white
-        containerView.addSubview(nTitle)
-        //        containerView.addSubview(nButton)
-        self.navigationItem.titleView = containerView
-        self.navigationController?.navigationBar.backgroundColor = .systemCyan
-        // titleView속성은 뷰 기반으로 타이틀을 사용할 수 있음
+        let formatter = DateFormatter()
+        // formatter의 달력은 그레고리언 형식
+        formatter.calendar = Calendar(identifier: .gregorian)
+        // formatter의 지역은 한국
+        formatter.locale = Locale(identifier: "ko_KR")
+        // 날짜표시를 년.월.일(요일)형식으로 선언
+        formatter.dateFormat = "yyyy.MM.dd(E)"
+        // finishButton을 완료로 선언 settitle ceLid 비교
+
+        // todayDateLabel에 dateString 저장
+        todayDayLabel.text = formatter.string(for: Date()) ?? ""
+       
         
     }
     func setNotification() {
@@ -90,6 +90,7 @@ class OilEditsViewController: UIViewController,UITextViewDelegate {
         let upperDataList = tablelist[0]
 //        var rePairList : [String] = []
         // 수정할 날짜 적용하기 위해서 날짜 형식 포맷
+        var insertcarBookDataList : [Dictionary<String,Any>] = []
         let formatter = DateFormatter()
         // 날짜 달력 형식 선언
         formatter.calendar = Calendar(identifier: .gregorian)
@@ -100,54 +101,60 @@ class OilEditsViewController: UIViewController,UITextViewDelegate {
         // 새로 저장에 필요한 정비기록 기본정보들을 저장
         let carBookData : [String:Any]  = [
             "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
-            "carbookRecordExpendDate" : formatter.string(for: Date()) ?? "",
+            "carbookRecordExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
             "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
             "carbookRecordIsHidden" : 0
         ]
-        // 만약 repairList의 갯수와 테이블리스트의 갯수가 같지 않으면
-//        if rePairList.count != tablelist.count-1 {
-//            // 동일항목은 등록불가합니다 라는 알림 창이 발생하게 한다
-//            let alert = UIAlertController(title: "동일항목", message: "등록불가합니다", preferredStyle: .alert)
-//            let cancel = UIAlertAction.init(title: "확인", style: .cancel, handler: nil)
-//            alert.addAction(cancel)
-//            self.present(alert, animated: true, completion: nil)
-//        }else{
+
             // repairList의 갯수와 테이블리스트의 갯수가 같을 경우
             let insertCarBookdata = carBookDataBase.insertCarbookData(carbookData: carBookData)
             //테이블 리스트 갯수 만큼 for문 동작한다
-//            for i in 0..<tablelist.count {
-//                // 새로 생성할 정비기록항목들은 위에서 생성한 데이터의 id값과 동일한 곳에 들어가야하고 id값은 Int형임으로 Int형으로 선언
-//                if let id = insertCarBookdata["id"] as? Int {
-//                    // 테이블리스트 i번째 데이터를 item이라고 선언
-//                    let item = tablelist[i]
-//                    // item중에 type이 Int형이고 type 값이 3이면 동작실행
-//                    if let type = item["Type"] as? Int, type == 3 {
-//                        // 새로 추가할 정비기록항목들을 묶어서 저장
-//                        let insertCarBookRecordItem : Dictionary<String,Any> = [
-//                            "carbookRecordItemRecordId" : id,
-//                            "carbookRecordItemCategoryCode" : item["Category"] as? String ?? "",
-//                            "carbookRecordItemCategoryName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
-//                            "carbookRecordItemExpenseMemo" : item["memo"] as? String ?? "",
-//                            "carbookRecordItemExpenseCost" : item["cost"] as? Double ?? 0.0,
-//                            "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
-//                        ]
-//                        // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
-//                        insertcarBookDataItemList.append(insertCarBookRecordItem)
-//                    }
-//                }
-//            }
-//            // 정비항목들을 db에 저장한다
-//            _ = carBookDataBase.insertCarbookItems(carbookDataItems: insertcarBookDataItemList)
+            for i in 0..<tablelist.count {
+                // 새로 생성할 정비기록항목들은 위에서 생성한 데이터의 id값과 동일한 곳에 들어가야하고 id값은 Int형임으로 Int형으로 선언
+                if let id = insertCarBookdata["id"] as? Int {
+                    // 테이블리스트 i번째 데이터를 item이라고 선언
+                    let item = tablelist[i]
+                    // item중에 type이 Int형이고 type 값이 3이면 동작실행
+                    if let type = item["Type"] as? Int, type == 3 {
+                        // 새로 추가할 정비기록항목들을 묶어서 저장
+                        let insertCarBookRecordOilItem : Dictionary<String,Any> = [
+                            "carbookRecordItemRecordId" : id,
+                            "carbookRecordOilItemFillFuel" : item["Category"] as? String ?? "",
+                            "carbookRecordOilItemExpenseMemo" : item["memo"] as? String ?? "",
+                            "carbookRecordOilItemExpenseCost" : item["cost"] as? Double ?? 0.0,
+                            "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
+                        ]
+                        // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
+                        insertcarBookDataList.append(insertCarBookRecordOilItem)
+                    }
+                }
+            }
+            // 정비항목들을 db에 저장한다
+            _ = carBookDataBase.insertCarbookOilItems(carbookDataOilItems: insertcarBookDataList)
             // 동작 후 메인 페이지로 이동
             self.dismiss(animated: true){
                 self.repairDelegate?.setRepairData(year: nil)
              
                 Swift.print("ID\(carBookData)")
-//            }
+                Swift.print("ID\(insertcarBookDataList)")
         }
         
     }
     
+    @IBAction func selectDateBtn(_ sender: Any) {
+        // 버튼 클릭시 날짜를 선택할 수 있게 CalendarsViewController으 뷰로 이동한다
+        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CalendarsViewController")
+            as? CalendarsViewController  {
+            vc.modalTransitionStyle = .crossDissolve
+            vc.modalPresentationStyle = .overFullScreen
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                vc.delegate = self.dateDelegate
+                vc.selectedDate = self.startDate
+                self.present(vc, animated: false, completion: nil)
+            }
+        }
+
+    }
     
     @IBAction func editButton(_ sender: Any) {
         insertDatas()
@@ -339,6 +346,38 @@ extension OilEditsViewController: UITableViewDataSource {
     
     
 }
+// 달력선택 delegate
+extension OilEditsViewController : selectDateDelegate {
+    func dateCalendarDismissCallBack() {
+    }
+
+        // 날짜 선택 함수 동작
+        func selectDate(date: Date) {
+            //  DateFormatter을 format에 저장
+            let format = DateFormatter()
+            // format의 달력 형식을 그레고리언 형식의 달력으로 저장
+            format.calendar = Calendar(identifier: .gregorian)
+            // format의 지역을 한국으로 저장
+            format.locale = Locale(identifier: "ko_KR")
+
+            // format의 날짜 표기 형식을 "년.월.일(요일)"로 저장
+            format.dateFormat = "yyyy.MM.dd(E)"
+
+            if finishDate == nil {
+                startDate = date
+                finishDate = nil
+                // 오늘 날짜의 문자를 선택한 날짜로 저장
+                todayDayLabel.text = format.string(for: date) ?? ""
+            }else {
+                      finishDate = date
+                todayDayLabel.text = format.string(for: date) ?? ""
+            }
+            
+        }
+    }
+
+// MARK: - Text
+
 // MARK: - TextView,TextField 사용을 위한 Delegate 선언
 extension OilEditsViewController : UITextFieldDelegate {
     // 텍스트뷰 입력이 끝날때 동작하는 함수

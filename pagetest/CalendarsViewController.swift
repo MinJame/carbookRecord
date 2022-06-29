@@ -10,7 +10,7 @@ import UIKit
 import JTAppleCalendar
 
 protocol selectDateDelegate {
-    func selectDate(date : Date, tag : Int)
+    func selectDate(date : Date)
     func dateCalendarDismissCallBack()
 }
 
@@ -156,7 +156,7 @@ class CalendarsViewController : UIViewController {
         
         if(self.presentingViewController != nil) {
             if let setDate = self.selectedDate {
-                self.delegate?.selectDate(date: setDate, tag: self.tag ?? 0)
+                self.delegate?.selectDate(date: setDate)
                 self.delegate?.dateCalendarDismissCallBack()
              
             }

@@ -101,6 +101,44 @@ class CARBOOK_DAO {
         return [["result" : false]]
     }
     
+    func insertCarbookOilItems (carbookDataOilItems :[Dictionary<String,Any>]) -> [Dictionary<String,Any>] {
+        
+        let carbookDB = FMDatabase(path: databaseURL?.path)
+        
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyyMMddHHmmss"
+        let date = Date()
+        
+        let updateFormatter = DateFormatter()
+        
+        updateFormatter.dateFormat = "yyyyMMddHHmmss"
+        updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
+        
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        updateFormatter.locale = Locale(identifier: "ko_KR")
+        
+        if carbookDB.open() {
+            defer {carbookDB.close()}
+            if carbookDB.beginTransaction() {
+                
+                carbookDataOilItems.forEach{ (item) in
+                    let insertSQL = "Insert Into CARBOOKRECORDITEM (carbookRecordId, carbookRecordOilItemExpenseCost,carbookRecordOilItemFillFuel,carbookRecordOilItemExpenseMemo,carbookRecordItemIsHidden,carbookRecordItemRegTime,carbookRecordItemUpdateTime) Values('\(item["carbookRecordItemRecordId"]!)','\(item[ "carbookRecordOilItemExpenseCost"]!)','\(item["carbookRecordOilItemFillFuel"]!)','\(item["carbookRecordOilItemExpenseMemo"]!)', '\(item["carbookRecordItemIsHidden"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
+                    
+                    let result = carbookDB.executeUpdate(insertSQL, withArgumentsIn: [])
+                    
+                    Swift.print("items:\(result)")
+                    Swift.print("insertSQL:\(insertSQL)")
+                }
+                carbookDB.commit()
+                return [["result" : true]]
+            }
+        }
+        Swift.print("Error \(carbookDB.lastErrorMessage())")
+        return [["result" : false]]
+    }
+    
+    
     func modifyCarBookData(carbookData :[String:Any], id : String) -> Bool{
         let carbookDB = FMDatabase(path: databaseURL?.path)
         

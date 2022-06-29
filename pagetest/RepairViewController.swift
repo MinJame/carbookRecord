@@ -706,18 +706,18 @@ extension RepairViewController : selectDateDelegate {
     }
     
     // 날짜 선택 함수 동작
-    func selectDate(date: Date, tag: Int) {
+    func selectDate(date: Date) {
         //  DateFormatter을 format에 저장
         let format = DateFormatter()
         // format의 달력 형식을 그레고리언 형식의 달력으로 저장
         format.calendar = Calendar(identifier: .gregorian)
         // format의 지역을 한국으로 저장
         format.locale = Locale(identifier: "ko_KR")
-
+        
         // format의 날짜 표기 형식을 "년.월.일(요일)"로 저장
         format.dateFormat = "yyyy.MM.dd(E)"
-
-        if tag == 0 {
+        
+        if finishDate == nil {
             startDate = date
             finishDate = nil
             // 오늘 날짜의 문자를 선택한 날짜로 저장

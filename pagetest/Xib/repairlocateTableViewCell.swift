@@ -31,11 +31,6 @@ class repairlocateTableViewCell: UITableViewCell {
         addOilPlacebutton.layer.cornerRadius = 10
         findPlace.layer.borderColor  = UIColor.black.cgColor
         findPlace.layer.borderWidth = 0.5
-        rePairStationDistance.text = UserDefaults.standard.string(forKey: "distance")
-        changeDistanceButton.setTitle(UserDefaults.standard.string(forKey: "distacnes"), for: .normal)
-        changeDistanceButton.setTitleColor(.black, for: .normal)
-        changeDistancesButtons.setTitle(UserDefaults.standard.string(forKey: "distacnes"), for: .normal)
-        changeDistancesButtons.setTitleColor(.black, for: .normal)
         totalDistanceField.delegate = self
         
     }
