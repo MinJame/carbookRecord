@@ -57,7 +57,7 @@ class OilEditsViewController: UIViewController,UITextViewDelegate {
             // cellId 있는 경우와 없는 경우 구분
 
         ]
-    
+    }
     func initTitle() {
         let formatter = DateFormatter()
         // formatter의 달력은 그레고리언 형식
