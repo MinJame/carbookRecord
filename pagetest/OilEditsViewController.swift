@@ -7,50 +7,52 @@
 
 import Foundation
 import UIKit
-import BSImagePicker
-import Photos
 
 class OilEditsViewController: UIViewController,UITextViewDelegate {
     
+    @IBOutlet weak var topView: UIView!
     @IBOutlet weak var OilTableView: UITableView!
-    var names = [String]()
-    public private(set) var assets: [PHAsset] = []
-    @IBOutlet weak var testView: UIView!
-    @IBOutlet weak var selectButton: UISegmentedControl!
+    var tablelist : [Dictionary<String,Any>] = []
+    var repairDelegate : RepairCallbackDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemCyan
-        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        self.view.addGestureRecognizer(tap)
+
         initTitle()
         initTableViews()
+        setNotification()
+        setItems()
     }
-    var oilItems : [String] = []
     func initTableViews() {
         
         OilTableView.delegate = self
         OilTableView.dataSource = self
         OilTableView.rowHeight = UITableView.automaticDimension
         
-        let cellsss: UINib = UINib(nibName: "RepairAddTableViewCell", bundle: nil)
-        self.OilTableView.register(cellsss, forCellReuseIdentifier: "RepairAddTableViewCellID")
+        let cell1: UINib = UINib(nibName: "repairlocateTableViewCell", bundle: nil)
+        OilTableView.register(cell1, forCellReuseIdentifier: "repairlocateTableViewCellID")
         
-        let cellss: UINib = UINib(nibName: "directInputTableViewCell", bundle: nil)
-        OilTableView.register(cellss, forCellReuseIdentifier: "directInputTableViewCellID")
+        let cell2: UINib = UINib(nibName: "RepairAddTableViewCell", bundle: nil)
+        self.OilTableView.register(cell2, forCellReuseIdentifier: "RepairAddTableViewCellID")
         
-        let cells: UINib = UINib(nibName: "repairlocateTableViewCell", bundle: nil)
-        OilTableView.register(cells, forCellReuseIdentifier: "repairlocateTableViewCellID")
-        setNotification()
+        let cell3: UINib = UINib(nibName: "selectFueltypeCell", bundle: nil)
+        OilTableView.register(cell3, forCellReuseIdentifier: "selectFueltypeCellID")
         
-        let cell: UINib = UINib(nibName: "selectFueltypeCell", bundle: nil)
-        OilTableView.register(cell, forCellReuseIdentifier: "selectFueltypeCellID")
-        setNotification()
-        setItems()
+        let cell4: UINib = UINib(nibName: "directInputTableViewCell", bundle: nil)
+        OilTableView.register(cell4, forCellReuseIdentifier: "directInputTableViewCellID")
         
     }
     
     func setItems(){
-        oilItems = ["INFO1","INFO2","INFO3","ITEM"]
+        tablelist = [
+            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false],
+            ["Type": 2],
+            ["Type": 3],
+            ["Type": 4],
+            // ["Type": 2],
+            // cellId 있는 경우와 없는 경우 구분
+
+        ]
     }
     func initTitle() {
         // 내비게이션 타이틀 레이블
@@ -74,9 +76,82 @@ class OilEditsViewController: UIViewController,UITextViewDelegate {
     func setNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    // 데이터 삽입하기
+    func insertDatas(){
+        //carbookdb 불러오기
+        let carBookDataBase = CARBOOK_DAO.sharedInstance
+        // 정비기록에서 새로운 추가할 아이템리스트 변수로 선언
+//        var insertcarBookDataItemList : [Dictionary<String,Any>] = []
+        // 테이블리스트첫번째데이터를 변수명으로 선언
+        let upperDataList = tablelist[0]
+//        var rePairList : [String] = []
+        // 수정할 날짜 적용하기 위해서 날짜 형식 포맷
+        let formatter = DateFormatter()
+        // 날짜 달력 형식 선언
+        formatter.calendar = Calendar(identifier: .gregorian)
+        // 날짜 형식의 지역 선언
+        formatter.locale = Locale(identifier: "ko_KR")
+        // 날짜 형식의 포맷 선언
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        // 새로 저장에 필요한 정비기록 기본정보들을 저장
+        let carBookData : [String:Any]  = [
+            "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
+            "carbookRecordExpendDate" : formatter.string(for: Date()) ?? "",
+            "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
+            "carbookRecordIsHidden" : 0
+        ]
+        // 만약 repairList의 갯수와 테이블리스트의 갯수가 같지 않으면
+//        if rePairList.count != tablelist.count-1 {
+//            // 동일항목은 등록불가합니다 라는 알림 창이 발생하게 한다
+//            let alert = UIAlertController(title: "동일항목", message: "등록불가합니다", preferredStyle: .alert)
+//            let cancel = UIAlertAction.init(title: "확인", style: .cancel, handler: nil)
+//            alert.addAction(cancel)
+//            self.present(alert, animated: true, completion: nil)
+//        }else{
+            // repairList의 갯수와 테이블리스트의 갯수가 같을 경우
+            let insertCarBookdata = carBookDataBase.insertCarbookData(carbookData: carBookData)
+            //테이블 리스트 갯수 만큼 for문 동작한다
+//            for i in 0..<tablelist.count {
+//                // 새로 생성할 정비기록항목들은 위에서 생성한 데이터의 id값과 동일한 곳에 들어가야하고 id값은 Int형임으로 Int형으로 선언
+//                if let id = insertCarBookdata["id"] as? Int {
+//                    // 테이블리스트 i번째 데이터를 item이라고 선언
+//                    let item = tablelist[i]
+//                    // item중에 type이 Int형이고 type 값이 3이면 동작실행
+//                    if let type = item["Type"] as? Int, type == 3 {
+//                        // 새로 추가할 정비기록항목들을 묶어서 저장
+//                        let insertCarBookRecordItem : Dictionary<String,Any> = [
+//                            "carbookRecordItemRecordId" : id,
+//                            "carbookRecordItemCategoryCode" : item["Category"] as? String ?? "",
+//                            "carbookRecordItemCategoryName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
+//                            "carbookRecordItemExpenseMemo" : item["memo"] as? String ?? "",
+//                            "carbookRecordItemExpenseCost" : item["cost"] as? Double ?? 0.0,
+//                            "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
+//                        ]
+//                        // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
+//                        insertcarBookDataItemList.append(insertCarBookRecordItem)
+//                    }
+//                }
+//            }
+//            // 정비항목들을 db에 저장한다
+//            _ = carBookDataBase.insertCarbookItems(carbookDataItems: insertcarBookDataItemList)
+            // 동작 후 메인 페이지로 이동
+            self.dismiss(animated: true){
+                self.repairDelegate?.setRepairData(year: nil)
+             
+                Swift.print("ID\(carBookData)")
+//            }
+        }
         
     }
     
+    
+    @IBAction func editButton(_ sender: Any) {
+        insertDatas()
+    }
     
     
     // MARK: - TextField & Keyboard Methods
@@ -118,34 +193,46 @@ extension OilEditsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return oilItems.count
+        return tablelist.count
         
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        switch oilItems[indexPath.row] {
-        case "INFO1" :
-            let cell : repairlocateTableViewCell  = OilTableView.dequeueReusableCell(withIdentifier: "repairlocateTableViewCellID", for: indexPath) as! repairlocateTableViewCell
-            
-            
-            cell.oi
-           
-//            if let btnchangeStation = cell?.contentView.viewWithTag(100) as? UIButton {
-//                btnchangeStation.addTarget(self, action: #selector(addBtnAction(_ :)), for: .touchUpInside)
-//            }
-//            
-//            if let btnaddStation = cell?.contentView.viewWithTag(103) as? UIButton {
-//                btnaddStation.addTarget(self, action: #selector(addBtnAction(_ :)), for: .touchUpInside)
-//            }
-            
-            return cell
-        case "INFO2" :
-            let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID")
-            
-            return cell!
-        case "INFO3" :
+        // 테이블리스트의 row들의 데이터를 item으로 선언
+        let item = tablelist[indexPath.row]
+        // item의 "Type"을 타입으로 선언
+        let type = item["Type"] as? Int ?? 0
+        
+        switch type {
+
+        case 1 :
+            if let cell = OilTableView.dequeueReusableCell(withIdentifier: "repairlocateTableViewCellID") as?
+                repairlocateTableViewCell{
+                
+                // driveDistance가 텍스트 필드여서 텍스트 필드 delegate 적용
+                cell.totalDistanceField.delegate = self
+                // driveDistance의 문자는 테이블리스트의["Distance"]값으로 할려고하는데 더블형임으로 문자형으로 변환해서 보여준다
+                cell.totalDistanceField.text = String(format: "%.f", tablelist[0]["Distance"] as? Double ?? 0.0)
+                
+                return cell
+            }else {
+                let cell = OilTableView.dequeueReusableCell(withIdentifier: "repairlocateTableViewCellID")
+                return cell!
+            }
+          
+        case 2 :
+            if let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID") as?
+                RepairAddTableViewCell{
+
+                return cell
+            }else {
+                let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID")
+                return cell!
+            }
+          
+        case 3 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "selectFueltypeCellID") as? selectFueltypeCell {
                 cell.changeoil.addTarget(self, action: #selector(changereFilButton(_ :)), for: .valueChanged)
                 if  cell.changeoil.selectedSegmentIndex == 0 {
@@ -168,13 +255,21 @@ extension OilEditsViewController: UITableViewDataSource {
 
                 return cell!
             }
+        case 4 :
+            if let cell = OilTableView.dequeueReusableCell(withIdentifier: "directInputTableViewCellID") as? directInputTableViewCell {
+              
+      
+                return cell
+            }
+            else {
+
+                let cell = OilTableView.dequeueReusableCell(withIdentifier: "directInputTableViewCellID")
+
+
+                return cell!
+            }
             
-          
-        case "ITEM" :
-            let cell = OilTableView.dequeueReusableCell(withIdentifier: "directInputTableViewCellID")
-            
-            
-            return cell!
+
         default :
             let cell = OilTableView.dequeueReusableCell(withIdentifier: "directInputTableViewCellID")
             
@@ -200,33 +295,17 @@ extension OilEditsViewController: UITableViewDataSource {
         
     }
     
-    @objc func changereFilButton(_ sender: UISegmentedControl) {
-
-        OilTableView.reloadData()
-//        switch sender.selectedSegmentIndex {
-//        case 0 :
-//            Swift.print("야호")
-//            let cell = OilTableView.dequeueReusableCell(withIdentifier: "selectFueltypeCellID")
-//            let items =  cell?.contentView.viewWithTag(105)as? UIView
-//            items!.isHidden = true
-//          //  changeDrag.isHidden = false
-//        case 1 :
-//            Swift.print("야호1")
-//            let cell = OilTableView.dequeueReusableCell(withIdentifier: "selectFueltypeCellID")
-//            let items =  cell?.contentView.viewWithTag(105)as? UIView
-//            items!.isHidden = false
-//         //   OilTableView.reloadData()
-//         // changeDrag.isHidden = false
-//        default:
-//
-//            Swift.print("야호")
-//
-//
-//        }
+    @objc func changereFilButton(_ sender: UIButton) {
+        // 만약 테이블리스트 첫번째의 islocation이 bool형이면 islocation에 저장
+        if let isLocation = tablelist[0]["isLocation"] as? Bool {
+            //그리고 테이블리스트에 islocation값의 반대되는 값을 저장한다
+            tablelist[0].updateValue(!isLocation , forKey: "isLocation")
+        }
+        // 그후 테이블뷰를 다시불러온다
+        self.OilTableView.reloadData()
+        
     }
-    
-    
-    //
+
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
     }
@@ -234,14 +313,19 @@ extension OilEditsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        switch oilItems[indexPath.row] {
-        case "INFO1" :
+        // item에 테이블리스트 열의 데이터 저장
+        let item = tablelist[indexPath.row]
+        // item의 "Type"값을 type에 저장
+        let type = item["Type"] as? Int ?? 0
+        // 타입 값에 따라 테이블뷰의 열의 높이 저장
+        switch type {
+        case 1 :
             return UITableView.automaticDimension
-        case "INFO2" :
+        case 2 :
             return UITableView.automaticDimension
-        case "INFO3" :
+        case 3 :
             return UITableView.automaticDimension
-        case "ITEM" :
+        case 4 :
             return UITableView.automaticDimension
         default :
             return 200.0
@@ -253,6 +337,87 @@ extension OilEditsViewController: UITableViewDataSource {
         // Dispose of any resources that can be recreated.
     }
     
+    
+}
+// MARK: - TextView,TextField 사용을 위한 Delegate 선언
+extension OilEditsViewController : UITextFieldDelegate {
+    // 텍스트뷰 입력이 끝날때 동작하는 함수
+    func textViewDidEndEditing(_ textView: UITextView) {
+        // 만약 텍스트뷰의 문자가 비어 있으면
+        if textView.text.isEmpty {
+            // 텍스트뷰의 문자를 "메모 250자 기입가능\n(이모티콘 불가)"로 입력해준다
+            textView.text = "메모 250자 기입가능\n(이모티콘 불가)"
+            // 텍스트뷰의 문자색을 연한 갈색으로 정한다
+            textView.textColor = UIColor.lightGray
+        }else {
+            // 만약 텍스트 뷰가 비어 있지 않다면 텍스트뷰의 데이터를 memo에 저장한다
+        }
+
+    }
+    //텍스트뷰 입력이 시작될때 동작하는 함수
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        // 만약 텍스트뷰의 문자색이 연한갈색이면
+        if textView.textColor == UIColor.lightGray {
+            //텍스트뷰의 문자를 없애고
+            textView.text = nil
+            // 텍스트뷰의 입력되는 문자를 검은색으로 입력시킨다
+            textView.textColor = UIColor.black
+        }
+        
+    }
+    // 텍스트필드에 입력이 끝났을때 동작하는 함수
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // 만약 텍스트 필드의 태그 값이 0인 경우
+        if textField.tag == 0 {
+            // 해당되는 텍스트 필드의 값을 더블형으로 변환시켜서 테이블리스트 "Distance"에 업데이트 시킨다
+            tablelist[textField.tag].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Distance")
+        }
+    }
+    // 텍스트 필드가 입력시작될때 동작하는 함수
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // 만약 텍스트필드의 문자색이 연한갈색이면
+        if textField.textColor == UIColor.lightGray {
+            // 만약 텍스트필드의 문자를 없애고
+            textField.text = nil
+            // 텍스트필드의 입력되는 문자를 검은색으로 입력시킨다
+            textField.textColor = UIColor.black
+        }
+    }
+    
+    //textfield가 숫자일때 단위마다 ,찍어주는 함수
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal // 1,000,000
+        formatter.locale = Locale.current
+        formatter.maximumFractionDigits = 0 // 허용하는 소숫점 자리수
+
+        if let removeAllSeprator = textField.text?.replacingOccurrences(of: formatter.groupingSeparator, with: ""){
+            var beforeForemattedString = removeAllSeprator + string
+            if formatter.number(from: string) != nil {
+                if let formattedNumber = formatter.number(from: beforeForemattedString), let formattedString = formatter.string(from: formattedNumber){
+                    textField.text = formattedString
+                    return false
+                }
+            }else{ // 숫자가 아닐 때
+                if string == "" {
+                    // 백스페이스일때
+                    let lastIndex = beforeForemattedString.index(beforeForemattedString.endIndex, offsetBy: -1)
+                    beforeForemattedString = String(beforeForemattedString[..<lastIndex])
+                    if let formattedNumber = formatter.number(from: beforeForemattedString), let formattedString = formatter.string(from: formattedNumber){
+                        textField.text = formattedString
+                        return false
+                    }
+                }else{
+                    // 문자일 때
+                    return false
+                }
+            }
+            
+        }
+        
+        return true
+    }
     
 }
 
