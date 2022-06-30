@@ -10,6 +10,7 @@ import UIKit
 class CarBudgetViewController: UIViewController {
     
     
+    @IBOutlet weak var oilFilButton: UIButton!
     @IBOutlet weak var carRepairButton: UIButton!
     @IBOutlet weak var extraItemButton: UIButton!
     @IBOutlet weak var currentUnitImageView: UIImageView!
@@ -19,6 +20,16 @@ class CarBudgetViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    @IBAction func moveToOilPageBtn(_ sender: Any) {
+        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "OilEditsViewController")
+            as? OilEditsViewController  {
+            vc.modalTransitionStyle = .coverVertical
+            vc.modalPresentationStyle = .overFullScreen
+            self.present(vc, animated: true)
+            
+        }
+        
+    }
     @IBAction func moveToTotalPageBtn(_ sender: Any) {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "TotalViewController")
             as? TotalViewController  {

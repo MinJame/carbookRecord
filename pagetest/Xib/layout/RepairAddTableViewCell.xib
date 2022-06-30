@@ -55,7 +55,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HnC-Iz-XXl">
+                            <textField opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HnC-Iz-XXl">
                                 <rect key="frame" x="309" y="15" width="240" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="XEk-Di-ZqL"/>
@@ -114,7 +114,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZUe-jC-9M6">
+                            <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZUe-jC-9M6">
                                 <rect key="frame" x="309" y="126" width="240" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="m2G-hV-AHU"/>
@@ -185,7 +185,9 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="fuelLiterField" destination="ZUe-jC-9M6" id="NSp-ki-AJV"/>
                 <outlet property="fuelTypeButton" destination="Y2r-e3-hg6" id="JU4-3W-gIs"/>
+                <outlet property="totalFulCost" destination="HnC-Iz-XXl" id="hRW-sh-6f8"/>
             </connections>
             <point key="canvasLocation" x="504" y="153"/>
         </tableViewCell>

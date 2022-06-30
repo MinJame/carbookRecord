@@ -10,6 +10,8 @@ import UIKit
 
 class RepairAddTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var totalFulCost: UITextField!
+    @IBOutlet weak var fuelLiterField: UITextField!
     @IBOutlet weak var fuelTypeButton: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()

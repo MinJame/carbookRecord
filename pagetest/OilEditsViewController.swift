@@ -8,8 +8,7 @@
 import Foundation
 import UIKit
 
-class OilEditsViewController: UIViewController,UITextViewDelegate {
-    
+class OilEditsViewController: UIViewController{
     @IBOutlet weak var todayDayLabel: UILabel!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var OilTableView: UITableView!
@@ -50,7 +49,7 @@ class OilEditsViewController: UIViewController,UITextViewDelegate {
     func setItems(){
         tablelist = [
             ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false],
-            ["Type": 2,"Memo" :"","Cost" : 0,"Fuel": 0],
+            ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0],
             ["Type": 3],
             ["Type": 4],
             // ["Type": 2],
@@ -79,7 +78,27 @@ class OilEditsViewController: UIViewController,UITextViewDelegate {
         let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         self.view.addGestureRecognizer(tap)
     }
-    
+    // db에서 정비목록을 불러올때 정비목록 변환해주는 함수
+    func getOilTypeCodeTitle(code : String) -> String {
+       
+        switch code {
+        case "1" :
+            return "휘발유"
+        case "2":
+            return"경유"
+        case "3":
+            return "LPG"
+        case "4" :
+            return "에탄올"
+        case "5":
+            return  "메탄올"
+        case "6" :
+            return "전기"
+        default :
+            return "휘발유"
+        }
+       
+    }
     // 데이터 삽입하기
     func insertDatas(){
         //carbookdb 불러오기
@@ -115,13 +134,14 @@ class OilEditsViewController: UIViewController,UITextViewDelegate {
                     // 테이블리스트 i번째 데이터를 item이라고 선언
                     let item = tablelist[i]
                     // item중에 type이 Int형이고 type 값이 3이면 동작실행
-                    if let type = item["Type"] as? Int, type == 3 {
+                    if let type = item["Type"] as? Int, type == 2 {
                         // 새로 추가할 정비기록항목들을 묶어서 저장
                         let insertCarBookRecordOilItem : Dictionary<String,Any> = [
                             "carbookRecordItemRecordId" : id,
                             "carbookRecordOilItemFillFuel" : item["Category"] as? String ?? "",
                             "carbookRecordOilItemExpenseMemo" : item["memo"] as? String ?? "",
                             "carbookRecordOilItemExpenseCost" : item["cost"] as? Double ?? 0.0,
+                            "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
                             "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
                         ]
                         // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
@@ -232,6 +252,12 @@ extension OilEditsViewController: UITableViewDataSource {
         case 2 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID") as?
                 RepairAddTableViewCell{
+                
+                cell.totalFulCost.delegate = self
+                cell.fuelLiterField.delegate = self
+                
+                cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
+                cell.fuelLiterField.text = String(format: "%.f", tablelist[1]["Liter"] as? Double ?? 0.0)
 
                 return cell
             }else {
@@ -379,7 +405,7 @@ extension OilEditsViewController : selectDateDelegate {
 // MARK: - Text
 
 // MARK: - TextView,TextField 사용을 위한 Delegate 선언
-extension OilEditsViewController : UITextFieldDelegate {
+extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
     // 텍스트뷰 입력이 끝날때 동작하는 함수
     func textViewDidEndEditing(_ textView: UITextView) {
         // 만약 텍스트뷰의 문자가 비어 있으면
@@ -410,6 +436,14 @@ extension OilEditsViewController : UITextFieldDelegate {
         if textField.tag == 0 {
             // 해당되는 텍스트 필드의 값을 더블형으로 변환시켜서 테이블리스트 "Distance"에 업데이트 시킨다
             tablelist[textField.tag].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Distance")
+        } else if textField.tag == 2 {
+            tablelist[2].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Cost")
+            
+        } else if textField.tag == 3 {
+            tablelist[2].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
+            
+        }else {
+            
         }
     }
     // 텍스트 필드가 입력시작될때 동작하는 함수

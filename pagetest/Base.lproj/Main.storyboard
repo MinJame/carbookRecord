@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="s8H-by-Qe5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -52,6 +52,20 @@
                                     <action selector="moveToTotalPageBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Lt0-AM-f5e"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oOB-oK-GQn">
+                                <rect key="frame" x="127" y="517" width="156" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="156" id="QvU-LD-QJY"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="fuelpump" catalog="system" title="주유기록">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="18"/>
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="moveToOilPageBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5FJ-vK-f9L"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -65,8 +79,11 @@
                             <constraint firstItem="l7z-Pa-Eps" firstAttribute="top" secondItem="G5x-Vw-oyK" secondAttribute="bottom" constant="58" id="YS4-RE-i5F"/>
                             <constraint firstItem="v4k-99-b5c" firstAttribute="top" secondItem="l7z-Pa-Eps" secondAttribute="bottom" constant="86" id="ZkM-qp-e2q"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xLQ-ee-ggn" secondAttribute="trailing" constant="62" id="aas-EO-vOF"/>
+                            <constraint firstItem="oOB-oK-GQn" firstAttribute="top" secondItem="l7z-Pa-Eps" secondAttribute="bottom" constant="65" id="dYY-Nf-93n"/>
                             <constraint firstItem="l7z-Pa-Eps" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ffF-Dh-GTo"/>
                             <constraint firstItem="l7z-Pa-Eps" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="108" id="gvU-kJ-f2T"/>
+                            <constraint firstItem="oOB-oK-GQn" firstAttribute="leading" secondItem="v4k-99-b5c" secondAttribute="trailing" constant="8" id="jTc-RI-KGY"/>
+                            <constraint firstItem="xLQ-ee-ggn" firstAttribute="top" secondItem="oOB-oK-GQn" secondAttribute="bottom" constant="24.5" id="lbM-es-q8H"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rMf-MO-n03"/>
@@ -75,11 +92,12 @@
                         <outlet property="currentUnitImageView" destination="l7z-Pa-Eps" id="j2g-ks-HGI"/>
                         <outlet property="extraItemButton" destination="xLQ-ee-ggn" id="ywq-I3-d3m"/>
                         <outlet property="inputCostLabel" destination="G5x-Vw-oyK" id="AEV-Qa-MEg"/>
+                        <outlet property="oilFilButton" destination="oOB-oK-GQn" id="CzW-3H-f9d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-542" y="57"/>
+            <point key="canvasLocation" x="-542.02898550724638" y="56.919642857142854"/>
         </scene>
         <!--Oil Edits View Controller-->
         <scene sceneID="pT4-Bx-Bey">
@@ -1334,6 +1352,7 @@
         <image name="cart" catalog="system" width="128" height="102"/>
         <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="delete.left" catalog="system" width="128" height="104"/>
+        <image name="fuelpump" catalog="system" width="128" height="122"/>
         <image name="icon_calendar_next" width="26" height="26"/>
         <image name="icon_calendar_prev" width="26" height="26"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>

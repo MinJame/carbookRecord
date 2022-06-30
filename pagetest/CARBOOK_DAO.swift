@@ -123,7 +123,7 @@ class CARBOOK_DAO {
             if carbookDB.beginTransaction() {
                 
                 carbookDataOilItems.forEach{ (item) in
-                    let insertSQL = "Insert Into CARBOOKRECORDITEM (carbookRecordId, carbookRecordOilItemExpenseCost,carbookRecordOilItemFillFuel,carbookRecordOilItemExpenseMemo,carbookRecordItemIsHidden,carbookRecordItemRegTime,carbookRecordItemUpdateTime) Values('\(item["carbookRecordItemRecordId"]!)','\(item[ "carbookRecordOilItemExpenseCost"]!)','\(item["carbookRecordOilItemFillFuel"]!)','\(item["carbookRecordOilItemExpenseMemo"]!)', '\(item["carbookRecordItemIsHidden"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
+                    let insertSQL = "Insert Into CARBOOKRECORDITEM (carbookRecordId, carbookRecordOilItemExpenseCost,carbookRecordOilItemFillFuel,carbookRecordOilItemExpenseMemo,carbookRecordOilItemFuelLiter,carbookRecordItemIsHidden,carbookRecordItemRegTime,carbookRecordItemUpdateTime) Values('\(item["carbookRecordItemRecordId"]!)','\(item[ "carbookRecordOilItemExpenseCost"]!)','\(item["carbookRecordOilItemFillFuel"]!)','\(item["carbookRecordOilItemExpenseMemo"]!)','\(item["carbookRecordOilItemFuelLiter"]!)', '\(item["carbookRecordItemIsHidden"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
                     
                     let result = carbookDB.executeUpdate(insertSQL, withArgumentsIn: [])
                     
