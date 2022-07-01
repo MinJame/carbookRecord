@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class OilEditsViewController: UIViewController{
+    @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var todayDayLabel: UILabel!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var OilTableView: UITableView!
@@ -25,6 +26,11 @@ class OilEditsViewController: UIViewController{
         setNotification()
         setItems()
         initTitle()
+        
+        if cellId != nil {
+            finishButton.titleLabel?.text = "수정"
+            getCarBookData()
+        }
     }
     func initTableViews() {
         
@@ -55,7 +61,7 @@ class OilEditsViewController: UIViewController{
             ["Type": 4],
             // ["Type": 2],
             // cellId 있는 경우와 없는 경우 구분
-
+            
         ]
     }
     func initTitle() {
@@ -67,10 +73,10 @@ class OilEditsViewController: UIViewController{
         // 날짜표시를 년.월.일(요일)형식으로 선언
         formatter.dateFormat = "yyyy.MM.dd(E)"
         // finishButton을 완료로 선언 settitle ceLid 비교
-
+        
         // todayDateLabel에 dateString 저장
         todayDayLabel.text = formatter.string(for: Date()) ?? ""
-       
+        
         
     }
     func setNotification() {
@@ -81,7 +87,7 @@ class OilEditsViewController: UIViewController{
     }
     // db에서 정비목록을 불러올때 정비목록 변환해주는 함수
     func getOilTypeCodeTitle(code : String) -> String {
-       
+        
         switch code {
         case "1" :
             return "휘발유"
@@ -98,17 +104,72 @@ class OilEditsViewController: UIViewController{
         default :
             return "휘발유"
         }
-       
+        
     }
+    func getCarBookData() {
+        let carBookDatabase = CARBOOK_DAO.sharedInstance
+        // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고 data item 변수 저장
+        if let item : [String : Any] = carBookDatabase.selectCarbookData(id: String(cellId ?? 0)) {
+            // 테이블리스트의  "Distance"에  데이터를 업데이트 시켜준다
+            tablelist[0].updateValue(item["carbookRecordTotalDistance"] as? Double ?? 0, forKey: "Distance")
+            // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
+            tablelist[0].updateValue(item["carbookRecordRepairMode"] as? Int ?? 0, forKey: "Type")
+            // list의 "carbookRecordExpendDate"가 문자형일 경우 date에 저장해준다
+            let date = item["carbookRecordExpendDate"] as? String ?? ""
+            // DateFormatter를 formatter에 저장한다
+            let formatter = DateFormatter()
+            // formatter 표시 형식을 "년월일시분초"형식으로 저장한다
+            formatter.dateFormat = "yyyyMMddHHmmss"
+            // formatter 지역을 한국으로 설정한다
+            formatter.locale = Locale(identifier: "ko_KR")
+            // dates를 date 형식으로 저장한다
+            let dates = formatter.date(from: date)
+            // dates startDate에 저장한다
+            startDate = dates
+            // formatter형식을 "년월일(요일)"으로 표시할수 있게 저장한다
+            formatter.dateFormat = "yyyy.MM.dd(E)"
+            // finishButton의 문자를 수정으로 저장한다 setTitle
+            finishButton.titleLabel?.text = "수정"
+            // todayDateLabel의 문자에 dateString 저장 비교해서
+            todayDayLabel.text = formatter.string(for: dates) ?? ""
+            // 만약 list의 "carbokRecordRepairMode"가 2일 경우
+            
+            // getcarBookDatas 함수를 호출한다
+            getcarBookDatas()
+        }
+    }
+    // carBookRecordItems
+    func getcarBookDatas() {
+        let carBookDatabase = CARBOOK_DAO.sharedInstance
+        // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고
+        if let list : [Dictionary<String,Any>] = carBookDatabase.selectCarbookDataList(id: String(cellId ?? 0)) {
+            // 정비기록의 비어있는 첫번째 것을 제거해준다 remove 충돌소지가 있음
+            Swift.print("야임마\(list)")
+            // list의 item값 중에서
+            for item in list {
+                tablelist[1].updateValue(item["carbookRecordOilItemFillFuel"] as? Int ?? 0, forKey: "Fuel")
+                // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
+                tablelist[1].updateValue(item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0, forKey: "Cost")
+                tablelist[1].updateValue(item["carbookRecordOilItemFuelLIter/"] as? Double ?? 0.0, forKey: "Liter")
+                // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
+                tablelist[1].updateValue(item["carbookRecordItemIsHidden"] as? Int ?? 0, forKey: "isHidden")
+                
+                Swift.print("유후\(tablelist)")
+                OilTableView.reloadData()
+                
+            }
+        }
+    }
+    
     // 데이터 삽입하기
     func insertDatas(){
         //carbookdb 불러오기
         let carBookDataBase = CARBOOK_DAO.sharedInstance
         // 정비기록에서 새로운 추가할 아이템리스트 변수로 선언
-//        var insertcarBookDataItemList : [Dictionary<String,Any>] = []
+        //        var insertcarBookDataItemList : [Dictionary<String,Any>] = []
         // 테이블리스트첫번째데이터를 변수명으로 선언
         let upperDataList = tablelist[0]
-//        var rePairList : [String] = []
+        //        var rePairList : [String] = []
         // 수정할 날짜 적용하기 위해서 날짜 형식 포맷
         var insertcarBookDataList : [Dictionary<String,Any>] = []
         let formatter = DateFormatter()
@@ -126,39 +187,39 @@ class OilEditsViewController: UIViewController{
             "carbookRecordType" : upperDataList["recordType"] as? String ?? "",
             "carbookRecordIsHidden" : 0
         ]
-
-            // repairList의 갯수와 테이블리스트의 갯수가 같을 경우
-            let insertCarBookdata = carBookDataBase.insertCarbookData(carbookData: carBookData)
-            //테이블 리스트 갯수 만큼 for문 동작한다
-            for i in 0..<tablelist.count {
-                // 새로 생성할 정비기록항목들은 위에서 생성한 데이터의 id값과 동일한 곳에 들어가야하고 id값은 Int형임으로 Int형으로 선언
-                if let id = insertCarBookdata["id"] as? Int {
-                    // 테이블리스트 i번째 데이터를 item이라고 선언
-                    let item = tablelist[i]
-                    // item중에 type이 Int형이고 type 값이 3이면 동작실행
-                    if let type = item["Type"] as? Int, type == 2 {
-                        // 새로 추가할 정비기록항목들을 묶어서 저장
-                        let insertCarBookRecordOilItem : Dictionary<String,Any> = [
-                            "carbookRecordItemRecordId" : id,
-                            "carbookRecordOilItemFillFuel" : item["Category"] as? String ?? "",
-                            "carbookRecordOilItemExpenseMemo" : item["memo"] as? String ?? "",
-                            "carbookRecordOilItemExpenseCost" : item["Cost"] as? Double ?? 0.0,
-                            "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
-                            "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
-                        ]
-                        // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
-                        insertcarBookDataList.append(insertCarBookRecordOilItem)
-                    }
+        
+        // repairList의 갯수와 테이블리스트의 갯수가 같을 경우
+        let insertCarBookdata = carBookDataBase.insertCarbookData(carbookData: carBookData)
+        //테이블 리스트 갯수 만큼 for문 동작한다
+        for i in 0..<tablelist.count {
+            // 새로 생성할 정비기록항목들은 위에서 생성한 데이터의 id값과 동일한 곳에 들어가야하고 id값은 Int형임으로 Int형으로 선언
+            if let id = insertCarBookdata["id"] as? Int {
+                // 테이블리스트 i번째 데이터를 item이라고 선언
+                let item = tablelist[i]
+                // item중에 type이 Int형이고 type 값이 3이면 동작실행
+                if let type = item["Type"] as? Int, type == 2 {
+                    // 새로 추가할 정비기록항목들을 묶어서 저장
+                    let insertCarBookRecordOilItem : Dictionary<String,Any> = [
+                        "carbookRecordItemRecordId" : id,
+                        "carbookRecordOilItemFillFuel" : item["Fuel"] as? String ?? "",
+                        "carbookRecordOilItemExpenseMemo" : item["memo"] as? String ?? "",
+                        "carbookRecordOilItemExpenseCost" : item["Cost"] as? Double ?? 0.0,
+                        "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
+                        "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
+                    ]
+                    // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
+                    insertcarBookDataList.append(insertCarBookRecordOilItem)
                 }
             }
-            // 정비항목들을 db에 저장한다
-            _ = carBookDataBase.insertCarbookOilItems(carbookDataOilItems: insertcarBookDataList)
-            // 동작 후 메인 페이지로 이동
-            self.dismiss(animated: true){
-                self.repairDelegate?.setRepairData(year: nil)
-             
-                Swift.print("ID\(carBookData)")
-                Swift.print("ID\(insertcarBookDataList)")
+        }
+        // 정비항목들을 db에 저장한다
+        _ = carBookDataBase.insertCarbookOilItems(carbookDataOilItems: insertcarBookDataList)
+        // 동작 후 메인 페이지로 이동
+        self.dismiss(animated: true){
+            self.repairDelegate?.setRepairData(year: nil)
+            
+            Swift.print("ID\(carBookData)")
+            Swift.print("ID\(insertcarBookDataList)")
         }
         
     }
@@ -175,13 +236,16 @@ class OilEditsViewController: UIViewController{
                 self.present(vc, animated: false, completion: nil)
             }
         }
-
+        
     }
     
     @IBAction func editButton(_ sender: Any) {
         insertDatas()
     }
     
+    @IBAction func moveView(_ sender: Any) {
+        dismiss(animated: true)
+    }
     
     // MARK: - TextField & Keyboard Methods
     @objc func keyboardWillShow(notification:NSNotification){
@@ -233,9 +297,9 @@ extension OilEditsViewController: UITableViewDataSource {
         let item = tablelist[indexPath.row]
         // item의 "Type"을 타입으로 선언
         let type = item["Type"] as? Int ?? 0
-        
+        Swift.print("뭐지\(item)")
         switch type {
-
+            
         case 1 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "repairlocateTableViewCellID") as?
                 repairlocateTableViewCell{
@@ -250,7 +314,7 @@ extension OilEditsViewController: UITableViewDataSource {
                 let cell = OilTableView.dequeueReusableCell(withIdentifier: "repairlocateTableViewCellID")
                 return cell!
             }
-          
+            
         case 2 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID") as?
                 RepairAddTableViewCell{
@@ -260,13 +324,13 @@ extension OilEditsViewController: UITableViewDataSource {
                 
                 cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
                 cell.fuelLiterField.text = String(format: "%.f", tablelist[1]["Liter"] as? Double ?? 0.0)
-
+                
                 return cell
             }else {
                 let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID")
                 return cell!
             }
-          
+            
         case 3 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "selectFueltypeCellID") as? selectFueltypeCell {
                 cell.changeoil.addTarget(self, action: #selector(changereFilButton(_ :)), for: .valueChanged)
@@ -274,37 +338,37 @@ extension OilEditsViewController: UITableViewDataSource {
                     cell.changeDrag.isHidden = true
                 }
                 else if cell.changeoil.selectedSegmentIndex == 1 {
-
+                    
                     cell.changeDrag.isHidden = false
                 }
                 else {
                     cell.changeDrag.isHidden = true
                 }
-      
+                
                 return cell
             }
             else {
-
+                
                 let cell = OilTableView.dequeueReusableCell(withIdentifier: "selectFueltypeCellID")
-
-
+                
+                
                 return cell!
             }
         case 4 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "directInputTableViewCellID") as? directInputTableViewCell {
-              
-      
+                
+                
                 return cell
             }
             else {
-
+                
                 let cell = OilTableView.dequeueReusableCell(withIdentifier: "directInputTableViewCellID")
-
-
+                
+                
                 return cell!
             }
             
-
+            
         default :
             let cell = OilTableView.dequeueReusableCell(withIdentifier: "directInputTableViewCellID")
             
@@ -340,7 +404,7 @@ extension OilEditsViewController: UITableViewDataSource {
         self.OilTableView.reloadData()
         
     }
-
+    
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
     }
@@ -366,7 +430,7 @@ extension OilEditsViewController: UITableViewDataSource {
             return 200.0
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -378,31 +442,31 @@ extension OilEditsViewController: UITableViewDataSource {
 extension OilEditsViewController : selectDateDelegate {
     func dateCalendarDismissCallBack() {
     }
-
-        // 날짜 선택 함수 동작
-        func selectDate(date: Date) {
-            //  DateFormatter을 format에 저장
-            let format = DateFormatter()
-            // format의 달력 형식을 그레고리언 형식의 달력으로 저장
-            format.calendar = Calendar(identifier: .gregorian)
-            // format의 지역을 한국으로 저장
-            format.locale = Locale(identifier: "ko_KR")
-
-            // format의 날짜 표기 형식을 "년.월.일(요일)"로 저장
-            format.dateFormat = "yyyy.MM.dd(E)"
-
-            if finishDate == nil {
-                startDate = date
-                finishDate = nil
-                // 오늘 날짜의 문자를 선택한 날짜로 저장
-                todayDayLabel.text = format.string(for: date) ?? ""
-            }else {
-                      finishDate = date
-                todayDayLabel.text = format.string(for: date) ?? ""
-            }
-            
+    
+    // 날짜 선택 함수 동작
+    func selectDate(date: Date) {
+        //  DateFormatter을 format에 저장
+        let format = DateFormatter()
+        // format의 달력 형식을 그레고리언 형식의 달력으로 저장
+        format.calendar = Calendar(identifier: .gregorian)
+        // format의 지역을 한국으로 저장
+        format.locale = Locale(identifier: "ko_KR")
+        
+        // format의 날짜 표기 형식을 "년.월.일(요일)"로 저장
+        format.dateFormat = "yyyy.MM.dd(E)"
+        
+        if finishDate == nil {
+            startDate = date
+            finishDate = nil
+            // 오늘 날짜의 문자를 선택한 날짜로 저장
+            todayDayLabel.text = format.string(for: date) ?? ""
+        }else {
+            finishDate = date
+            todayDayLabel.text = format.string(for: date) ?? ""
         }
+        
     }
+}
 
 // MARK: - Text
 
@@ -419,7 +483,7 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
         }else {
             // 만약 텍스트 뷰가 비어 있지 않다면 텍스트뷰의 데이터를 memo에 저장한다
         }
-
+        
     }
     //텍스트뷰 입력이 시작될때 동작하는 함수
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -468,7 +532,7 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
         formatter.numberStyle = .decimal // 1,000,000
         formatter.locale = Locale.current
         formatter.maximumFractionDigits = 0 // 허용하는 소숫점 자리수
-
+        
         if let removeAllSeprator = textField.text?.replacingOccurrences(of: formatter.groupingSeparator, with: ""){
             var beforeForemattedString = removeAllSeprator + string
             if formatter.number(from: string) != nil {

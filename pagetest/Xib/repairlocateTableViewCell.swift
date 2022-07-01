@@ -134,6 +134,7 @@ class repairlocateTableViewCell: UITableViewCell {
         toolbars.setItems([flexibleSpace,cancelBT,doneBT], animated: false)
         toolbars.isUserInteractionEnabled = true
         totalDistanceField.inputAccessoryView = toolbars
+
     
         
         

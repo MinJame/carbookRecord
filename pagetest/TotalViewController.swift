@@ -268,13 +268,18 @@ extension TotalViewController: UITableViewDataSource {
         let cell : rePairListTableViewCell  = totalTableView.dequeueReusableCell(withIdentifier: "rePairListTableViewCellID", for: indexPath) as! rePairListTableViewCell
         let items = carDataList[indexPath.section]["items"] as? [Dictionary<String,Any>] ?? []
         let item = items[indexPath.row] as? Dictionary<String,Any> ?? [:]
+        let types = item["carbookRecordRegTime"] as? String ?? ""
+        
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "yyyyMMddHHmmss"
         let dateString = formatter.date(from : item["carbookRecordExpendDate"] as? String ?? "")
         formatter.dateFormat = "MM.dd"
+        
         cell.rePairDateLabel.text = formatter.string(for: dateString) ?? ""
+      
+        if types == "정비"{
         cell.totalDistanceLabel.text = String(format: "%.f", item["carbookRecordTotalDistance"] as? Double ?? 0.0)
         cell.rePairExpenseCost.text = String(format: "%.f", item["TotalCost"] as? Double ?? 0.0)
         // memoView를 숨겨준다
@@ -366,6 +371,21 @@ extension TotalViewController: UITableViewDataSource {
                 // 1보다 작을 경우 rePairItemListView를 숨긴다
                 cell.rePairItemListView.isHidden = true
             }
+        }
+        } else {
+           
+            cell.totalDistanceLabel.text = String(format: "%.f", item["carbookRecordTotalDistance"] as? Double ?? 0.0)
+            cell.rePairExpenseCost.text = String(format: "%.f", item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0)
+            // memoView를 숨겨준다
+            cell.memoView.isHidden = true
+            //cell의 ID값을 버튼의 태그 값에 저장을 합니다
+            cell.changeItemButton.tag = item["carbookRecordId"] as? Int ?? 0
+            //cell의 버튼의 액션을 할 수 있게 추가해줍니다.
+            cell.changeItemButton.addTarget(self, action: #selector(changeItem(_:)), for: .touchUpInside)
+            cell.rePairItemTitleLabel.text = "동일주유소"
+            cell.rePairItemListView.isHidden =  true
+      
+           
         }
         return cell
     }

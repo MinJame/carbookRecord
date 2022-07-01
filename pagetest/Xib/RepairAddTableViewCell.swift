@@ -65,6 +65,7 @@ class RepairAddTableViewCell: UITableViewCell {
         @objc func keydown() {
             /// picker와 같은 뷰를 닫는 함수
             self.totalFulCost.endEditing(true)
+            self.fuelLiterField.endEditing(true)
         }
 
         func toolbarItem() {
@@ -77,7 +78,7 @@ class RepairAddTableViewCell: UITableViewCell {
             toolbars.setItems([flexibleSpace,cancelBT,doneBT], animated: false)
             toolbars.isUserInteractionEnabled = true
             totalFulCost.inputAccessoryView = toolbars
-
+            fuelLiterField.inputAccessoryView = toolbars
             
             
         }
