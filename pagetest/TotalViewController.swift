@@ -221,23 +221,41 @@ extension TotalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath : IndexPath) {
         // 만약 carDataList["items"]값이 있으면 items에 저장
         if let items = carDataList[indexPath.section]["items"] as? [Dictionary<String,Any>] {
+            Swift.print("items\(items)")
             // item는 items의 indexPath.row열의 데이터
             let item = items[indexPath.row]
             // id는 item안의 carbookRecordId 값
+            Swift.print("items\(item)")
             let id = item["carbookRecordId"] as? Int ?? 0
-            // 해당열을 눌렀을때에 "RepairViewController"로 이동
-            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "RepairViewController")
-                as? RepairViewController  {
-                vc.modalTransitionStyle = .coverVertical
-                vc.modalPresentationStyle = .fullScreen
-                // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
-                vc.celId = id
-                // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
-                vc.repairDelegate = delegate
-                self.present(vc, animated: true, completion: nil)
+            let types = item["carbookRecordRegTime"] as? String
+            
+            if types == "정비" {
+                
+                // 해당열을 눌렀을때에 "RepairViewController"로 이동
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "RepairViewController")
+                    as? RepairViewController  {
+                    vc.modalTransitionStyle = .coverVertical
+                    vc.modalPresentationStyle = .fullScreen
+                    // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
+                    vc.celId = id
+                    // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
+                    vc.repairDelegate = delegate
+                    self.present(vc, animated: true, completion: nil)
+                }
+            }else {
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "OilEditsViewController")
+                    as? OilEditsViewController  {
+                    vc.modalTransitionStyle = .coverVertical
+                    vc.modalPresentationStyle = .fullScreen
+                    // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
+                    vc.cellId = id
+                    // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
+                    vc.repairDelegate = delegate
+                    self.present(vc, animated: true, completion: nil)
             }
         }
         
+    }
     }
     
     // 테이블뷰의 셀의 갯수

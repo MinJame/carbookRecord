@@ -39,7 +39,7 @@ class CARBOOK_DAO {
             dateFormatter.locale = Locale(identifier: "ko_KR")
             updateFormatter.locale = Locale(identifier: "ko_KR")
             
-            let insertSQL = "Insert Into CARBOOKRECORD ( carbookRecordRepairMode,carbookRecordExpendDate,carbookRecordIsHidden,carbookRecordTotalDistance,carbookRecordRegTime,carbookRecordUpdateTime) Values('\(carbookData["carbookRecordRepairMode"]!)', '\(carbookData["carbookRecordExpendDate"]!)', '\(carbookData["carbookRecordIsHidden"]!)','\(carbookData["carbookRecordTotalDistance"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
+            let insertSQL = "Insert Into CARBOOKRECORD ( carbookRecordRepairMode,carbookRecordExpendDate,carbookRecordIsHidden,carbookRecordTotalDistance,carbookRecordRegTime,carbookRecordUpdateTime,carbookRecordType) Values('\(carbookData["carbookRecordRepairMode"]!)', '\(carbookData["carbookRecordExpendDate"]!)', '\(carbookData["carbookRecordIsHidden"]!)','\(carbookData["carbookRecordTotalDistance"]!)','\(carbookData["carbookRecordType"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
             
             Swift.print("저기는 : \(insertSQL)")
             

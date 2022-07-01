@@ -55,7 +55,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HnC-Iz-XXl">
+                            <textField opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HnC-Iz-XXl">
                                 <rect key="frame" x="309" y="15" width="240" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="XEk-Di-ZqL"/>
@@ -87,7 +87,7 @@
                                     <action selector="changeFuelTypeButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="fhm-2z-sMa"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2dX-en-xoM">
+                            <textField opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2dX-en-xoM">
                                 <rect key="frame" x="309" y="71.5" width="240" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="QGM-0X-qph"/>
@@ -114,14 +114,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZUe-jC-9M6">
-                                <rect key="frame" x="309" y="126" width="240" height="34"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="m2G-hV-AHU"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                            </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lZo-jt-4ZD">
                                 <rect key="frame" x="557" y="132.5" width="9.5" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -135,6 +127,14 @@
                                     <constraint firstAttribute="height" constant="1" id="iB4-W7-1PV"/>
                                 </constraints>
                             </view>
+                            <textField opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZUe-jC-9M6">
+                                <rect key="frame" x="309" y="126" width="240" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="m2G-hV-AHU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="jP0-ex-cmj" firstAttribute="leading" secondItem="Wus-L5-gC1" secondAttribute="leading" id="2dH-yj-tB8"/>

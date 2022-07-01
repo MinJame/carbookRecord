@@ -17,6 +17,7 @@ class OilEditsViewController: UIViewController{
     var dateDelegate : selectDateDelegate?
     var startDate : Date?
     var finishDate : Date?
+    var cellId : Int?
     override func viewDidLoad() {
         super.viewDidLoad()
         dateDelegate = self
@@ -48,7 +49,7 @@ class OilEditsViewController: UIViewController{
     
     func setItems(){
         tablelist = [
-            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false],
+            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false,"recordType" : "주유"],
             ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0],
             ["Type": 3],
             ["Type": 4],
@@ -122,6 +123,7 @@ class OilEditsViewController: UIViewController{
             "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
             "carbookRecordExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
             "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
+            "carbookRecordType" : upperDataList["recordType"] as? String ?? "",
             "carbookRecordIsHidden" : 0
         ]
 
@@ -140,7 +142,7 @@ class OilEditsViewController: UIViewController{
                             "carbookRecordItemRecordId" : id,
                             "carbookRecordOilItemFillFuel" : item["Category"] as? String ?? "",
                             "carbookRecordOilItemExpenseMemo" : item["memo"] as? String ?? "",
-                            "carbookRecordOilItemExpenseCost" : item["cost"] as? Double ?? 0.0,
+                            "carbookRecordOilItemExpenseCost" : item["Cost"] as? Double ?? 0.0,
                             "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
                             "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
                         ]
@@ -433,14 +435,16 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
     // 텍스트필드에 입력이 끝났을때 동작하는 함수
     func textFieldDidEndEditing(_ textField: UITextField) {
         // 만약 텍스트 필드의 태그 값이 0인 경우
-        if textField.tag == 0 {
+        if textField.tag == 5 {
             // 해당되는 텍스트 필드의 값을 더블형으로 변환시켜서 테이블리스트 "Distance"에 업데이트 시킨다
-            tablelist[textField.tag].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Distance")
-        } else if textField.tag == 2 {
-            tablelist[2].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Cost")
+            tablelist[0].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Distance")
+        }
+        if textField.tag == 6 {
+            tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Cost")
             
-        } else if textField.tag == 3 {
-            tablelist[2].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
+        }
+        if textField.tag == 7 {
+            tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
             
         }else {
             

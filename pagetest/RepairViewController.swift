@@ -83,7 +83,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     func setLists() {
         // 테이블리스트 데이터들 선언
         tablelist = [
-            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false],
+            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false,"recordType" : "정비"],
             // ["Type": 2],
             // cellId 있는 경우와 없는 경우 구분
             ["Type" :3, "Category": "1", "cost" : 0 ,"memo":"","Num": 1
@@ -391,6 +391,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
             "carbookRecordExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
             "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
+            "carbookRecordType" : upperDataList["recordType"] as? String ?? "",
             "carbookRecordIsHidden" : 0
         ]
         // 테이블리스트의 갯수 만큼 for문 동작

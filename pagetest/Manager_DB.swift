@@ -20,14 +20,14 @@ class Manager_DB {
     public static let sharedInstance = Manager_DB()
     var databaseCheck : [String:[String:String]] = [:]
     
-    let create_CARBOOKRECORD = "CREATE TABLE CARBOOKRECORD (_id INTEGER PRIMARY KEY AUTOINCREMENT,carbookRecordRepairMode INTEGER DEFAULT 0,carbookRecordExpendDate TEXT,carbookRecordIsHidden INTEGER DEFAULT 0,carbookRecordTotalDistance REAL DEFAULT 0.0,carbookRecordRegTime TEXT,carbookRecordUpdateTime TEXT)"
+    let create_CARBOOKRECORD = "CREATE TABLE CARBOOKRECORD (_id INTEGER PRIMARY KEY AUTOINCREMENT,carbookRecordRepairMode INTEGER DEFAULT 0,carbookRecordExpendDate TEXT,carbookRecordIsHidden INTEGER DEFAULT 0,carbookRecordTotalDistance REAL DEFAULT 0.0,carbookRecordRegTime TEXT,carbookRecordUpdateTime TEXT,carbookRecordType TEXT)"
     
     let create_CARBOOKRECORDITEM = "CREATE TABLE CARBOOKRECORDITEM (_id INTEGER PRIMARY KEY AUTOINCREMENT,carbookRecordId INTEGER,carbookRecordItemCategoryCode TEXT,carbookRecordItemCategoryName TEXT,carbookRecordItemExpenseMemo TEXT,carbookRecordItemExpenseCost REAL DEFAULT 0.0,carbookRecordItemIsHidden INTEGER DEFAULT 0,carbookRecordItemRegTime TEXT,carbookRecordItemUpdateTime TEXT,carbookRecordOilItem TEXT, carbookRecordOilItemExpenseCost REAL DEFAULT 0.0,carbookRecordOilItemFillFuel TEXT,carbookRecordOilItemFuelLIter REAL DEFAULT 0.0,carbookRecordOilItemExpenseMemo TEXT )"
     
     
     init() {
         
-        let CARBOOKRECORD_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carbookRecordRepairMode" : "INTEGER DEFAULT 0","carbookRecordExpendDate" :"TEXT","carbookRecordIsHidden" : "INTEGER DEFAULT 0","carbookRecordTotalDistance" : "REAL DEFAULT 0.0","carbookRecordRegTime" : "TEXT", "carbookRecordUpdateTime" : "TEXT"]
+        let CARBOOKRECORD_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carbookRecordRepairMode" : "INTEGER DEFAULT 0","carbookRecordExpendDate" :"TEXT","carbookRecordIsHidden" : "INTEGER DEFAULT 0","carbookRecordTotalDistance" : "REAL DEFAULT 0.0","carbookRecordRegTime" : "TEXT", "carbookRecordUpdateTime" : "TEXT","carbookRecordType" : "TEXT"]
         
         let CARBOOKRECORDITEM_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carbookRecordId " : "INTEGER","carbookRecordItemCategoryCode" : "TEXT","carbookRecordItemCategoryName" :"TEXT","carbookRecordItemExpenseMemo" : "TEXT","carbookRecordItemExpenseCost" : "REAL DEFAULT 0.0","carbookRecordItemIsHidden" : "INTEGER DEFAULT 0", "carbookRecordItemRegTime" : "TEXT","carbookRecordUpdateTime" : "TEXT","carbookRecordOilItem": "TEXT", "carbookRecordOilItemExpenseCost" : "REAL DEFAULT 0.0","carbookRecordOilItemFillFuel": "TEXT","carbookRecordOilItemExpenseMemo" : "TEXT","carbookRecordOilItemFuelLiter" : "REAL DEFAULT 0.0"] 
         
