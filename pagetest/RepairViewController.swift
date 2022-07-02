@@ -291,7 +291,8 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
             "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
             "carbookRecordIsHidden" : 0,
-            "carbookRecordExpendDate" : formatter.string(for: startDate ?? Date()) ?? ""
+            "carbookRecordExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
+            "carbookRecordType" : upperDataList["recordType"] as? String ?? ""
         ]
         // filter를 이용해서
         // 테이블리스트의 갯수 만큼 for문 동작

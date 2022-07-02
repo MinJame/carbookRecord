@@ -56,7 +56,7 @@ class OilEditsViewController: UIViewController{
     func setItems(){
         tablelist = [
             ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false,"recordType" : "주유"],
-            ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0],
+            ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0,"id": 0,"FuelType" : "경유"],
             ["Type": 3],
             ["Type": 4],
             // ["Type": 2],
@@ -144,13 +144,15 @@ class OilEditsViewController: UIViewController{
         // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고
         if let list : [Dictionary<String,Any>] = carBookDatabase.selectCarbookDataList(id: String(cellId ?? 0)) {
             // 정비기록의 비어있는 첫번째 것을 제거해준다 remove 충돌소지가 있음
-            Swift.print("야임마\(list)")
+            Swift.print("야임마\(cellId)")
             // list의 item값 중에서
             for item in list {
+                tablelist[1].updateValue(item["_id"] as? Int ?? 0, forKey: "id")
+
                 tablelist[1].updateValue(item["carbookRecordOilItemFillFuel"] as? Int ?? 0, forKey: "Fuel")
                 // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
                 tablelist[1].updateValue(item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0, forKey: "Cost")
-                tablelist[1].updateValue(item["carbookRecordOilItemFuelLIter/"] as? Double ?? 0.0, forKey: "Liter")
+                tablelist[1].updateValue(item["carbookRecordOilItemFuelLIter"] as? Double ?? 0.0, forKey: "Liter")
                 // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
                 tablelist[1].updateValue(item["carbookRecordItemIsHidden"] as? Int ?? 0, forKey: "isHidden")
                 
@@ -161,6 +163,70 @@ class OilEditsViewController: UIViewController{
         }
     }
     
+    
+    // 데이터 수정하기
+    func updateData() {
+        //carbookdb 불러오기
+        let carBookDataBase = CARBOOK_DAO.sharedInstance
+        // 테이블리스트첫번째데이터를 변수명으로 선언
+        let upperDataList = tablelist[0]
+        // 수정페이지에서 새로운 추가할 아이템리스트 변수로 선언
+        var insertcarBookDataList : [Dictionary<String,Any>] = []
+        // 수정페이지에서 수정할 아이템리스트 변수로 선언
+        // 수정할 날짜 적용하기 위해서 날짜 형식 포맷
+        let formatter = DateFormatter()
+        // 날짜 달력 형식 선언
+        formatter.calendar = Calendar(identifier: .gregorian)
+        // 날짜 형식의 지역 선언
+        formatter.locale = Locale(identifier: "ko_KR")
+        // 날짜 형식의 포맷 선언
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
+        let upperCarDataList : [String:Any] = [
+            "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
+            "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
+            "carbookRecordIsHidden" : 0,
+            "carbookRecordExpendDate" : formatter.string(for: startDate ?? Date()) ?? ""
+        ]
+        
+        // carbookdatadb에 수정한 항목들을 해당한 셀 아이디에 값에 맞게 저장해 주어야함으로 수정한 항목과 셀아이디값별로 구분해서 db저장
+        let _ = carBookDataBase.modifyCarBookData(carbookData: upperCarDataList, id: String(cellId ?? 0))
+        //테이블리스트 갯수 만큼 for문이 돈다
+        for i in 0..<tablelist.count {
+            // 테이블리스트 i번째 데이터를 item이라고 선언
+            
+            let item = tablelist[i]
+            // item중에 type이 Int형이고 type 값이 3이면 동작실행
+            Swift.print("테스트\(item)")
+            if let type = item["Type"] as? Int, type == 2 {
+                // 새로 추가할 정비기록항목들을 묶어서 저장
+                let id =  item["id"] as? Int ?? 0
+                Swift.print("테스트\(id)")
+                if id != 0 {
+                    let insertCarBookRecordOilItem : Dictionary<String,Any> = [
+                        "_id" :  item["id"] as? Int ?? 0 ,
+                        "carbookRecordItemRecordId" : cellId ?? 0,
+                        "carbookRecordOilItemFillFuel" : item["Fuel"] as? String ?? "",
+                        "carbookRecordOilItemExpenseMemo" : item["memo"] as? String ?? "",
+                        "carbookRecordOilItemExpenseCost" : item["Cost"] as? Double ?? 0.0,
+                        "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
+                        "carbookRecordOilItemType" : item["FuelType"] as? String ?? "",
+                        "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
+                    ]
+                    // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
+                    insertcarBookDataList.append(insertCarBookRecordOilItem)
+                }
+              
+            }            // 수정한 정비기록 데이터들을 db에 저장
+            let _ = carBookDataBase.modifyCarBookDataOilItem(carbookDataOilItem: insertcarBookDataList)
+            
+            
+            self.dismiss(animated: true) {
+                self.repairDelegate?.setRepairData(year: nil)
+            }
+        }
+        
+    }
     // 데이터 삽입하기
     func insertDatas(){
         //carbookdb 불러오기
@@ -205,6 +271,7 @@ class OilEditsViewController: UIViewController{
                         "carbookRecordOilItemExpenseMemo" : item["memo"] as? String ?? "",
                         "carbookRecordOilItemExpenseCost" : item["Cost"] as? Double ?? 0.0,
                         "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
+                        "carbookRecordOilItemType" : item["FuelType"] as? String ?? "",
                         "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
                     ]
                     // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
@@ -240,7 +307,11 @@ class OilEditsViewController: UIViewController{
     }
     
     @IBAction func editButton(_ sender: Any) {
-        insertDatas()
+        if cellId != nil {
+            updateData()
+        }  else {
+            insertDatas()
+        }
     }
     
     @IBAction func moveView(_ sender: Any) {
@@ -321,9 +392,11 @@ extension OilEditsViewController: UITableViewDataSource {
                 
                 cell.totalFulCost.delegate = self
                 cell.fuelLiterField.delegate = self
-                
+                cell.fuelTypeButton.titleLabel?.text = tablelist[1]["FuelType"] as? String ?? ""
+                tablelist[1].updateValue(cell.fuelTypeButton.titleLabel?.text ?? "", forKey: "FuelType")
                 cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
                 cell.fuelLiterField.text = String(format: "%.f", tablelist[1]["Liter"] as? Double ?? 0.0)
+                
                 
                 return cell
             }else {
@@ -404,7 +477,7 @@ extension OilEditsViewController: UITableViewDataSource {
         self.OilTableView.reloadData()
         
     }
-    
+      
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
     }

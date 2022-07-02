@@ -39,7 +39,7 @@ class CARBOOK_DAO {
             dateFormatter.locale = Locale(identifier: "ko_KR")
             updateFormatter.locale = Locale(identifier: "ko_KR")
             
-            let insertSQL = "Insert Into CARBOOKRECORD ( carbookRecordRepairMode,carbookRecordExpendDate,carbookRecordIsHidden,carbookRecordTotalDistance,carbookRecordRegTime,carbookRecordUpdateTime,carbookRecordType) Values('\(carbookData["carbookRecordRepairMode"]!)', '\(carbookData["carbookRecordExpendDate"]!)', '\(carbookData["carbookRecordIsHidden"]!)','\(carbookData["carbookRecordTotalDistance"]!)','\(carbookData["carbookRecordType"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
+            let insertSQL = "Insert Into CARBOOKRECORD ( carbookRecordRepairMode,carbookRecordExpendDate,carbookRecordIsHidden,carbookRecordTotalDistance,carbookRecordRegTime,carbookRecordUpdateTime,carbookRecordType) Values('\(carbookData["carbookRecordRepairMode"]!)', '\(carbookData["carbookRecordExpendDate"]!)', '\(carbookData["carbookRecordIsHidden"]!)','\(carbookData["carbookRecordTotalDistance"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))','\(carbookData["carbookRecordType"]!)')"
             
             Swift.print("저기는 : \(insertSQL)")
             
@@ -123,7 +123,7 @@ class CARBOOK_DAO {
             if carbookDB.beginTransaction() {
                 
                 carbookDataOilItems.forEach{ (item) in
-                    let insertSQL = "Insert Into CARBOOKRECORDITEM (carbookRecordId, carbookRecordOilItemExpenseCost,carbookRecordOilItemFillFuel,carbookRecordOilItemExpenseMemo,carbookRecordOilItemFuelLiter,carbookRecordItemIsHidden,carbookRecordItemRegTime,carbookRecordItemUpdateTime) Values('\(item["carbookRecordItemRecordId"]!)','\(item[ "carbookRecordOilItemExpenseCost"]!)','\(item["carbookRecordOilItemFillFuel"]!)','\(item["carbookRecordOilItemExpenseMemo"]!)','\(item["carbookRecordOilItemFuelLiter"]!)', '\(item["carbookRecordItemIsHidden"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
+                    let insertSQL = "Insert Into CARBOOKRECORDITEM (carbookRecordId, carbookRecordOilItemExpenseCost,carbookRecordOilItemFillFuel,carbookRecordOilItemExpenseMemo,carbookRecordOilItemFuelLiter,carbookRecordOilItemType,carbookRecordItemIsHidden,carbookRecordItemRegTime,carbookRecordItemUpdateTime) Values('\(item["carbookRecordItemRecordId"]!)','\(item[ "carbookRecordOilItemExpenseCost"]!)','\(item["carbookRecordOilItemFillFuel"]!)','\(item["carbookRecordOilItemExpenseMemo"]!)','\(item["carbookRecordOilItemFuelLiter"]!)','\(item["carbookRecordOilItemType"]!)', '\(item["carbookRecordItemIsHidden"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
                     
                     let result = carbookDB.executeUpdate(insertSQL, withArgumentsIn: [])
                     
@@ -191,6 +191,37 @@ class CARBOOK_DAO {
             if carbookDB.beginTransaction() {
                 carbookDataItem.forEach{ (item) in
                     let updateSQL = "UPDATE CARBOOKRECORDITEM SET carbookRecordId = '\(item["carbookRecordItemRecordId"]!)',  carbookRecordItemCategoryCode = '\(item["carbookRecordItemCategoryCode"]!)', carbookRecordItemCategoryName = '\(item["carbookRecordItemCategoryName"]!)', carbookRecordItemExpenseMemo = '\(item["carbookRecordItemExpenseMemo"]!)', carbookRecordItemExpenseCost = '\(item["carbookRecordItemExpenseCost"]!)',carbookRecordItemIsHidden = '\(item["carbookRecordItemIsHidden"]!)', carbookRecordItemRegTime = '\(dateFormatter.string(from: Date()))', carbookRecordItemUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE carbookRecordId = '\(item["carbookRecordItemRecordId"]!)' AND _id = '\(item["_id"]!)' "
+        
+                    let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
+                    
+                    Swift.print("items:\(result)")
+                    Swift.print("insertSQL:\(updateSQL)")
+                }
+                carbookDB.commit()
+                return true
+            }
+        }
+        Swift.print("Error \(carbookDB.lastErrorMessage())")
+        return false
+    }
+    
+    
+    func modifyCarBookDataOilItem(carbookDataOilItem : [Dictionary<String,Any>]) -> Bool{
+        let carbookDB = FMDatabase(path: databaseURL?.path)
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyyMMddHHmmss"
+        let updateFormatter = DateFormatter()
+        updateFormatter.dateFormat = "yyyyMMddHHmmss"
+        updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
+        
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        updateFormatter.locale = Locale(identifier: "ko_KR")
+        if carbookDB.open() {
+            defer {carbookDB.close()}
+            if carbookDB.beginTransaction() {
+                carbookDataOilItem.forEach{ (item) in
+                    let updateSQL = "UPDATE CARBOOKRECORDITEM SET carbookRecordId = '\(item["carbookRecordItemRecordId"]!)',  carbookRecordOilItemExpenseCost = '\(item["carbookRecordOilItemExpenseCost"]!)', carbookRecordOilItemFillFuel = '\(item["carbookRecordOilItemFillFuel"]!)', carbookRecordOilItemFuelLiter = '\(item["carbookRecordOilItemFuelLiter"]!)',carbookRecordOilItemType = '\(item["carbookRecordOilItemType"]!)',carbookRecordItemIsHidden = '\(item["carbookRecordItemIsHidden"]!)', carbookRecordItemRegTime = '\(dateFormatter.string(from: Date()))', carbookRecordItemUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE carbookRecordId = '\(item["carbookRecordItemRecordId"]!)' AND _id = '\(item["_id"]!)'"
         
                     let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
                     

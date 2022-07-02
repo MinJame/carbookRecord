@@ -227,7 +227,7 @@ extension TotalViewController: UITableViewDataSource {
             // id는 item안의 carbookRecordId 값
             Swift.print("items\(item)")
             let id = item["carbookRecordId"] as? Int ?? 0
-            let types = item["carbookRecordRegTime"] as? String
+            let types = item["carbookRecordType"] as? String
             
             if types == "정비" {
                 
@@ -268,7 +268,7 @@ extension TotalViewController: UITableViewDataSource {
         let cell : rePairListTableViewCell  = totalTableView.dequeueReusableCell(withIdentifier: "rePairListTableViewCellID", for: indexPath) as! rePairListTableViewCell
         let items = carDataList[indexPath.section]["items"] as? [Dictionary<String,Any>] ?? []
         let item = items[indexPath.row] as? Dictionary<String,Any> ?? [:]
-        let types = item["carbookRecordRegTime"] as? String ?? ""
+        let types = item["carbookRecordType"] as? String ?? ""
         
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
@@ -382,7 +382,8 @@ extension TotalViewController: UITableViewDataSource {
             cell.changeItemButton.tag = item["carbookRecordId"] as? Int ?? 0
             //cell의 버튼의 액션을 할 수 있게 추가해줍니다.
             cell.changeItemButton.addTarget(self, action: #selector(changeItem(_:)), for: .touchUpInside)
-            cell.rePairItemTitleLabel.text = "동일주유소"
+            cell.rePairItemTitleLabel.text = "주유"
+            cell.rePairLocationLabel.text = "동일주유소"
             cell.rePairItemListView.isHidden =  true
       
            
