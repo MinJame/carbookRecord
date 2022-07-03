@@ -127,7 +127,7 @@
                                         </imageReference>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZM-gO-lr0">
-                                        <rect key="frame" x="72" y="15" width="72.5" height="128"/>
+                                        <rect key="frame" x="72" y="15" width="169" height="128"/>
                                         <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" imagePlacement="top" title="사진추가">
@@ -148,6 +148,7 @@
                                     <constraint firstAttribute="bottom" secondItem="3ZM-gO-lr0" secondAttribute="bottom" constant="17" id="ArK-UQ-UIK"/>
                                     <constraint firstItem="2M3-JE-gLH" firstAttribute="top" secondItem="AMp-e0-mSl" secondAttribute="top" constant="29" id="NxY-M2-sdl"/>
                                     <constraint firstItem="3ZM-gO-lr0" firstAttribute="top" secondItem="AMp-e0-mSl" secondAttribute="top" constant="15" id="ae0-cy-KZ1"/>
+                                    <constraint firstAttribute="trailing" secondItem="3ZM-gO-lr0" secondAttribute="trailing" constant="359" id="bIh-3c-0GJ"/>
                                     <constraint firstItem="2M3-JE-gLH" firstAttribute="leading" secondItem="AMp-e0-mSl" secondAttribute="leading" constant="21" id="xlF-ew-3ZU"/>
                                 </constraints>
                             </view>

@@ -10,6 +10,7 @@ import UIKit
 
 class RepairAddTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var fuelCost: UITextField!
     @IBOutlet weak var totalFulCost: UITextField!
     @IBOutlet weak var fuelLiterField: UITextField!
     @IBOutlet weak var fuelTypeButton: UIButton!

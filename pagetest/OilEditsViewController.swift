@@ -393,15 +393,18 @@ extension OilEditsViewController: UITableViewDataSource {
         case 2 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID") as?
                 RepairAddTableViewCell{
-                
+              
                 cell.totalFulCost.delegate = self
                 cell.fuelLiterField.delegate = self
+//
+               
+                cell.fuelTypeButton.addTarget(self, action: #selector(changereOilFuelButton(_ :)), for:  .touchUpInside)
                 cell.fuelTypeButton.titleLabel?.text = tablelist[1]["FuelType"] as? String ?? ""
-                tablelist[1].updateValue(cell.fuelTypeButton.titleLabel?.text ?? "", forKey: "FuelType")
+//                tablelist[1].updateValue(cell.fuelTypeButton.titleLabel?.text ?? "", forKey: "FuelType")
+                var cellCost = tablelist[1]["Cost"] as? Double ?? 0.0
                 cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
-                cell.fuelLiterField.text = String(format: "%.f", tablelist[1]["Liter"] as? Double ?? 0.0)
-                
-                
+                cell.fuelCost.text = String(format: "%.f", 2100.0)
+                cell.fuelLiterField.text = String(format: "%.f", cellCost/2100.0)
                 return cell
             }else {
                 let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID")
@@ -485,6 +488,36 @@ extension OilEditsViewController: UITableViewDataSource {
         self.OilTableView.reloadData()
         
     }
+    
+    @objc func changereOilFuelButton(_ sender: UIButton) {
+        // 만약 테이블리스트 첫번째의 islocation이 bool형이면 islocation에 저장
+        
+        let alert = UIAlertController(title: "유종", message: "가득주유시 정황한 연비 측정과 구간연비 값을 지원합니다.\n 부분주유시 구간 연비 값은 측정되지 않으며, 추가적으로 주유 후 연료게이지 값을 설정할 경우에만 구간연비를 예측합니다", preferredStyle: UIAlertController.Style.alert)
+       
+        let gasoline = UIAlertAction(title: "휘발유", style: UIAlertAction.Style.default, handler:{[self]
+            action in
+            tablelist[1].updateValue("휘발유" , forKey: "FuelType")
+        })
+        let diesel = UIAlertAction(title: "경유", style: UIAlertAction.Style.default, handler:{[self]
+            action in
+            tablelist[1].updateValue("경유" , forKey: "FuelType")
+        })
+        let LPG = UIAlertAction(title: "LPG", style: UIAlertAction.Style.default, handler:{[self]
+            action in
+            tablelist[1].updateValue("LPG" , forKey: "FuelType")
+        })
+        
+        let cancel = UIAlertAction(title: "확인", style: UIAlertAction.Style.cancel)
+        alert.addAction(gasoline)
+        alert.addAction(diesel)
+        alert.addAction(LPG)
+        alert.addAction(cancel) // 알림창에 버튼추가
+       
+        self.present(alert,animated: false)
+        self.OilTableView.reloadData()
+        
+    }
+    
       
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
@@ -549,7 +582,7 @@ extension OilEditsViewController : selectDateDelegate {
     }
 }
 
-// MARK: - Text
+ 
 
 // MARK: - TextView,TextField 사용을 위한 Delegate 선언
 extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {

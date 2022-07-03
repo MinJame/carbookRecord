@@ -71,7 +71,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y2r-e3-hg6">
-                                <rect key="frame" x="76" y="70" width="62.5" height="61"/>
+                                <rect key="frame" x="76" y="64" width="62.5" height="61"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="경유">
                                     <imageReference key="image" image="arrowtriangle.down.fill" catalog="system" symbolScale="medium" renderingMode="hierarchical-single">
@@ -83,12 +83,9 @@
                                     </imageReference>
                                     <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
-                                <connections>
-                                    <action selector="changeFuelTypeButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="fhm-2z-sMa"/>
-                                </connections>
                             </button>
                             <textField opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2dX-en-xoM">
-                                <rect key="frame" x="309" y="83.5" width="240" height="34"/>
+                                <rect key="frame" x="309" y="76.5" width="240" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="QGM-0X-qph"/>
                                 </constraints>
@@ -96,7 +93,7 @@
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="원" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xhp-CN-S3l">
-                                <rect key="frame" x="551.5" y="90" width="15" height="21"/>
+                                <rect key="frame" x="551.5" y="83" width="15" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -140,7 +137,7 @@
                             <constraint firstItem="jP0-ex-cmj" firstAttribute="leading" secondItem="Wus-L5-gC1" secondAttribute="leading" id="2dH-yj-tB8"/>
                             <constraint firstItem="HnC-Iz-XXl" firstAttribute="trailing" secondItem="2dX-en-xoM" secondAttribute="trailing" id="3jC-Q2-2Hd"/>
                             <constraint firstItem="hag-4e-gH9" firstAttribute="top" secondItem="Wus-L5-gC1" secondAttribute="bottom" constant="24" id="5YM-wB-Td0"/>
-                            <constraint firstItem="Xhp-CN-S3l" firstAttribute="centerY" secondItem="Y2r-e3-hg6" secondAttribute="centerY" id="5rt-I1-sOK"/>
+                            <constraint firstItem="Xhp-CN-S3l" firstAttribute="centerY" secondItem="Y2r-e3-hg6" secondAttribute="centerY" constant="-1" id="5rt-I1-sOK"/>
                             <constraint firstItem="jP0-ex-cmj" firstAttribute="leading" secondItem="Cfs-qC-u84" secondAttribute="leading" constant="76" id="6S6-oY-Uht"/>
                             <constraint firstItem="jP0-ex-cmj" firstAttribute="leading" secondItem="9b4-Kj-lKT" secondAttribute="leading" id="8SC-8W-Vod"/>
                             <constraint firstItem="2dX-en-xoM" firstAttribute="leading" secondItem="HnC-Iz-XXl" secondAttribute="leading" id="8kx-Ji-fOM"/>
@@ -156,15 +153,15 @@
                             <constraint firstItem="vzv-Xn-YkZ" firstAttribute="centerY" secondItem="n0h-rd-3Bn" secondAttribute="centerY" id="UXf-in-sux"/>
                             <constraint firstItem="n0h-rd-3Bn" firstAttribute="leading" secondItem="vzv-Xn-YkZ" secondAttribute="trailing" constant="32" id="VtX-Py-9Wh"/>
                             <constraint firstItem="HnC-Iz-XXl" firstAttribute="trailing" secondItem="ZUe-jC-9M6" secondAttribute="trailing" id="Yku-XV-6PB"/>
-                            <constraint firstItem="Wus-L5-gC1" firstAttribute="top" secondItem="2dX-en-xoM" secondAttribute="bottom" constant="2" id="aL7-fu-glG"/>
+                            <constraint firstItem="Wus-L5-gC1" firstAttribute="top" secondItem="2dX-en-xoM" secondAttribute="bottom" constant="9" id="aL7-fu-glG"/>
                             <constraint firstItem="lZo-jt-4ZD" firstAttribute="leading" secondItem="ZUe-jC-9M6" secondAttribute="trailing" constant="8" id="dtg-fC-xBA"/>
                             <constraint firstItem="HnC-Iz-XXl" firstAttribute="top" secondItem="Cfs-qC-u84" secondAttribute="top" constant="15" id="eku-96-Bgd"/>
                             <constraint firstItem="vzv-Xn-YkZ" firstAttribute="centerY" secondItem="JNo-Vh-vfY" secondAttribute="centerY" id="eo5-QG-jKm"/>
-                            <constraint firstItem="Y2r-e3-hg6" firstAttribute="top" secondItem="jP0-ex-cmj" secondAttribute="bottom" constant="5" id="f6N-0H-qa2"/>
+                            <constraint firstItem="Y2r-e3-hg6" firstAttribute="top" secondItem="jP0-ex-cmj" secondAttribute="bottom" constant="-1" id="f6N-0H-qa2"/>
                             <constraint firstAttribute="bottom" secondItem="hag-4e-gH9" secondAttribute="bottom" constant="3" id="iNC-KQ-uqG"/>
                             <constraint firstItem="jP0-ex-cmj" firstAttribute="trailing" secondItem="JNo-Vh-vfY" secondAttribute="trailing" id="j2X-ac-eYc"/>
                             <constraint firstItem="HnC-Iz-XXl" firstAttribute="centerY" secondItem="n0h-rd-3Bn" secondAttribute="centerY" id="kjD-gy-VNm"/>
-                            <constraint firstItem="2dX-en-xoM" firstAttribute="centerY" secondItem="Y2r-e3-hg6" secondAttribute="centerY" id="ku7-7U-Vpx"/>
+                            <constraint firstItem="2dX-en-xoM" firstAttribute="centerY" secondItem="Y2r-e3-hg6" secondAttribute="centerY" constant="-1" id="ku7-7U-Vpx"/>
                             <constraint firstItem="ZUe-jC-9M6" firstAttribute="centerY" secondItem="lZo-jt-4ZD" secondAttribute="centerY" id="lPL-Jn-tCN"/>
                             <constraint firstItem="hag-4e-gH9" firstAttribute="centerX" secondItem="n0h-rd-3Bn" secondAttribute="centerX" constant="-2" id="lj1-2n-Gam"/>
                             <constraint firstItem="vzv-Xn-YkZ" firstAttribute="leading" secondItem="Cfs-qC-u84" secondAttribute="leading" constant="20" id="qfZ-J6-PS6"/>
@@ -185,6 +182,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="fuelCost" destination="2dX-en-xoM" id="5Y4-G5-NLX"/>
                 <outlet property="fuelLiterField" destination="ZUe-jC-9M6" id="NSp-ki-AJV"/>
                 <outlet property="fuelTypeButton" destination="Y2r-e3-hg6" id="JU4-3W-gIs"/>
                 <outlet property="totalFulCost" destination="HnC-Iz-XXl" id="hRW-sh-6f8"/>
@@ -193,8 +191,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="arrowtriangle.down.fill" catalog="system" width="128" height="124"/>
-        <image name="fuelpump" catalog="system" width="128" height="122"/>
+        <image name="arrowtriangle.down.fill" catalog="system" width="32" height="32"/>
+        <image name="fuelpump" catalog="system" width="32" height="32"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
