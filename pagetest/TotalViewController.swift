@@ -234,7 +234,7 @@ extension TotalViewController: UITableViewDataSource {
         headerView?.totalDistacneLabel.text = String(format: "%.f",carDataList[section]["monthDistance"] as? Double ?? "")
         //헤더뷰의 totalCostLabel에 cardatalist[section]에["totalCost"]값이 더블형인데 스트링형으로 변환해서 보여준다
         headerView?.totalCostLabel.text = String(format: "%.f",carDataList[section]["monthCost"] as? Double ?? "")
-        headerView?.totalFuelLabel.text = String(format: "%.f",carDataList[section]["monthFuel"] as? Double ?? "")
+        headerView?.totalFuelLabel.text = String(format: "%.2f",carDataList[section]["monthFuel"] as? Double ?? "")
         //헤더뷰의 totalCostLabel에 cardatalist[section]에["totalCost"]값이 더블형인데 스트링형으로 변환해서 보여준다
         headerView?.totalFuelCostLabel.text = String(format: "%.f",carDataList[section]["monthFuelCost"] as? Double ?? "")
         return headerView
@@ -291,7 +291,7 @@ extension TotalViewController: UITableViewDataSource {
         let items = carDataList[indexPath.section]["items"] as? [Dictionary<String,Any>] ?? []
         let item = items[indexPath.row] as? Dictionary<String,Any> ?? [:]
         let types = item["carbookRecordType"] as? String ?? ""
-        
+        let status = item["carbookRecordFuelStatus"] as? String ?? ""
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.locale = Locale(identifier: "ko_KR")
@@ -398,7 +398,11 @@ extension TotalViewController: UITableViewDataSource {
         }
         } else {
             cell.fuelCostBtn.isHidden  = false
+            if status != "부분" {
             cell.fuelStatusBtn.isHidden = false
+            }else {
+                cell.fuelStatusBtn.isHidden = true
+            }
             cell.totalDistanceLabel.text = String(format: "%.f", item["carbookRecordTotalDistance"] as? Double ?? 0.0)
             cell.rePairExpenseCost.text = String(format: "%.f", item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0)
             // memoView를 숨겨준다

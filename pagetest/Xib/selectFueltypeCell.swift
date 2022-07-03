@@ -18,9 +18,9 @@ class selectFueltypeCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-        sliderValueLabel.setTitle(String(slider.value), for: .normal)
         slider.value = 50
+        sliderValueLabel.titleLabel?.text = String(Int(slider.value))+"%"
+      
         changeDrag.isHidden = true
     }
     @IBAction func askInfo(_ sender: Any) {
@@ -54,8 +54,8 @@ class selectFueltypeCell: UITableViewCell {
     }
     @IBAction func changeValues(_ sender: UISlider) {
         let values = sender.value
-        sliderValueLabel.setTitle(String(values), for: .normal)
         
+        sliderValueLabel.titleLabel?.text = String(Int(values))+"%"
   
     }
     

@@ -53,18 +53,6 @@
                                                     <segment title="부분주유"/>
                                                 </segments>
                                             </segmentedControl>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="njj-V2-Kih">
-                                                <rect key="frame" x="93" y="36" width="73" height="31"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="가득주유"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79H-UR-gsp">
-                                                <rect key="frame" x="291" y="36" width="73" height="31"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="부분주유"/>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
@@ -79,8 +67,11 @@
                                     <view tag="105" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f95-XY-Eb1">
                                         <rect key="frame" x="0.0" y="103" width="477" height="103"/>
                                         <subviews>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Hd8-sB-5dY">
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Hd8-sB-5dY">
                                                 <rect key="frame" x="42" y="17" width="393" height="68"/>
+                                                <connections>
+                                                    <action selector="changeValues:" destination="KGk-i7-Jjw" eventType="valueChanged" id="HLW-CU-IU2"/>
+                                                </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fSY-d6-5cx">
                                                 <rect key="frame" x="20" y="41.5" width="22" height="20.5"/>
@@ -98,19 +89,19 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5GR-9a-vRW">
-                                                <rect key="frame" x="387.5" y="0.0" width="60.5" height="31"/>
+                                                <rect key="frame" x="378" y="0.0" width="71" height="25"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="퍼센트"/>
-                                                <connections>
-                                                    <action selector="changeValues:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="mdL-Yv-6EE"/>
-                                                </connections>
+                                                <buttonConfiguration key="configuration" style="plain" title="퍼센트입니다">
+                                                    <fontDescription key="titleFontDescription" type="system" pointSize="9"/>
+                                                    <color key="baseForegroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </buttonConfiguration>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="fSY-d6-5cx" firstAttribute="leading" secondItem="f95-XY-Eb1" secondAttribute="leading" constant="20" id="8Hs-nw-fPf"/>
                                             <constraint firstItem="Hd8-sB-5dY" firstAttribute="top" secondItem="f95-XY-Eb1" secondAttribute="top" constant="17" id="G5y-EN-hvs"/>
-                                            <constraint firstAttribute="trailing" secondItem="5GR-9a-vRW" secondAttribute="trailing" constant="29" id="HEe-D0-e8D"/>
+                                            <constraint firstAttribute="trailing" secondItem="5GR-9a-vRW" secondAttribute="trailing" constant="28" id="HEe-D0-e8D"/>
                                             <constraint firstAttribute="bottom" secondItem="Hd8-sB-5dY" secondAttribute="bottom" constant="19" id="SFD-ns-H3C"/>
                                             <constraint firstAttribute="trailing" secondItem="XUE-x5-tbf" secondAttribute="trailing" constant="15" id="TyA-CP-KO5"/>
                                             <constraint firstItem="Hd8-sB-5dY" firstAttribute="centerX" secondItem="f95-XY-Eb1" secondAttribute="centerX" id="X5l-QX-xrV"/>
@@ -154,7 +145,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="questionmark.circle" catalog="system" width="32" height="32"/>
+        <image name="questionmark.circle" catalog="system" width="128" height="121"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

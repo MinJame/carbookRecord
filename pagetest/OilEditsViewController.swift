@@ -19,6 +19,7 @@ class OilEditsViewController: UIViewController{
     var startDate : Date?
     var finishDate : Date?
     var cellId : Int?
+    var fuelStatus : Int? = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         dateDelegate = self
@@ -56,10 +57,10 @@ class OilEditsViewController: UIViewController{
     func setItems(){
         tablelist = [
             ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false,"recordType" : "주유",],
-            ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0,"id": 0,"FuelType" : "경유","memo": "","washCost" : 0],
+            ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0.00,"id": 0,"FuelType" : "경유","memo": "","washCost" : 0,"status" : "가득","percentage" : 100],
             ["Type": 3],
             ["Type": 4],
-            // ["Type": 2],
+        
             // cellId 있는 경우와 없는 경우 구분
             
         ]
@@ -152,9 +153,12 @@ class OilEditsViewController: UIViewController{
                 tablelist[1].updateValue(item["carbookRecordOilItemFillFuel"] as? Int ?? 0, forKey: "Fuel")
                 // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
                 tablelist[1].updateValue(item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0, forKey: "Cost")
+                tablelist[1].updateValue(item["carbookRecordOilItemType"] as? Double ?? 0.0, forKey: "FuelType")
                 tablelist[1].updateValue(item["carbookRecordOilItemFuelLIter"] as? Double ?? 0.0, forKey: "Liter")
                 tablelist[1].updateValue(item["carbookRecordItemExpenseMemo"] as? String ?? "", forKey: "memo")
                 tablelist[1].updateValue(item["carbookRecordWashCost"] as? Double ?? 0.0, forKey: "washCost")
+                tablelist[1].updateValue(item["carbookRecordFuelStatus"] as? String ?? "", forKey: "status")
+                tablelist[1].updateValue(item["carbookRecordFuelPercentage"] as? Double ?? 0.0, forKey: "percentage")
                 // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
                 tablelist[1].updateValue(item["carbookRecordItemIsHidden"] as? Int ?? 0, forKey: "isHidden")
                 OilTableView.reloadData()
@@ -201,7 +205,6 @@ class OilEditsViewController: UIViewController{
             if let type = item["Type"] as? Int, type == 2 {
                 // 새로 추가할 정비기록항목들을 묶어서 저장
                 let id =  item["id"] as? Int ?? 0
-                Swift.print("테스트\(id)")
                 if id != 0 {
                     let insertCarBookRecordOilItem : Dictionary<String,Any> = [
                         "_id" :  item["id"] as? Int ?? 0 ,
@@ -212,6 +215,10 @@ class OilEditsViewController: UIViewController{
                         "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
                         "carbookRecordOilItemType" : item["FuelType"] as? String ?? "",
                         "carbookRecordWashCost" : item["washCost"] as? Double ?? 0.0,
+                        "carbookRecordFuelStatus" : item["status"] as? String ?? "",
+                        "carbookRecordFuelPercentage" : item["percentage"] as? Int ?? 0,
+              
+                        // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
                         "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
                     ]
                     // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
@@ -274,6 +281,8 @@ class OilEditsViewController: UIViewController{
                         "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
                         "carbookRecordOilItemType" : item["FuelType"] as? String ?? "",
                         "carbookRecordWashCost" : item["washCost"] as? Double ?? 0.0,
+                        "carbookRecordFuelStatus" : item["status"] as? String ?? "",
+                        "carbookRecordFuelPercentage" : item["percentage"] as? Int ?? 0,
                         "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
                     ]
                     // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
@@ -394,9 +403,14 @@ extension OilEditsViewController: UITableViewDataSource {
                 cell.totalFulCost.delegate = self
                 cell.fuelLiterField.delegate = self
 //
-               
-                cell.fuelTypeButton.addTarget(self, action: #selector(changereOilFuelButton(_ :)), for:  .touchUpInside)
-                cell.fuelTypeButton.titleLabel?.text = tablelist[1]["FuelType"] as? String ?? ""
+                if cellId != nil {
+                    cell.fuelTypeButton.titleLabel?.text = "단가" ?? ""
+                }else {
+                    cell.fuelTypeButton.addTarget(self, action: #selector(changereOilFuelButton(_ :)), for:  .touchUpInside)
+                   cell.fuelTypeButton.titleLabel?.text = tablelist[1]["FuelType"] as? String ?? ""
+                    
+                }
+              
 //                tablelist[1].updateValue(cell.fuelTypeButton.titleLabel?.text ?? "", forKey: "FuelType")
                 var cellCost = tablelist[1]["Cost"] as? Double ?? 0.0
                 cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
@@ -415,17 +429,41 @@ extension OilEditsViewController: UITableViewDataSource {
         case 3 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "selectFueltypeCellID") as? selectFueltypeCell {
                 cell.changeoil.addTarget(self, action: #selector(changereFilButton(_ :)), for: .valueChanged)
-                if  cell.changeoil.selectedSegmentIndex == 0 {
-                    cell.changeDrag.isHidden = true
-                }
-                else if cell.changeoil.selectedSegmentIndex == 1 {
+               
+                if item["carbookRecordFuelStatus"] as? String == "부분" {
+                    cell.changeoil.selectedSegmentIndex == 1
+                   
+                        cell.changeDrag.isHidden = false
+                        cell.sliderValueLabel.layer.borderWidth  = 1
+                        cell.sliderValueLabel.layer.borderColor = UIColor.lightGray.cgColor
+                        //repairButton 모서리 굴곡 값 5
+                        cell.sliderValueLabel.layer.backgroundColor = UIColor.white.cgColor
+                        self.tablelist[1].updateValue("부분" , forKey: "status")
+                        self.tablelist[1].updateValue(Int(cell.sliderValueLabel.titleLabel?.text ?? "0") ?? 0, forKey: "percentage")
+
                     
-                    cell.changeDrag.isHidden = false
+                }else {
+                    if  cell.changeoil.selectedSegmentIndex == 0 {
+                        self.tablelist[1].updateValue("가득" , forKey: "status")
+                        cell.changeDrag.isHidden = true
+                    }
+                    else if cell.changeoil.selectedSegmentIndex == 1 {
+                   
+                        cell.changeDrag.isHidden = false
+                        cell.sliderValueLabel.layer.borderWidth  = 1
+                        cell.sliderValueLabel.layer.borderColor = UIColor.lightGray.cgColor
+                        //repairButton 모서리 굴곡 값 5
+                        cell.sliderValueLabel.layer.backgroundColor = UIColor.white.cgColor
+                        tablelist[1].updateValue("부분" , forKey: "status")
+                        tablelist[1].updateValue(Int(cell.sliderValueLabel.titleLabel?.text ?? "0") ?? 0, forKey: "percentage")
+
+                    }
+                    else {
+                        cell.changeDrag.isHidden = true
+                    }
+
+                    
                 }
-                else {
-                    cell.changeDrag.isHidden = true
-                }
-                
                 return cell
             }
             else {
@@ -493,19 +531,22 @@ extension OilEditsViewController: UITableViewDataSource {
     @objc func changereOilFuelButton(_ sender: UIButton) {
         // 만약 테이블리스트 첫번째의 islocation이 bool형이면 islocation에 저장
         
-        let alert = UIAlertController(title: "유종", message: "가득주유시 정황한 연비 측정과 구간연비 값을 지원합니다.\n 부분주유시 구간 연비 값은 측정되지 않으며, 추가적으로 주유 후 연료게이지 값을 설정할 경우에만 구간연비를 예측합니다", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "유종", message: "", preferredStyle: UIAlertController.Style.alert)
        
         let gasoline = UIAlertAction(title: "휘발유", style: UIAlertAction.Style.default, handler:{[self]
             action in
             tablelist[1].updateValue("휘발유" , forKey: "FuelType")
+            self.OilTableView.reloadData()
         })
         let diesel = UIAlertAction(title: "경유", style: UIAlertAction.Style.default, handler:{[self]
             action in
             tablelist[1].updateValue("경유" , forKey: "FuelType")
+            self.OilTableView.reloadData()
         })
         let LPG = UIAlertAction(title: "LPG", style: UIAlertAction.Style.default, handler:{[self]
             action in
             tablelist[1].updateValue("LPG" , forKey: "FuelType")
+            self.OilTableView.reloadData()
         })
         
         let cancel = UIAlertAction(title: "확인", style: UIAlertAction.Style.cancel)

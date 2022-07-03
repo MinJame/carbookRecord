@@ -44,7 +44,7 @@ class directInputTableViewCell: UITableViewCell, UITextViewDelegate {
     @objc func keydown() {
         /// picker와 같은 뷰를 닫는 함수
         self.memoTextView.endEditing(true)
-
+        self.washCarCostField.endEditing(true)
     }
     
     func toolbarItems() {

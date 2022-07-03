@@ -71,9 +71,9 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y2r-e3-hg6">
-                                <rect key="frame" x="76" y="64" width="62.5" height="61"/>
+                                <rect key="frame" x="76" y="64" width="74.5" height="61"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="경유">
+                                <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="휘발유">
                                     <imageReference key="image" image="arrowtriangle.down.fill" catalog="system" symbolScale="medium" renderingMode="hierarchical-single">
                                         <hierarchicalColors>
                                             <color white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -124,7 +124,7 @@
                                     <constraint firstAttribute="height" constant="1" id="iB4-W7-1PV"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZUe-jC-9M6">
+                            <textField opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0.00" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZUe-jC-9M6">
                                 <rect key="frame" x="309" y="130" width="240" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="m2G-hV-AHU"/>
@@ -187,7 +187,7 @@
                 <outlet property="fuelTypeButton" destination="Y2r-e3-hg6" id="JU4-3W-gIs"/>
                 <outlet property="totalFulCost" destination="HnC-Iz-XXl" id="hRW-sh-6f8"/>
             </connections>
-            <point key="canvasLocation" x="504" y="153"/>
+            <point key="canvasLocation" x="503.62318840579712" y="152.67857142857142"/>
         </tableViewCell>
     </objects>
     <resources>
