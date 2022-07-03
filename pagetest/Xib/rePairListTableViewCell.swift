@@ -8,10 +8,9 @@
 import UIKit
 
 class rePairListTableViewCell: UITableViewCell {
-    @IBOutlet weak var fuelStatusLabel: UILabel!
-    @IBOutlet weak var fuelCostLabel: UILabel!
+    @IBOutlet weak var fuelStatusBtn: UIButton!
+    @IBOutlet weak var fuelCostBtn: UIButton!
     @IBOutlet weak var memoTextView: UITextView!
-    @IBOutlet weak var otherrePairCosts: UILabel!
     @IBOutlet weak var otherrePairitemTitleLabel: UILabel!
     @IBOutlet weak var rePairItemTitleLabel: UILabel!
     @IBOutlet weak var rePairItemListView: UIView!
@@ -30,8 +29,17 @@ class rePairListTableViewCell: UITableViewCell {
         rePairItemImageView.layer.cornerRadius = 10
         memoView.layer.cornerRadius = 10
         memoTextView.layer.cornerRadius = 10
-        fuelStatusLabel.layer.cornerRadius = 10
-        
+        fuelStatusBtn.layer.borderWidth = 0.5
+        // repairButton 색은 연한 회색
+        fuelStatusBtn.layer.borderColor = UIColor.lightGray.cgColor
+        //repairButton 모서리 굴곡 값 5
+        fuelStatusBtn.layer.backgroundColor = UIColor.white.cgColor
+        fuelStatusBtn.layer.cornerRadius = 10
+        //repairButton 문자색 하얀색
+        fuelStatusBtn.tintColor = UIColor.white
+        // selfrepairButton 두께는 1
+      
+      
         //        otherrePairitemTitleLabel.text = ""
 //        otherrePairCostLabel.text = ""
 //        rePairItemTitleLabel.text = ""

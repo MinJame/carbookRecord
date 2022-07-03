@@ -25,6 +25,8 @@ class TotalViewController: UIViewController {
     @IBOutlet weak var totalTableView: UITableView!
     @IBOutlet weak var yearTotalDistanceLabel: UILabel!
     @IBOutlet weak var yearTotalExpenseCostLabel: UILabel!
+    @IBOutlet weak var yearTotalFuelCostLabel: UILabel!
+    @IBOutlet weak var yearTotalFuelLabel: UILabel!
     var searchDates : [dates] = []
     var selectDate : (yearRow : Int, monthRow: Int) = (0,0)
     var carDataList : [Dictionary<String,Any>] = []
@@ -142,20 +144,32 @@ class TotalViewController: UIViewController {
             //저장에 필요한 변수들 선언
             var totalCost : Double = 0.0
             var totalDistance : Double = 0.0
+            var totalFuel : Double = 0.0
+            var totalFuelCost : Double = 0.0
             var date : String = ""
             //db에 있는 데이터들을 월별로 묶는다
             let groupRawData = Dictionary(grouping: list){$0["date"] as? String ?? ""}
             for (key,value) in groupRawData {
                 var monthCost : Double = 0.0
                 var monthDistance : Double = 0.0
+                var monthFuel : Double = 0.0
+                var monthFuelCost : Double = 0.0
                 date = key
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
                     totalCost += item["TotalCost"] as? Double ?? 0.0
+                    totalCost += item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0
+                    totalCost += item["carbookRecordWashCost"] as? Double ?? 0.0
                     // totalDistance에 grouprawdata의 value값의 i번째["carbookRecordTotalDistance"]의 값을 더해준다
                     totalDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
+                    totalFuelCost += item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0
+                    totalFuel += item["carbookRecordOilItemFuelLiter"] as? Double ?? 0.0
                     monthCost += item["TotalCost"] as? Double ?? 0.0
+                    monthCost += item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0
+                    monthCost += item["carbookRecordWashCost"] as? Double ?? 0.0
                     monthDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
+                    monthFuelCost += item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0
+                    monthFuel += item["carbookRecordOilItemFuelLiter"] as? Double ?? 0.0
                 }
                 
                 let carbookdata :Dictionary<String,Any>  = [
@@ -163,6 +177,9 @@ class TotalViewController: UIViewController {
                     "date" : date ,
                     "monthDistance"  : monthDistance,
                     "monthCost" : monthCost,
+                    "monthFuel"  : monthFuel,
+                    "monthFuelCost" : monthFuelCost,
+
                     "items": value
                 ]
                 
@@ -174,6 +191,8 @@ class TotalViewController: UIViewController {
             yearTotalExpenseCostLabel.text = String(format: "%.f",totalCost)
             // yearTotalDistanceLabel에 monthDistance 적용
             yearTotalDistanceLabel.text = String(format: "%.f",totalDistance)
+            yearTotalFuelLabel.text = String(format: "%.2f",totalFuel)
+            yearTotalFuelCostLabel.text = String(format: "%.f",totalFuelCost)
             // 저장된 데이터들을 월별로 내림차순으로 정리한다
             carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
         }
@@ -215,6 +234,9 @@ extension TotalViewController: UITableViewDataSource {
         headerView?.totalDistacneLabel.text = String(format: "%.f",carDataList[section]["monthDistance"] as? Double ?? "")
         //헤더뷰의 totalCostLabel에 cardatalist[section]에["totalCost"]값이 더블형인데 스트링형으로 변환해서 보여준다
         headerView?.totalCostLabel.text = String(format: "%.f",carDataList[section]["monthCost"] as? Double ?? "")
+        headerView?.totalFuelLabel.text = String(format: "%.f",carDataList[section]["monthFuel"] as? Double ?? "")
+        //헤더뷰의 totalCostLabel에 cardatalist[section]에["totalCost"]값이 더블형인데 스트링형으로 변환해서 보여준다
+        headerView?.totalFuelCostLabel.text = String(format: "%.f",carDataList[section]["monthFuelCost"] as? Double ?? "")
         return headerView
     }
     //  열을 눌렀을때 동작하는 함수
@@ -280,6 +302,8 @@ extension TotalViewController: UITableViewDataSource {
         cell.rePairDateLabel.text = formatter.string(for: dateString) ?? ""
       
         if types == "정비"{
+            cell.fuelCostBtn.isHidden  = true
+            cell.fuelStatusBtn.isHidden = true
         cell.totalDistanceLabel.text = String(format: "%.f", item["carbookRecordTotalDistance"] as? Double ?? 0.0)
         cell.rePairExpenseCost.text = String(format: "%.f", item["TotalCost"] as? Double ?? 0.0)
         // memoView를 숨겨준다
@@ -373,8 +397,8 @@ extension TotalViewController: UITableViewDataSource {
             }
         }
         } else {
-            cell.fuelStatusLabel.isHidden  = false 
-            cell.fuelCostLabel.isHidden = false
+            cell.fuelCostBtn.isHidden  = false
+            cell.fuelStatusBtn.isHidden = false
             cell.totalDistanceLabel.text = String(format: "%.f", item["carbookRecordTotalDistance"] as? Double ?? 0.0)
             cell.rePairExpenseCost.text = String(format: "%.f", item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0)
             // memoView를 숨겨준다
@@ -383,7 +407,7 @@ extension TotalViewController: UITableViewDataSource {
             cell.changeItemButton.tag = item["carbookRecordId"] as? Int ?? 0
             //cell의 버튼의 액션을 할 수 있게 추가해줍니다.
             cell.changeItemButton.addTarget(self, action: #selector(changeItem(_:)), for: .touchUpInside)
-            cell.rePairItemTitleLabel.text = "주유"
+            cell.rePairItemTitleLabel.text = "주유" + String(format: "%.2f", item["carbookRecordOilItemFuelLiter"] as? Double ?? 0.0) + "L"
             cell.rePairLocationLabel.text = "동일주유소"
             cell.rePairItemListView.isHidden =  true
             

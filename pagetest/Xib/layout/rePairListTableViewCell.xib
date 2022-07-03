@@ -109,24 +109,32 @@
                                                     <action selector="addMemoView:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Q5a-lr-ruU"/>
                                                 </connections>
                                             </button>
-                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="가득" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o0g-MR-F7B">
-                                                <rect key="frame" x="78" y="16" width="26" height="18"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2100원/L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XLr-3d-LHe">
-                                                <rect key="frame" x="337" y="15" width="60" height="18"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9F1-cb-czw">
+                                                <rect key="frame" x="76" y="12" width="41.5" height="26"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="가득">
+                                                    <fontDescription key="titleFontDescription" type="system" pointSize="10"/>
+                                                    <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </buttonConfiguration>
+                                            </button>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sKY-oD-7HU">
+                                                <rect key="frame" x="352.5" y="12" width="65.5" height="26"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="2100원/L">
+                                                    <fontDescription key="titleFontDescription" type="system" pointSize="10"/>
+                                                    <color key="baseForegroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </buttonConfiguration>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
+                                            <constraint firstItem="9F1-cb-czw" firstAttribute="centerY" secondItem="ntg-9x-ou5" secondAttribute="centerY" id="2V2-il-kma"/>
                                             <constraint firstItem="nfR-zK-TTX" firstAttribute="centerY" secondItem="wwn-bM-ysO" secondAttribute="centerY" constant="8.25" id="8Gl-fT-Bes"/>
                                             <constraint firstItem="lcD-ZK-xvX" firstAttribute="top" secondItem="Q7X-Kh-lr4" secondAttribute="bottom" constant="20" id="9PH-Jq-Ast"/>
                                             <constraint firstAttribute="trailing" secondItem="Q7X-Kh-lr4" secondAttribute="trailing" constant="18" id="9Yy-uq-fsw"/>
+                                            <constraint firstItem="9F1-cb-czw" firstAttribute="leading" secondItem="ntg-9x-ou5" secondAttribute="trailing" constant="5.5" id="FcN-4o-zIi"/>
+                                            <constraint firstItem="sKY-oD-7HU" firstAttribute="centerY" secondItem="ntg-9x-ou5" secondAttribute="centerY" id="Mbd-NQ-98E"/>
+                                            <constraint firstItem="Q7X-Kh-lr4" firstAttribute="leading" secondItem="sKY-oD-7HU" secondAttribute="trailing" constant="-16" id="NaZ-mF-nrT"/>
                                             <constraint firstItem="lcD-ZK-xvX" firstAttribute="centerY" secondItem="9qz-ka-Fwp" secondAttribute="centerY" id="UyE-Mu-VI1"/>
                                             <constraint firstAttribute="height" constant="80" id="Xr3-BB-62i"/>
                                             <constraint firstItem="Pif-BN-JFn" firstAttribute="top" secondItem="Q7X-Kh-lr4" secondAttribute="bottom" constant="20.5" id="Y9X-PV-HV2"/>
@@ -134,21 +142,17 @@
                                             <constraint firstItem="fHG-wI-0a4" firstAttribute="top" secondItem="nfR-zK-TTX" secondAttribute="bottom" constant="0.5" id="c8L-hG-cNr"/>
                                             <constraint firstItem="nfR-zK-TTX" firstAttribute="leading" secondItem="wwn-bM-ysO" secondAttribute="leading" constant="15" id="dja-h0-OY1"/>
                                             <constraint firstItem="fHG-wI-0a4" firstAttribute="centerY" secondItem="9qz-ka-Fwp" secondAttribute="centerY" id="dvg-C0-Rsb"/>
-                                            <constraint firstItem="o0g-MR-F7B" firstAttribute="leading" secondItem="ntg-9x-ou5" secondAttribute="trailing" constant="7.5" id="ess-dS-vhw"/>
                                             <constraint firstItem="9qz-ka-Fwp" firstAttribute="top" secondItem="nfR-zK-TTX" secondAttribute="bottom" constant="0.5" id="fWl-At-nAg"/>
                                             <constraint firstItem="Pif-BN-JFn" firstAttribute="centerY" secondItem="9qz-ka-Fwp" secondAttribute="centerY" id="mx6-GH-z7y"/>
                                             <constraint firstItem="fHG-wI-0a4" firstAttribute="leading" secondItem="9qz-ka-Fwp" secondAttribute="trailing" constant="1.5" id="my4-gt-pR9"/>
-                                            <constraint firstItem="Q7X-Kh-lr4" firstAttribute="leading" secondItem="XLr-3d-LHe" secondAttribute="trailing" constant="5" id="nVE-NU-pX5"/>
                                             <constraint firstItem="lcD-ZK-xvX" firstAttribute="leading" secondItem="Pif-BN-JFn" secondAttribute="trailing" constant="3.5" id="pe7-5q-m5k"/>
                                             <constraint firstItem="nfR-zK-TTX" firstAttribute="top" secondItem="ntg-9x-ou5" secondAttribute="bottom" constant="2" id="qxf-CE-avW"/>
                                             <constraint firstItem="Q7X-Kh-lr4" firstAttribute="top" secondItem="wwn-bM-ysO" secondAttribute="top" constant="8" id="rDX-XT-WO6"/>
-                                            <constraint firstItem="o0g-MR-F7B" firstAttribute="centerY" secondItem="ntg-9x-ou5" secondAttribute="centerY" id="rpT-ym-rQH"/>
                                             <constraint firstItem="6WN-ln-6Gu" firstAttribute="leading" secondItem="fHG-wI-0a4" secondAttribute="trailing" constant="2" id="s8o-Vb-I9b"/>
                                             <constraint firstItem="6WN-ln-6Gu" firstAttribute="centerY" secondItem="9qz-ka-Fwp" secondAttribute="centerY" id="snC-aY-sEg"/>
                                             <constraint firstItem="nfR-zK-TTX" firstAttribute="leading" secondItem="ntg-9x-ou5" secondAttribute="leading" id="tIz-1W-bbq"/>
                                             <constraint firstAttribute="trailing" secondItem="lcD-ZK-xvX" secondAttribute="trailing" constant="17.5" id="w1E-CP-5ie"/>
                                             <constraint firstItem="6WN-ln-6Gu" firstAttribute="top" secondItem="nfR-zK-TTX" secondAttribute="bottom" constant="1.5" id="wPc-9Z-EF7"/>
-                                            <constraint firstItem="XLr-3d-LHe" firstAttribute="centerY" secondItem="ntg-9x-ou5" secondAttribute="centerY" constant="-1.25" id="ztQ-PI-J5h"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oqP-5l-oJX">
@@ -264,8 +268,8 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="changeItemButton" destination="Q7X-Kh-lr4" id="kFI-Pq-QaQ"/>
-                <outlet property="fuelCostLabel" destination="XLr-3d-LHe" id="1Ux-aw-C93"/>
-                <outlet property="fuelStatusLabel" destination="o0g-MR-F7B" id="T4t-gD-1WY"/>
+                <outlet property="fuelCostBtn" destination="sKY-oD-7HU" id="Ewd-oL-Cwe"/>
+                <outlet property="fuelStatusBtn" destination="9F1-cb-czw" id="eUd-FK-Jx2"/>
                 <outlet property="memoTextView" destination="Bbi-wG-tIe" id="Fsz-C8-svx"/>
                 <outlet property="memoView" destination="oqP-5l-oJX" id="OaA-Qz-tko"/>
                 <outlet property="otherrePairCostLabel" destination="rCl-dl-Mr2" id="ynp-WG-lCg"/>

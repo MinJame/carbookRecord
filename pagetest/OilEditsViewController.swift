@@ -157,8 +157,6 @@ class OilEditsViewController: UIViewController{
                 tablelist[1].updateValue(item["carbookRecordWashCost"] as? Double ?? 0.0, forKey: "washCost")
                 // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
                 tablelist[1].updateValue(item["carbookRecordItemIsHidden"] as? Int ?? 0, forKey: "isHidden")
-                
-                Swift.print("유후\(tablelist)")
                 OilTableView.reloadData()
                 
             }
@@ -372,7 +370,6 @@ extension OilEditsViewController: UITableViewDataSource {
         let item = tablelist[indexPath.row]
         // item의 "Type"을 타입으로 선언
         let type = item["Type"] as? Int ?? 0
-        Swift.print("뭐지\(item)")
         switch type {
             
         case 1 :
@@ -404,7 +401,11 @@ extension OilEditsViewController: UITableViewDataSource {
                 var cellCost = tablelist[1]["Cost"] as? Double ?? 0.0
                 cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
                 cell.fuelCost.text = String(format: "%.f", 2100.0)
-                cell.fuelLiterField.text = String(format: "%.f", cellCost/2100.0)
+                cell.fuelLiterField.text = String(format: "%.2f", cellCost/2100.0)
+                tablelist[1].updateValue(NumberFormatter().number(from: cell.fuelLiterField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+                    cell.fuelLiterField.text = String(format: "%.f", self.tablelist[1]["Liter"] as? Double ?? 0.0)
+                }
                 return cell
             }else {
                 let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID")
@@ -621,10 +622,6 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
         }
         if textField.tag == 6 {
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Cost")
-            
-        }
-        if textField.tag == 7 {
-            tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
             
         }
         if textField.tag == 9 {
