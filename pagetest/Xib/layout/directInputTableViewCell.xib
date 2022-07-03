@@ -51,7 +51,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rq0-c2-9Pg">
+                                    <textField opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rq0-c2-9Pg">
                                         <rect key="frame" x="167" y="21" width="361" height="19"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
@@ -90,7 +90,7 @@
                                             </hierarchicalColors>
                                         </imageReference>
                                     </imageView>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BwP-LG-h6t">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BwP-LG-h6t">
                                         <rect key="frame" x="69" y="14" width="505" height="214"/>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <color key="textColor" systemColor="labelColor"/>
@@ -178,6 +178,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="memoTextView" destination="BwP-LG-h6t" id="vJD-cf-HGb"/>
+                <outlet property="washCarCostField" destination="Rq0-c2-9Pg" id="RdQ-hH-gcz"/>
             </connections>
             <point key="canvasLocation" x="447.82608695652175" y="163.39285714285714"/>
         </tableViewCell>

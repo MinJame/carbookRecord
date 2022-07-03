@@ -373,7 +373,8 @@ extension TotalViewController: UITableViewDataSource {
             }
         }
         } else {
-           
+            cell.fuelStatusLabel.isHidden  = false ㄴ
+            cell.fuelCostLabel.isHidden = false
             cell.totalDistanceLabel.text = String(format: "%.f", item["carbookRecordTotalDistance"] as? Double ?? 0.0)
             cell.rePairExpenseCost.text = String(format: "%.f", item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0)
             // memoView를 숨겨준다
@@ -385,7 +386,74 @@ extension TotalViewController: UITableViewDataSource {
             cell.rePairItemTitleLabel.text = "주유"
             cell.rePairLocationLabel.text = "동일주유소"
             cell.rePairItemListView.isHidden =  true
-      
+            
+            // 만약 item의 carbookRecordItemExpenseMemo가 문자형이면 memoText에 저장하고
+            if let memoText = item["carbookRecordItemExpenseMemo"] as? String  {
+                // 만약 memoText 값이 있으면
+                if memoText != "" {
+                    // memoView를 숨기지 않고 memoText값을 memoTextView에 넣어준다
+                    cell.memoView.isHidden = false
+                    cell.memoTextView.text = memoText
+                }
+            }
+            
+            // 만약 item의 "categoryCodes"가 문자형이고,item의 "categoryCodesCost"가 문자형이면
+            if let washCosts = item["carbookRecordWashCost"] as? Double  {
+                // 정비항목 코드를,를 이용해 분리해서 codeList에 저장한다
+                // 만약 codeList와 costList의 수가 1보다 크면
+                if washCosts != 0.0 {
+                    cell.rePairItmeStackView.removeAllArrangedSubviews()
+                    //repairItemListView를 숨기지않는다
+                    cell.rePairItemListView.isHidden = false
+                    let itemView = UIView(frame: CGRect(x: 0, y: 0, width: cell.rePairItemListView.frame.width, height: 30))
+                    // titleLabel의 값을 폭은 100 높이는 30으로 지정해서 저장한다
+                    let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+                    // valueLabel의 값을 폭은 100 높이는 30으로 지정해서 저장한다
+                    let valueLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+                    itemView.translatesAutoresizingMaskIntoConstraints = false
+                    titleLabel.translatesAutoresizingMaskIntoConstraints = false
+                    valueLabel.translatesAutoresizingMaskIntoConstraints = false
+                    
+                    titleLabel.text = "세차비"
+                    // valueLabel은 costList의 값을 index순서에 맞게 보여준다
+                    valueLabel.text = "₩" + String(format: "%.f", item["carbookRecordWashCost"] as? Double ?? 0.0)
+                    titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+                    // valueLabel 폰트 사이즈를 지정해준다
+                    valueLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+                    // valueLabel의 문자 위치를 지정해준다
+                    valueLabel.textAlignment = .right
+                    // titleLabel의 문자 색을 지정해준다
+                    titleLabel.textColor = .lightGray
+                    // valueLabel의 문자 색을 지정해준다
+                    valueLabel.textColor = .darkGray
+                    // 아이템 뷰에 titleLabel을 추가해준다
+                    itemView.addSubview(titleLabel)
+                    // 아이템 뷰에 valueLabel을 추가해준다
+                    itemView.addSubview(valueLabel)
+                    //titleLabel leading값을 지정해준다
+                    titleLabel.leadingAnchor.constraint(equalTo: itemView.leadingAnchor, constant: 10).isActive = true
+                    //titleLabel width값의 간격을 지정해준다
+                    titleLabel.widthAnchor.constraint(equalTo: itemView.widthAnchor, multiplier: 0.5).isActive = true
+                    titleLabel.centerYAnchor.constraint(equalTo: itemView.centerYAnchor, constant: 0).isActive = true
+                    //valueLabel trailing값의 간격을 지정해준다
+                    valueLabel.trailingAnchor.constraint(equalTo: itemView.trailingAnchor, constant: -10).isActive = true
+                    //valueLabel width값의 간격을 지정해준다
+                    valueLabel.widthAnchor.constraint(equalTo: itemView.widthAnchor, multiplier: 0.5).isActive = true
+                    valueLabel.centerYAnchor.constraint(equalTo: itemView.centerYAnchor, constant: 0).isActive = true
+                    cell.rePairItmeStackView.addArrangedSubview(itemView)
+                    // itemView의 width값을 지정해준다
+                    itemView.widthAnchor.constraint(equalTo: cell.rePairItmeStackView.widthAnchor, constant: 0).isActive = true
+                    // itemView의 높이값을 지정해준다
+                    itemView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+                    // 코드리스트의 갯수만큼 for문 동작
+                    
+                    
+                }else {
+                    // 1보다 작을 경우 rePairItemListView를 숨긴다
+                    cell.rePairItemListView.isHidden = true
+                }
+            }
+
            
         }
         return cell

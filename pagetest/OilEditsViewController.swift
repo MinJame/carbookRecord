@@ -55,8 +55,8 @@ class OilEditsViewController: UIViewController{
     
     func setItems(){
         tablelist = [
-            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false,"recordType" : "주유"],
-            ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0,"id": 0,"FuelType" : "경유"],
+            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false,"recordType" : "주유",],
+            ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0,"id": 0,"FuelType" : "경유","memo": "","washCost" : 0],
             ["Type": 3],
             ["Type": 4],
             // ["Type": 2],
@@ -144,7 +144,7 @@ class OilEditsViewController: UIViewController{
         // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고
         if let list : [Dictionary<String,Any>] = carBookDatabase.selectCarbookDataList(id: String(cellId ?? 0)) {
             // 정비기록의 비어있는 첫번째 것을 제거해준다 remove 충돌소지가 있음
-            Swift.print("야임마\(cellId)")
+
             // list의 item값 중에서
             for item in list {
                 tablelist[1].updateValue(item["_id"] as? Int ?? 0, forKey: "id")
@@ -153,6 +153,8 @@ class OilEditsViewController: UIViewController{
                 // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
                 tablelist[1].updateValue(item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0, forKey: "Cost")
                 tablelist[1].updateValue(item["carbookRecordOilItemFuelLIter"] as? Double ?? 0.0, forKey: "Liter")
+                tablelist[1].updateValue(item["carbookRecordItemExpenseMemo"] as? String ?? "", forKey: "memo")
+                tablelist[1].updateValue(item["carbookRecordWashCost"] as? Double ?? 0.0, forKey: "washCost")
                 // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
                 tablelist[1].updateValue(item["carbookRecordItemIsHidden"] as? Int ?? 0, forKey: "isHidden")
                 
@@ -211,6 +213,7 @@ class OilEditsViewController: UIViewController{
                         "carbookRecordOilItemExpenseCost" : item["Cost"] as? Double ?? 0.0,
                         "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
                         "carbookRecordOilItemType" : item["FuelType"] as? String ?? "",
+                        "carbookRecordWashCost" : item["washCost"] as? Double ?? 0.0,
                         "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
                     ]
                     // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
@@ -268,10 +271,11 @@ class OilEditsViewController: UIViewController{
                     let insertCarBookRecordOilItem : Dictionary<String,Any> = [
                         "carbookRecordItemRecordId" : id,
                         "carbookRecordOilItemFillFuel" : item["Fuel"] as? String ?? "",
-                        "carbookRecordOilItemExpenseMemo" : item["memo"] as? String ?? "",
+                        "carbookRecordItemExpenseMemo" : item["memo"] as? String ?? "",
                         "carbookRecordOilItemExpenseCost" : item["Cost"] as? Double ?? 0.0,
                         "carbookRecordOilItemFuelLiter" : item["Liter"] as? Double ?? 0.0,
                         "carbookRecordOilItemType" : item["FuelType"] as? String ?? "",
+                        "carbookRecordWashCost" : item["washCost"] as? Double ?? 0.0,
                         "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
                     ]
                     // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
@@ -430,7 +434,11 @@ extension OilEditsViewController: UITableViewDataSource {
         case 4 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "directInputTableViewCellID") as? directInputTableViewCell {
                 
-                
+                cell.memoTextView.delegate = self
+                cell.washCarCostField.delegate = self
+                cell.memoTextView.text = tablelist[1]["memo"] as? String ?? ""
+                tablelist[1].updateValue(cell.memoTextView.text ?? "", forKey: "memo")
+                cell.washCarCostField.text = String(format: "%.f", tablelist[1]["washCost"] as? Double ?? 0.0)
                 return cell
             }
             else {
@@ -553,8 +561,10 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
             textView.text = "메모 250자 기입가능\n(이모티콘 불가)"
             // 텍스트뷰의 문자색을 연한 갈색으로 정한다
             textView.textColor = UIColor.lightGray
+            tablelist[textView.tag].updateValue("", forKey: "memo")
         }else {
             // 만약 텍스트 뷰가 비어 있지 않다면 텍스트뷰의 데이터를 memo에 저장한다
+            tablelist[textView.tag].updateValue(textView.text ?? "", forKey: "memo")
         }
         
     }
@@ -582,6 +592,10 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
         }
         if textField.tag == 7 {
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
+            
+        }
+        if textField.tag == 9 {
+            tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "washCost")
             
         }else {
             

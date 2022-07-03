@@ -8,7 +8,8 @@
 import UIKit
 
 class rePairListTableViewCell: UITableViewCell {
-
+    @IBOutlet weak var fuelStatusLabel: UILabel!
+    @IBOutlet weak var fuelCostLabel: UILabel!
     @IBOutlet weak var memoTextView: UITextView!
     @IBOutlet weak var otherrePairCosts: UILabel!
     @IBOutlet weak var otherrePairitemTitleLabel: UILabel!
@@ -29,7 +30,9 @@ class rePairListTableViewCell: UITableViewCell {
         rePairItemImageView.layer.cornerRadius = 10
         memoView.layer.cornerRadius = 10
         memoTextView.layer.cornerRadius = 10
-//        otherrePairitemTitleLabel.text = ""
+        fuelStatusLabel.layer.cornerRadius = 10
+        
+        //        otherrePairitemTitleLabel.text = ""
 //        otherrePairCostLabel.text = ""
 //        rePairItemTitleLabel.text = ""
 //        otherrePairCosts.text = ""

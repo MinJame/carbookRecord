@@ -110,7 +110,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="98"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chd-kE-GuK">
-                                        <rect key="frame" x="17" y="36.5" width="25" height="25"/>
+                                        <rect key="frame" x="17" y="54.5" width="25" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="poB-Eu-Cjn"/>
                                             <constraint firstAttribute="height" constant="25" id="xcn-m4-MJa"/>
@@ -125,7 +125,7 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tx6-q1-BT2">
-                                        <rect key="frame" x="71" y="-1" width="139" height="100"/>
+                                        <rect key="frame" x="71" y="34" width="139" height="66"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="49l-bl-Cji">
                                                 <rect key="frame" x="0.0" y="0.0" width="131" height="100"/>
@@ -157,14 +157,14 @@
                                             <constraint firstItem="49l-bl-Cji" firstAttribute="leading" secondItem="tx6-q1-BT2" secondAttribute="leading" id="CKy-rv-ESS"/>
                                             <constraint firstItem="49l-bl-Cji" firstAttribute="trailing" secondItem="tx6-q1-BT2" secondAttribute="trailingMargin" id="FQg-6X-wDj"/>
                                             <constraint firstItem="oBm-NT-5sE" firstAttribute="leading" secondItem="1J3-xg-I1L" secondAttribute="leading" id="WeL-c6-0rP"/>
-                                            <constraint firstAttribute="bottom" secondItem="49l-bl-Cji" secondAttribute="bottom" id="aYh-fq-Slh"/>
+                                            <constraint firstAttribute="bottom" secondItem="49l-bl-Cji" secondAttribute="bottom" constant="-34" id="aYh-fq-Slh"/>
                                             <constraint firstItem="oBm-NT-5sE" firstAttribute="top" secondItem="tx6-q1-BT2" secondAttribute="top" constant="12" id="b1m-Gx-6x7"/>
                                             <constraint firstItem="1J3-xg-I1L" firstAttribute="top" secondItem="oBm-NT-5sE" secondAttribute="bottom" constant="2" id="eHD-0m-W6Y"/>
                                             <constraint firstItem="49l-bl-Cji" firstAttribute="leading" secondItem="1J3-xg-I1L" secondAttribute="leading" id="gNY-SD-Ftw"/>
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gHf-tm-C8Y">
-                                        <rect key="frame" x="344" y="33.5" width="49" height="31"/>
+                                        <rect key="frame" x="344" y="51.5" width="49" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="완료">
                                             <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -177,10 +177,10 @@
                                 <color key="backgroundColor" red="0.16470588235294117" green="0.77647058823529413" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="tx6-q1-BT2" firstAttribute="leading" secondItem="chd-kE-GuK" secondAttribute="trailing" constant="29" id="1yG-Q9-eX9"/>
-                                    <constraint firstAttribute="bottom" secondItem="tx6-q1-BT2" secondAttribute="bottom" constant="-1" id="7cW-tE-TZn"/>
+                                    <constraint firstAttribute="bottom" secondItem="tx6-q1-BT2" secondAttribute="bottom" constant="-2" id="7cW-tE-TZn"/>
                                     <constraint firstItem="tx6-q1-BT2" firstAttribute="centerY" secondItem="chd-kE-GuK" secondAttribute="centerY" id="7nO-S4-Wsz"/>
                                     <constraint firstAttribute="trailing" secondItem="gHf-tm-C8Y" secondAttribute="trailing" constant="21" id="Jin-aZ-nbd"/>
-                                    <constraint firstItem="tx6-q1-BT2" firstAttribute="centerY" secondItem="ybe-ba-FcT" secondAttribute="centerY" id="cmE-fp-rh9"/>
+                                    <constraint firstItem="tx6-q1-BT2" firstAttribute="centerY" secondItem="ybe-ba-FcT" secondAttribute="centerY" constant="18" id="cmE-fp-rh9"/>
                                     <constraint firstItem="gHf-tm-C8Y" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="tx6-q1-BT2" secondAttribute="trailing" constant="98" id="cr5-dr-2Ec"/>
                                     <constraint firstItem="chd-kE-GuK" firstAttribute="leading" secondItem="ybe-ba-FcT" secondAttribute="leading" constant="17" id="w7R-Ty-9Jn"/>
                                     <constraint firstItem="gHf-tm-C8Y" firstAttribute="centerY" secondItem="tx6-q1-BT2" secondAttribute="centerY" id="zKj-Ph-wWU"/>
