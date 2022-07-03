@@ -373,7 +373,7 @@ extension TotalViewController: UITableViewDataSource {
             }
         }
         } else {
-            cell.fuelStatusLabel.isHidden  = false ㄴ
+            cell.fuelStatusLabel.isHidden  = false 
             cell.fuelCostLabel.isHidden = false
             cell.totalDistanceLabel.text = String(format: "%.f", item["carbookRecordTotalDistance"] as? Double ?? 0.0)
             cell.rePairExpenseCost.text = String(format: "%.f", item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0)
