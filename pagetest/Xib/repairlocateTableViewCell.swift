@@ -28,8 +28,14 @@ class repairlocateTableViewCell: UITableViewCell {
         addOilPlacebutton.layer.borderWidth = 2
         addOilPlacebutton.layer.borderColor = UIColor.lightGray.cgColor
         addOilPlacebutton.layer.cornerRadius = 10
-        findPlace.layer.borderColor  = UIColor.black.cgColor
         findPlace.layer.borderWidth = 0.5
+        // repairButton 색은 연한 회색
+        findPlace.layer.borderColor = UIColor.lightGray.cgColor
+        //repairButton 모서리 굴곡 값 5
+        findPlace.layer.backgroundColor = UIColor.white.cgColor
+        findPlace.layer.cornerRadius = 10
+        //repairButton 문자색 하얀색
+        findPlace.tintColor = UIColor.white
         totalDistanceField.delegate = self
         
     }

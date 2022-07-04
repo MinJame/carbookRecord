@@ -43,6 +43,9 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         if celId != nil {
             finishButton.titleLabel?.text = "수정"
             getCarBookData()
+        }else {
+            finishButton.titleLabel?.text = "완료"
+            
         }
     }
     // 버튼 세팅하는 함수
@@ -74,7 +77,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 날짜표시를 년.월.일(요일)형식으로 선언
         formatter.dateFormat = "yyyy.MM.dd(E)"
         // finishButton을 완료로 선언 settitle ceLid 비교
-        finishButton.titleLabel?.text = "완료"
+     
         // todayDateLabel에 dateString 저장
         todayDateLabel.text = formatter.string(for: Date()) ?? ""
         
