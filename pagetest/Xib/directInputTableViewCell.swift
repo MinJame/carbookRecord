@@ -23,7 +23,7 @@ class directInputTableViewCell: UITableViewCell, UITextViewDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        memoPlaceholderSetting()
+//        memoPlaceholderSetting()
         toolbarItem()
         toolbarItems()
     }

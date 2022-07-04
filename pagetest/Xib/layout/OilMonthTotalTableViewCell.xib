@@ -263,6 +263,7 @@
                 <outlet property="totalCostLabel" destination="yiW-My-yIc" id="1hf-XQ-TOh"/>
                 <outlet property="totalDistacneLabel" destination="Fw6-UP-D06" id="rx8-6T-Q6F"/>
                 <outlet property="totalFuelCostLabel" destination="OmT-0B-knA" id="RGK-DA-dlD"/>
+                <outlet property="totalFuelEfficiencyLabel" destination="6rB-6X-RZ5" id="TKh-VB-ZBD"/>
                 <outlet property="totalFuelLabel" destination="OLx-As-kv4" id="JYf-eB-wVA"/>
             </connections>
             <point key="canvasLocation" x="131.8840579710145" y="79.6875"/>

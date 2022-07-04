@@ -1266,6 +1266,7 @@
                         <outlet property="yearTotalDistanceLabel" destination="Gk2-1z-0Ge" id="k0T-FZ-hiy"/>
                         <outlet property="yearTotalExpenseCostLabel" destination="DpS-9W-ibC" id="h9S-bW-dPx"/>
                         <outlet property="yearTotalFuelCostLabel" destination="8Iy-FY-EY6" id="VJN-Hb-fDB"/>
+                        <outlet property="yearTotalFuelEffiencyLabel" destination="f1L-kS-rAK" id="fnC-nC-d6V"/>
                         <outlet property="yearTotalFuelLabel" destination="srG-1F-HS9" id="xNH-ed-JxI"/>
                     </connections>
                 </viewController>

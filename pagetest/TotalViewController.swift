@@ -25,6 +25,7 @@ class TotalViewController: UIViewController {
     @IBOutlet weak var totalTableView: UITableView!
     @IBOutlet weak var yearTotalDistanceLabel: UILabel!
     @IBOutlet weak var yearTotalExpenseCostLabel: UILabel!
+    @IBOutlet weak var yearTotalFuelEffiencyLabel: UILabel!
     @IBOutlet weak var yearTotalFuelCostLabel: UILabel!
     @IBOutlet weak var yearTotalFuelLabel: UILabel!
     var searchDates : [dates] = []
@@ -146,6 +147,7 @@ class TotalViewController: UIViewController {
             var totalDistance : Double = 0.0
             var totalFuel : Double = 0.0
             var totalFuelCost : Double = 0.0
+            var totalFuelEfficiency : Double = 0.0
             var date : String = ""
             //db에 있는 데이터들을 월별로 묶는다
             let groupRawData = Dictionary(grouping: list){$0["date"] as? String ?? ""}
@@ -154,6 +156,7 @@ class TotalViewController: UIViewController {
                 var monthDistance : Double = 0.0
                 var monthFuel : Double = 0.0
                 var monthFuelCost : Double = 0.0
+                var monthFuelEfficiency : Double = 0.0
                 date = key
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
@@ -164,12 +167,14 @@ class TotalViewController: UIViewController {
                     totalDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
                     totalFuelCost += item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0
                     totalFuel += item["carbookRecordOilItemFuelLiter"] as? Double ?? 0.0
+                    totalFuelEfficiency = totalDistance/totalFuel
                     monthCost += item["TotalCost"] as? Double ?? 0.0
                     monthCost += item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0
                     monthCost += item["carbookRecordWashCost"] as? Double ?? 0.0
                     monthDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
                     monthFuelCost += item["carbookRecordOilItemExpenseCost"] as? Double ?? 0.0
                     monthFuel += item["carbookRecordOilItemFuelLiter"] as? Double ?? 0.0
+                    monthFuelEfficiency = monthDistance/monthFuel
                 }
                 
                 let carbookdata :Dictionary<String,Any>  = [
@@ -178,6 +183,7 @@ class TotalViewController: UIViewController {
                     "monthDistance"  : monthDistance,
                     "monthCost" : monthCost,
                     "monthFuel"  : monthFuel,
+                    "monthFuelEfficiency" : monthFuelEfficiency,
                     "monthFuelCost" : monthFuelCost,
 
                     "items": value
@@ -193,6 +199,7 @@ class TotalViewController: UIViewController {
             yearTotalDistanceLabel.text = String(format: "%.f",totalDistance)
             yearTotalFuelLabel.text = String(format: "%.2f",totalFuel)
             yearTotalFuelCostLabel.text = String(format: "%.f",totalFuelCost)
+            yearTotalFuelEffiencyLabel.text = String(format: "%.f",totalFuelEfficiency)
             // 저장된 데이터들을 월별로 내림차순으로 정리한다
             carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
         }
@@ -236,6 +243,7 @@ extension TotalViewController: UITableViewDataSource {
         headerView?.totalCostLabel.text = String(format: "%.f",carDataList[section]["monthCost"] as? Double ?? "")
         headerView?.totalFuelLabel.text = String(format: "%.2f",carDataList[section]["monthFuel"] as? Double ?? "")
         //헤더뷰의 totalCostLabel에 cardatalist[section]에["totalCost"]값이 더블형인데 스트링형으로 변환해서 보여준다
+        headerView?.totalFuelEfficiencyLabel.text = String(format: "%.f",carDataList[section]["monthFuelEfficiency"] as? Double ?? "")
         headerView?.totalFuelCostLabel.text = String(format: "%.f",carDataList[section]["monthFuelCost"] as? Double ?? "")
         return headerView
     }
@@ -422,6 +430,7 @@ extension TotalViewController: UITableViewDataSource {
                     // memoView를 숨기지 않고 memoText값을 memoTextView에 넣어준다
                     cell.memoView.isHidden = false
                     cell.memoTextView.text = memoText
+                    
                 }
             }
             

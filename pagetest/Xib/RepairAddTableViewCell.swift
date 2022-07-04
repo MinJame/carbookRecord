@@ -19,9 +19,6 @@ class RepairAddTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         toolbarItem()
-        fuelTypeButton.titleLabel!.text = UserDefaults.standard.string(forKey: "oiltypes")
-        fuelTypeButton.setTitleColor(.black, for: .normal)
- 
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

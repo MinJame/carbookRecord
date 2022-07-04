@@ -410,15 +410,16 @@ extension OilEditsViewController: UITableViewDataSource {
                    cell.fuelTypeButton.titleLabel?.text = tablelist[1]["FuelType"] as? String ?? ""
                     
                 }
-              
-//                tablelist[1].updateValue(cell.fuelTypeButton.titleLabel?.text ?? "", forKey: "FuelType")
-                var cellCost = tablelist[1]["Cost"] as? Double ?? 0.0
+                let cellCost = tablelist[1]["Cost"] as? Double ?? 0.0
+                
                 cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
                 cell.fuelCost.text = String(format: "%.f", 2100.0)
-                cell.fuelLiterField.text = String(format: "%.2f", cellCost/2100.0)
-                tablelist[1].updateValue(NumberFormatter().number(from: cell.fuelLiterField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
-                    cell.fuelLiterField.text = String(format: "%.f", self.tablelist[1]["Liter"] as? Double ?? 0.0)
+                if cellCost != nil {
+                    cell.fuelLiterField.text = String(format: "%.2f", cellCost/2100.0)
+                    tablelist[1].updateValue(NumberFormatter().number(from: cell.fuelLiterField.text?.replacingOccurrences(of: ",", with: "") ?? "0.00")?.doubleValue as Any , forKey: "Liter")
+                    OilTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
+                }else {
+                    cell.fuelLiterField.text = "0.00"
                 }
                 return cell
             }else {

@@ -10,6 +10,7 @@ import UIKit
 class OilMonthTotalTableViewCell: UITableViewHeaderFooterView {
     @IBOutlet weak var firstView: UIView!
   
+    @IBOutlet weak var totalFuelEfficiencyLabel: UILabel!
     @IBOutlet weak var totalFuelCostLabel: UILabel!
     @IBOutlet weak var totalFuelLabel: UILabel!
     @IBOutlet weak var totalCostLabel: UILabel!
