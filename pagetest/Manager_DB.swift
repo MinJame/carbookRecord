@@ -22,17 +22,24 @@ class Manager_DB {
     
     let create_CARBOOKRECORD = "CREATE TABLE CARBOOKRECORD (_id INTEGER PRIMARY KEY AUTOINCREMENT,carbookRecordRepairMode INTEGER DEFAULT 0,carbookRecordExpendDate TEXT,carbookRecordIsHidden INTEGER DEFAULT 0,carbookRecordTotalDistance REAL DEFAULT 0.0,carbookRecordRegTime TEXT,carbookRecordUpdateTime TEXT,carbookRecordType TEXT)"
     
-    let create_CARBOOKRECORDITEM = "CREATE TABLE CARBOOKRECORDITEM (_id INTEGER PRIMARY KEY AUTOINCREMENT,carbookRecordId INTEGER,carbookRecordItemCategoryCode TEXT,carbookRecordItemCategoryName TEXT,carbookRecordItemExpenseMemo TEXT,carbookRecordItemExpenseCost REAL DEFAULT 0.0,carbookRecordItemIsHidden INTEGER DEFAULT 0,carbookRecordItemRegTime TEXT,carbookRecordItemUpdateTime TEXT,carbookRecordOilItem TEXT, carbookRecordOilItemExpenseCost REAL DEFAULT 0.0,carbookRecordOilItemFillFuel TEXT,carbookRecordOilItemFuelLIter REAL DEFAULT 0.0,carbookRecordOilItemType TEXT,carbookRecordWashCost REAL DEFAULT 0.0,carbookRecordFuelStatus TEXT, carbookRecordFuelPercentage INTEGER )"
+    let create_CARBOOKRECORDREPAIRITEM = "CREATE TABLE CARBOOKRECORDREPAIRITEM (_id INTEGER PRIMARY KEY AUTOINCREMENT,carbookRecordId INTEGER,carbookRecordItemCategoryCode TEXT,carbookRecordItemCategoryName TEXT,carbookRecordItemExpenseMemo TEXT,carbookRecordItemExpenseCost REAL DEFAULT 0.0,carbookRecordItemIsHidden INTEGER DEFAULT 0,carbookRecordItemRegTime TEXT,carbookRecordItemUpdateTime TEXT)"
+    
+    let create_CARBOOKRECORDOILITEM = "CREATE TABLE CARBOOKRECORDOILITEM (_id INTEGER PRIMARY KEY AUTOINCREMENT,carbookRecordId INTEGER,carbookRecordOilItem TEXT, carbookRecordOilItemExpenseCost REAL DEFAULT 0.0,carbookRecordOilItemFillFuel TEXT,carbookRecordOilItemFuelLIter REAL DEFAULT 0.0,carbookRecordOilItemType TEXT,carbookRecordWashCost REAL DEFAULT 0.0,carbookRecordFuelStatus TEXT, carbookRecordFuelPercentage INTEGER,carbookRecordItemIsHidden INTEGER DEFAULT 0,carbookRecordItemRegTime TEXT,carbookRecordItemUpdateTime TEXT )"
+    
+    
     
     
     init() {
         
         let CARBOOKRECORD_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carbookRecordRepairMode" : "INTEGER DEFAULT 0","carbookRecordExpendDate" :"TEXT","carbookRecordIsHidden" : "INTEGER DEFAULT 0","carbookRecordTotalDistance" : "REAL DEFAULT 0.0","carbookRecordRegTime" : "TEXT", "carbookRecordUpdateTime" : "TEXT","carbookRecordType" : "TEXT"]
         
-        let CARBOOKRECORDITEM_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carbookRecordId " : "INTEGER","carbookRecordItemCategoryCode" : "TEXT","carbookRecordItemCategoryName" :"TEXT","carbookRecordItemExpenseMemo" : "TEXT","carbookRecordItemExpenseCost" : "REAL DEFAULT 0.0","carbookRecordItemIsHidden" : "INTEGER DEFAULT 0", "carbookRecordItemRegTime" : "TEXT","carbookRecordUpdateTime" : "TEXT","carbookRecordOilItem": "TEXT", "carbookRecordOilItemExpenseCost" : "REAL DEFAULT 0.0","carbookRecordOilItemFillFuel": "TEXT","carbookRecordOilItemFuelLiter" : "REAL DEFAULT 0.0","carbookRecordOilItemType" : "TEXT","carbookRecordWashCost" : "REAL DEFAULT 0.0","carbookRecordFuelStatus" : "TEXT","carbookRecordFuelPercentage" : "INTEGER DEFAULT 0"]
+        let CARBOOKRECORDREPAIRITEM_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carbookRecordId " : "INTEGER","carbookRecordItemCategoryCode" : "TEXT","carbookRecordItemCategoryName" :"TEXT","carbookRecordItemExpenseMemo" : "TEXT","carbookRecordItemExpenseCost" : "REAL DEFAULT 0.0","carbookRecordItemIsHidden" : "INTEGER DEFAULT 0", "carbookRecordItemRegTime" : "TEXT","carbookRecordUpdateTime" : "TEXT","carbookRecordOilItem": "TEXT", "carbookRecordOilItemExpenseCost" : "REAL DEFAULT 0.0","carbookRecordOilItemFillFuel": "TEXT","carbookRecordOilItemFuelLiter" : "REAL DEFAULT 0.0","carbookRecordOilItemType" : "TEXT","carbookRecordWashCost" : "REAL DEFAULT 0.0","carbookRecordFuelStatus" : "TEXT","carbookRecordFuelPercentage" : "INTEGER DEFAULT 0"]
+        
+        let CARBOOKRECORDOILITEM_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carbookRecordId " : "INTEGER","carbookRecordOilItem": "TEXT", "carbookRecordOilItemExpenseCost" : "REAL DEFAULT 0.0","carbookRecordOilItemFillFuel": "TEXT","carbookRecordOilItemFuelLiter" : "REAL DEFAULT 0.0","carbookRecordOilItemType" : "TEXT","carbookRecordWashCost" : "REAL DEFAULT 0.0","carbookRecordFuelStatus" : "TEXT","carbookRecordFuelPercentage" : "INTEGER DEFAULT 0","carbookRecordItemIsHidden" : "INTEGER DEFAULT 0", "carbookRecordItemRegTime" : "TEXT","carbookRecordUpdateTime" : "TEXT"]
         
         databaseCheck.updateValue(CARBOOKRECORD_column, forKey: "CARBOOKRECORD")
-        databaseCheck.updateValue(CARBOOKRECORDITEM_column, forKey: "CARBOOKRECORDITEM")
+        databaseCheck.updateValue(CARBOOKRECORDREPAIRITEM_column, forKey: "CARBOOKRECORDREPAIRITEM")
+        databaseCheck.updateValue(CARBOOKRECORDOILITEM_column, forKey: "CARBOOKRECORDOILITEM")
         
         Swift.print("db호출")
         let filemangr = FileManager.default
@@ -76,7 +83,10 @@ class Manager_DB {
                 if !carbookDB.executeStatements(create_CARBOOKRECORD){
                     Swift.print("에러\(carbookDB.lastErrorMessage())")
                 }
-                if !carbookDB.executeStatements(create_CARBOOKRECORDITEM){
+                if !carbookDB.executeStatements(create_CARBOOKRECORDREPAIRITEM){
+                    Swift.print("에러\(carbookDB.lastErrorMessage())")
+                }
+                if !carbookDB.executeStatements(create_CARBOOKRECORDOILITEM){
                     Swift.print("에러\(carbookDB.lastErrorMessage())")
                 }
             }
@@ -96,8 +106,10 @@ class Manager_DB {
                             switch item.key {
                             case "CARBOOKRECORD" :
                                 create_sql = create_CARBOOKRECORD
-                            case "CARBOOKRECORDITEM" :
-                             create_sql = create_CARBOOKRECORDITEM
+                            case "CARBOOKRECORDREPAIRITEM" :
+                             create_sql = create_CARBOOKRECORDREPAIRITEM
+                            case "CARBOOKRECORDOILITEM" :
+                             create_sql = create_CARBOOKRECORDOILITEM
                          default:
                              return
                             }

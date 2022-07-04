@@ -39,6 +39,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         setNotification()
         setLists()
         setBtn()
+        finishButton.titleLabel?.text = "완료"
         // 만약 celId가 있으면 getcarBookData 함수를 실행한다
         if celId != nil {
             finishButton.titleLabel?.text = "수정"
