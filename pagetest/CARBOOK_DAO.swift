@@ -22,7 +22,7 @@ class CARBOOK_DAO {
         databaseURL = dirURL.appendingPathComponent("Carbook").appendingPathComponent("carbook.db")
     }
     
-    func insertCarbookData(carbookData : [String:Any]) -> [String:Any] {
+    func insertCarbookData(carbookData : Dictionary<String, Any>) -> Dictionary<String, Any> {
         let carbookDB = FMDatabase(path: databaseURL?.path)
         
         if carbookDB.open() {
@@ -30,32 +30,41 @@ class CARBOOK_DAO {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyyMMddHHmmss"
             let date = Date()
-            
+            let regDateFormmatter = DateFormatter()
+            let uploadDateFormmatter = DateFormatter()
             let updateFormatter = DateFormatter()
-            
+            let globalDateFormatter = DateFormatter()
+            regDateFormmatter.dateFormat = "yyyyMMddHHmmss"
+            uploadDateFormmatter.dateFormat = "yyyyMMddHHmmss"
             updateFormatter.dateFormat = "yyyyMMddHHmmss"
+            globalDateFormatter.dateFormat =  "yyyyMMddHHmmss"
             updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
             
-            dateFormatter.locale = Locale(identifier: "ko_KR")
-            updateFormatter.locale = Locale(identifier: "ko_KR")
             
-            let insertSQL = "Insert Into CARBOOKRECORD ( carbookRecordRepairMode,carbookRecordExpendDate,carbookRecordIsHidden,carbookRecordTotalDistance,carbookRecordRegTime,carbookRecordUpdateTime,carbookRecordType) Values('\(carbookData["carbookRecordRepairMode"]!)', '\(carbookData["carbookRecordExpendDate"]!)', '\(carbookData["carbookRecordIsHidden"]!)','\(carbookData["carbookRecordTotalDistance"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))','\(carbookData["carbookRecordType"]!)')"
+            dateFormatter.locale = Locale(identifier: "ko_KR")
+            regDateFormmatter.locale = Locale(identifier: "ko_KR")
+            uploadDateFormmatter.locale = Locale(identifier: "ko_KR")
+            updateFormatter.locale = Locale(identifier: "ko_KR")
+            globalDateFormatter.locale =  Locale(identifier: "ko_KR")
+            let insertSQL = "Insert Into REPAIR ( carSN,repairID,repairKey,repairIsHidden,repairMode,repairPlace,repairAddress,repairLatitude,repairLongitude,repairExpendDate,repairDist,repairImage,repairRegTime,repairUploadTime,repairUpdateTime,repairGlobalTime) Values('\(carbookData["carSN"]!)','\(dateFormatter.string(from:date))','\(carbookData["repairKey"]!)','\(carbookData["repairIsHidden"]!)','\(carbookData["repairMode"]!)','\(carbookData["repairPlace"]!)','\(carbookData["repairAddress"]!)','\(carbookData["repairLatitude"]!)','\(carbookData["repairLongitude"]!)','\(carbookData["repairExpendDate"]!)','\(carbookData["repairDist"]!)','\(carbookData["repairImage"]!)','\(regDateFormmatter.string(from: date))','\(uploadDateFormmatter.string(from: date))','\(updateFormatter.string(from: date))','\(globalDateFormatter.string(from: date))')"
             
             Swift.print("저기는 : \(insertSQL)")
             
             let result = carbookDB.executeUpdate(insertSQL, withArgumentsIn: [])
             if !result {
-                Swift.print("Error \(carbookDB.lastErrorMessage())")
+                Swift.print("Error1 \(carbookDB.lastErrorMessage())")
             }else {
                 let checkSQL = "select last_insert_rowid() as  'id'"
                 if let result = carbookDB.executeQuery(checkSQL, withArgumentsIn: []){
                     var id = 0
                     while result.next() {
                         id = Int(result.int(forColumn : "id"))
+        
                     }
                     return["result" : true, "id" : id]
                 }
             }
+            Swift.print("result\(result)")
             return ["result" : result]
             
         }
@@ -69,35 +78,41 @@ class CARBOOK_DAO {
         let carbookDB = FMDatabase(path: databaseURL?.path)
         
         let dateFormatter = DateFormatter()
-        
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
         let date = Date()
-        
+        let regDateFormmatter = DateFormatter()
+        let uploadDateFormmatter = DateFormatter()
         let updateFormatter = DateFormatter()
-        
+        let globalDateFormatter = DateFormatter()
+        regDateFormmatter.dateFormat = "yyyyMMddHHmmss"
+        uploadDateFormmatter.dateFormat = "yyyyMMddHHmmss"
         updateFormatter.dateFormat = "yyyyMMddHHmmss"
+        globalDateFormatter.dateFormat =  "yyyyMMddHHmmss"
         updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
         
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        updateFormatter.locale = Locale(identifier: "ko_KR")
         
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        regDateFormmatter.locale = Locale(identifier: "ko_KR")
+        uploadDateFormmatter.locale = Locale(identifier: "ko_KR")
+        updateFormatter.locale = Locale(identifier: "ko_KR")
+        globalDateFormatter.locale =  Locale(identifier: "ko_KR")
         if carbookDB.open() {
             defer {carbookDB.close()}
             if carbookDB.beginTransaction() {
                 
                 carbookDataItems.forEach{ (item) in
-                    let insertSQL = "Insert Into CARBOOKRECORDREPAIRITEM (carbookRecordId, carbookRecordItemCategoryCode,carbookRecordItemCategoryName,carbookRecordItemExpenseMemo,carbookRecordItemExpenseCost,carbookRecordItemIsHidden,carbookRecordItemRegTime,carbookRecordItemUpdateTime) Values('\(item["carbookRecordItemRecordId"]!)','\(item["carbookRecordItemCategoryCode"]!)','\(item["carbookRecordItemCategoryName"]!)','\(item[ "carbookRecordItemExpenseMemo"]!)','\(item["carbookRecordItemExpenseCost"]!)', '\(item["carbookRecordItemIsHidden"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))')"
+                    let insertSQL = "Insert Into REPAIRITEM (repairSN, repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime) Values('\(item["repairSN"]!)','\(dateFormatter.string(from: date))','\(item["repairItemKey"]!)','\(item["repairltemIsHidden"]!)','\(item[ "repairltemCategoryCode"]!)','\(item["repairItemDivision"]!)', '\(item["repairltemName"]!)','\(item["repairltemCost"]!)','\(item["repairltemMemo"]!)','\(regDateFormmatter.string(from: date))','\(uploadDateFormmatter.string(from: date))','\(dateFormatter.string(from: date))', '\(globalDateFormatter.string(from: date))')"
                     
                     let result = carbookDB.executeUpdate(insertSQL, withArgumentsIn: [])
                     
-                    Swift.print("items:\(result)")
+                    Swift.print("item:\(result)")
                     Swift.print("insertSQL:\(insertSQL)")
                 }
                 carbookDB.commit()
                 return [["result" : true]]
             }
         }
-        Swift.print("Error \(carbookDB.lastErrorMessage())")
+        Swift.print("Error2 \(carbookDB.lastErrorMessage())")
         return [["result" : false]]
     }
     
@@ -143,7 +158,7 @@ class CARBOOK_DAO {
     }
     
     
-    func modifyCarBookData(carbookData :[String:Any], id : String) -> Bool{
+    func modifyCarBookData(carbookData :Dictionary<String, Any>, id : String) -> Bool{
         let carbookDB = FMDatabase(path: databaseURL?.path)
         
         let dateFormatter = DateFormatter()
@@ -360,7 +375,7 @@ class CARBOOK_DAO {
             
             let yearSearchQuery = year != nil ? "WHERE date Like '\(year!)%'" : ""
             
-            let querySQL =  "SELECT * , substr(carbookRecordExpendDate,0,7) as 'date' FROM CARBOOKRECORD as 'A' JOIN(SELECT carbookRecordId,carbookRecordItemCategoryCode,carbookRecordItemExpenseMemo , carbookRecordItemCategoryName,COUNT(*) as 'COUNT', SUM(carbookRecordItemExpenseCost) as 'TotalCost',group_concat(carbookRecordItemCategoryCode,',') as'categoryCodes',group_concat(carbookRecordItemCategoryName,',') as'categoryCodesName',group_concat(carbookRecordItemExpenseMemo,',') as'carbookRecordItemMemos',group_concat(carbookRecordItemExpenseCost,',') as 'categoryCodesCost' FROM CARBOOKRECORDREPAIRITEM WHERE carbookRecordItemIsHidden = 0 GROUP BY carbookRecordId ) as 'B' ON(A._id = B.carbookRecordId) AND A.carbookRecordIsHidden = 0 \(yearSearchQuery) GROUP BY carbookRecordId ORDER BY A.carbookRecordExpendDate DESC"
+            let querySQL =  "SELECT * , substr(carbookRecordExpendDate,0,7) as 'date' FROM CARBOOKRECORD as 'A' JOIN(SELECT carbookRecordId,carbookRecordItemCategoryCode,carbookRecordItemExpenseMemo , carbookRecordItemCategoryName,COUNT(*) as 'COUNT', SUM(carbookRecordItemExpenseCost) as 'TotalCost',group_concat(carbookRecordItemCategoryCode,',') as'categoryCodes',group_concat(carbookRecordItemCategoryName,',') as'categoryCodesName',group_concat(carbookRecordItemExpenseMemo,',') as'carbookRecordItemMemos',group_concat(carbookRecordItemExpenseCost,',') as 'categoryCodesCost' FROM CARBOOKRECORDREPAIRITEM WHERE carbookRecordItemIsHidden = 0 GROUP BY carbookRecordId ) as 'B'   JOIN(SELECT carbookRecordId,carbookRecordOilItemExpenseCost,carbookRecordOilItemFillFuel,carbookRecordOilItemFuelLiter,carbookRecordOilItemType,carbookRecordWashCost,carbookRecordFuelStatus,carbookRecordItemIsHidden,carbookRecordItemRegTime,carbookRecordItemUpdateTime FROM carbookRecordOilItem WHERE carbookRecordItemIsHidden = 0) as 'C' ON(A._id = B.carbookRecordId  OR A._id = C.carbookRecordId  ) AND A.carbookRecordIsHidden = 0 \(yearSearchQuery)ORDER BY A.carbookRecordExpendDate DESC  "
             
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []

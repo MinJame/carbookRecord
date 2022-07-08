@@ -87,7 +87,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     func setLists() {
         // 테이블리스트 데이터들 선언
         tablelist = [
-            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false,"recordType" : "정비"],
+            ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false],
             // ["Type": 2],
             // cellId 있는 경우와 없는 경우 구분
             ["Type" :3, "Category": "1", "cost" : 0 ,"memo":"","Num": 1
@@ -291,7 +291,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 날짜 형식의 포맷 선언
         formatter.dateFormat = "yyyyMMddHHmmss"
         //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
-        let upperCarDataList : [String:Any] = [
+        let upperCarDataList : Dictionary<String, Any> = [
             "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
             "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
             "carbookRecordIsHidden" : 0,
@@ -392,12 +392,20 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 날짜 형식의 포맷 선언
         formatter.dateFormat = "yyyyMMddHHmmss"
         // 새로 저장에 필요한 정비기록 기본정보들을 저장
-        let carBookData : [String:Any]  = [
-            "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
-            "carbookRecordExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
-            "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
-            "carbookRecordType" : upperDataList["recordType"] as? String ?? "",
-            "carbookRecordIsHidden" : 0
+        let carBookData : Dictionary<String, Any>  = [
+            "carSN" : 1,
+            "repairKey" : "확인",
+            "repairIsHidden" : 0,
+            "repairMode" : upperDataList["Mode"] as? Int ?? 0,
+            "repairPlace" : "우리집",
+            "repairAddress" : "내일시작",
+            "repairLatitude" : 39.1234,
+            "repairLongitude" : 127.88,
+            "repairExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
+            "repairDist" : upperDataList["Distance"] as? Double ?? 0.0,
+            "repairImage" : "사진사진"
+            
+          
         ]
         // 테이블리스트의 갯수 만큼 for문 동작
         for i in 0..<tablelist.count {
@@ -427,18 +435,21 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             for i in 0..<tablelist.count {
                 // 새로 생성할 정비기록항목들은 위에서 생성한 데이터의 id값과 동일한 곳에 들어가야하고 id값은 Int형임으로 Int형으로 선언
                 if let id = insertCarBookdata["id"] as? Int {
+                    Swift.print("testId\(id)")
                     // 테이블리스트 i번째 데이터를 item이라고 선언
                     let item = tablelist[i]
                     // item중에 type이 Int형이고 type 값이 3이면 동작실행
                     if let type = item["Type"] as? Int, type == 3 {
                         // 새로 추가할 정비기록항목들을 묶어서 저장
                         let insertCarBookRecordItem : Dictionary<String,Any> = [
-                            "carbookRecordItemRecordId" : id,
-                            "carbookRecordItemCategoryCode" : item["Category"] as? String ?? "",
-                            "carbookRecordItemCategoryName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
-                            "carbookRecordItemExpenseMemo" : item["memo"] as? String ?? "",
-                            "carbookRecordItemExpenseCost" : item["cost"] as? Double ?? 0.0,
-                            "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
+                            "repairSN" : id,
+                            "repairItemKey" : "확인",
+                            "repairltemIsHidden" : item["isHidden"] as? Int ?? 0,
+                            "repairltemCategoryCode" : item["Category"] as? String ?? "",
+                            "repairItemDivision" : 0,
+                            "repairltemName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
+                            "repairltemCost" : item["cost"] as? Double ?? 0.0,
+                            "repairltemMemo" : item["memo"] as? String ?? ""
                         ]
                         // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
                         insertcarBookDataItemList.append(insertCarBookRecordItem)

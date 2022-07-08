@@ -258,7 +258,7 @@ extension TotalViewController: UITableViewDataSource {
             Swift.print("items\(item)")
             let id = item["carbookRecordId"] as? Int ?? 0
             let types = item["carbookRecordType"] as? String
-            
+            Swift.print("키값1\(id)")
             if types == "정비" {
                 
                 // 해당열을 눌렀을때에 "RepairViewController"로 이동
@@ -504,6 +504,7 @@ extension TotalViewController: UITableViewDataSource {
     @objc func changeItem(_ sender: UIButton) {
         // 각 셀의 Id 아이디 값을 버튼 태그 값에 저장했으므로 ID 값을 다시 불러 옵니다.
         let Id = sender.tag
+        Swift.print("키값\(Id)")
         // 버튼 클릭시 수정 또는 삭제 문구가 액션시트 형식으로 나오게 해줍니다.
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         //수정 버튼을 클릭시 동작하는 방식
