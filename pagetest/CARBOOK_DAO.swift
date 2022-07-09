@@ -165,17 +165,19 @@ class CARBOOK_DAO {
         
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
         
+        let uploadDateFormmatter = DateFormatter()
         let updateFormatter = DateFormatter()
         
         updateFormatter.dateFormat = "yyyyMMddHHmmss"
         updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
-        
+        uploadDateFormmatter.dateFormat = "yyyyMMddHHmmss"
         dateFormatter.locale = Locale(identifier: "ko_KR")
+        uploadDateFormmatter.locale = Locale(identifier: "ko_KR")
         updateFormatter.locale = Locale(identifier: "ko_KR")
         
         if carbookDB.open() {
             defer {carbookDB.close()}
-            let updateSQL = "UPDATE CARBOOKRECORD SET carbookRecordRepairMode = '\(carbookData["carbookRecordRepairMode"]!)', carbookRecordExpendDate = '\(carbookData["carbookRecordExpendDate"]!)', carbookRecordIsHidden = '\(carbookData["carbookRecordIsHidden"]!)', carbookRecordTotalDistance = '\(carbookData["carbookRecordTotalDistance"]!)', carbookRecordRegTime = '\(dateFormatter.string(from: Date()))', carbookRecordUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE _id = '\(id)' "
+            let updateSQL = "UPDATE REPAIR SET repairIsHidden = '\(carbookData["repairIsHidden"]!)',repairMode = '\(carbookData["carbookRrepairModeecordRepairMode"]!)', repairPlace = '\(carbookData["repairPlace"]!)', repairAddress = '\(carbookData["repairAddress"]!)', repairLatitude = '\(carbookData["repairLatitude"]!)', repairLongitude = '\(carbookData["repairLongitude"]!)',repairExpendDate = '\(carbookData["repairExpendDate"]!)',repairDist = '\(carbookData["repairDist"]!)',repairImage = '\(carbookData["repairImage"]!)', repairUploadTime = '\(uploadDateFormmatter.string(from: Date())) 'WHERE _id = '\(id)', repairUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE _id = '\(id)' "
             
             let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
             Swift.print("insertSQL1:\(updateSQL)")
@@ -199,7 +201,10 @@ class CARBOOK_DAO {
         
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
         let updateFormatter = DateFormatter()
+        let uploadDateFormmatter = DateFormatter()
+        uploadDateFormmatter.dateFormat = "yyyyMMddHHmmss"
         updateFormatter.dateFormat = "yyyyMMddHHmmss"
+        uploadDateFormmatter.locale = Locale(identifier: "ko_KR")
         updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
         
         dateFormatter.locale = Locale(identifier: "ko_KR")
@@ -208,7 +213,7 @@ class CARBOOK_DAO {
             defer {carbookDB.close()}
             if carbookDB.beginTransaction() {
                 carbookDataItem.forEach{ (item) in
-                    let updateSQL = "UPDATE CARBOOKRECORDREPAIRITEM SET carbookRecordId = '\(item["carbookRecordItemRecordId"]!)',  carbookRecordItemCategoryCode = '\(item["carbookRecordItemCategoryCode"]!)', carbookRecordItemCategoryName = '\(item["carbookRecordItemCategoryName"]!)', carbookRecordItemExpenseMemo = '\(item["carbookRecordItemExpenseMemo"]!)', carbookRecordItemExpenseCost = '\(item["carbookRecordItemExpenseCost"]!)',carbookRecordItemIsHidden = '\(item["carbookRecordItemIsHidden"]!)', carbookRecordItemRegTime = '\(dateFormatter.string(from: Date()))', carbookRecordItemUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE carbookRecordId = '\(item["carbookRecordItemRecordId"]!)' AND _id = '\(item["_id"]!)' "
+                    let updateSQL = "UPDATE REPAIRITEM SET repairltemID = '\(item["repairltemID"]!)',  repairltemIsHidden = '\(item["repairltemIsHidden"]!)', repairltemCategoryCode = '\(item["repairltemCategoryCode"]!)', repairItemDivision = '\(item["repairItemDivision"]!)', repairltemName = '\(item["repairltemName"]!)',repairltemCost = '\(item["repairltemCost"]!)',repairltemMemo = '\(item["repairltemMemo"]!)', repairltemUploadTime = '\(uploadDateFormmatter.string(from: Date()))', carbookRecordItemUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE repairltemID = '\(item["repairltemID"]!)' AND _id = '\(item["_id"]!)' "
         
                     let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
                     
@@ -259,7 +264,7 @@ class CARBOOK_DAO {
         
         if carbookDB.open() {
             defer {carbookDB.close()}
-            let updateSQL = "UPDATE CARBOOKRECORD SET carbookRecordIsHidden = 1 WHERE _id = '\(deleteId)'"
+            let updateSQL = "UPDATE CARBOOKRECORD SET repairIsHidden = 1 WHERE _id = '\(deleteId)'"
             let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
             Swift.print("items:\(result)")
             Swift.print("insertSQL1:\(updateSQL)")
@@ -285,7 +290,7 @@ class CARBOOK_DAO {
             defer {carbookDB.close()}
             if carbookDB.beginTransaction() {
                 deleteIds.forEach{ (item) in
-                    let updateSQL = "UPDATE CARBOOKRECORDREPAIRITEM SET carbookRecordItemIsHidden = 1 WHERE _id = '\(item)'"
+                    let updateSQL = "UPDATE REPAIRITEM SET repairltemIsHidden = 1 WHERE _id = '\(item)'"
         
                     let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
                     
@@ -301,10 +306,10 @@ class CARBOOK_DAO {
     }
     
     
-    func selectCarbookData(id : String) -> [String:Any]?{
+    func selectCarbookData(id : String) -> Dictionary<String, Any>?{
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
-            let selectSQL = "SELECT * FROM CARBOOKRECORD WHERE _id = '\(id)' AND  carbookRecordIsHidden = 0"
+            let selectSQL = "SELECT * FROM REPAIR WHERE _id = '\(id)' AND  repairIsHidden = 0"
             if let result : FMResultSet = carbookDB.executeQuery(selectSQL, withArgumentsIn:  []) {
                 var dict : [String:Any] = [:]
                 while result.next() {
@@ -325,7 +330,7 @@ class CARBOOK_DAO {
     func selectCarbookDataList(id : String) -> [Dictionary<String, Any>]?{
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
-            let selectSQL = "SELECT * FROM CARBOOKRECORDREPAIRITEM WHERE carbookRecordId ='\(id)' AND carbookRecordItemIsHidden = 0 ORDER BY carbookRecordItemUpdateTime DESC"
+            let selectSQL = "SELECT * FROM REPAIRITEM WHERE carbookRecordId ='\(id)' AND carbookRecordItemIsHidden = 0 ORDER BY carbookRecordItemUpdateTime DESC"
             var dictArray: [Dictionary<String, Any>]? = []
             if let result : FMResultSet = carbookDB.executeQuery(selectSQL, withArgumentsIn:  []) {
                 var dict : Dictionary<String, Any> = [:]

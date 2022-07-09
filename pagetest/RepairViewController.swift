@@ -291,13 +291,22 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 날짜 형식의 포맷 선언
         formatter.dateFormat = "yyyyMMddHHmmss"
         //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
-        let upperCarDataList : Dictionary<String, Any> = [
-            "carbookRecordRepairMode" : upperDataList["Type"] as? Int ?? 0,
-            "carbookRecordTotalDistance" : upperDataList["Distance"] as? Double ?? 0.0,
-            "carbookRecordIsHidden" : 0,
-            "carbookRecordExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
-            "carbookRecordType" : upperDataList["recordType"] as? String ?? ""
+        let carBookData : Dictionary<String, Any>  = [
+            "carSN" : 1,
+            "repairKey" : "확인",
+            "repairIsHidden" : 0,
+            "repairMode" : upperDataList["Mode"] as? Int ?? 0,
+            "repairPlace" : "우리집",
+            "repairAddress" : "내일시작",
+            "repairLatitude" : 39.1234,
+            "repairLongitude" : 127.88,
+            "repairExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
+            "repairDist" : upperDataList["Distance"] as? Double ?? 0.0,
+            "repairImage" : "사진사진"
+            
+          
         ]
+        // 테이
         // filter를 이용해서
         // 테이블리스트의 갯수 만큼 for문 동작
 
@@ -324,7 +333,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             self.present(alert, animated: true, completion: nil)
         }else {
             // carbookdatadb에 수정한 항목들을 해당한 셀 아이디에 값에 맞게 저장해 주어야함으로 수정한 항목과 셀아이디값별로 구분해서 db저장
-            let _ = carBookDataBase.modifyCarBookData(carbookData: upperCarDataList, id: String(celId ?? 0))
+            let _ = carBookDataBase.modifyCarBookData(carbookData: carBookData, id: String(celId ?? 0))
             //테이블리스트 갯수 만큼 for문이 돈다
             for i in 0..<tablelist.count {
                 // 테이블리스트 i번째 데이터를 item이라고 선언
@@ -335,27 +344,30 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
                     let id = item["id"] as? Int ?? 0
                     if id == 0 {     // 만약 id 값이 0이면 저장된 데이터들이 없으므로 새로운 정비기록들을 추가
                         // 새로 추가할 정비기록들을 묶어서 저장
-                        let insertCarBookDatas : Dictionary<String,Any> = [
-                            // 추가되는 정비기록데이터가 같은 셀에 있어야되서 cellId에 맞게 데이터 구분해서 db저장
-                            "carbookRecordItemRecordId" : celId ?? 0,
-                            "carbookRecordItemCategoryCode" : item["Category"] as? String ?? "",
-                            "carbookRecordItemExpenseCost" : item["cost"] as? Double ?? 0.0,
-                            "carbookRecordItemCategoryName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
-                            "carbookRecordItemExpenseMemo" : item["memo"] as? String ?? "",
-                            "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0
+                        let insertCarBookRecordItem : Dictionary<String,Any> = [
+                            "repairSN" : id,
+                            "repairItemKey" : "확인",
+                            "repairltemIsHidden" : item["isHidden"] as? Int ?? 0,
+                            "repairltemCategoryCode" : item["Category"] as? String ?? "",
+                            "repairItemDivision" : 0,
+                            "repairltemName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
+                            "repairltemCost" : item["cost"] as? Double ?? 0.0,
+                            "repairltemMemo" : item["memo"] as? String ?? ""
                         ]
-                        insertcarBookDataList.append(insertCarBookDatas)
+                        insertcarBookDataList.append(insertCarBookRecordItem)
                         
                     }else {  //만약 id 값이 0이 아니면 이미 저장된 데이터 값들이 있으므로 해당 id값에 맞춰서 정비기록를 수정해준다
                         //수정해서 업데이트할 정비기록을 묶어서 저장
                         let updateCarBookDatas : Dictionary<String,Any> = [
                             "_id" : id ,
-                            "carbookRecordItemRecordId" : celId ?? 0,
-                            "carbookRecordItemCategoryCode" : item["Category"] as? String ?? "",
-                            "carbookRecordItemExpenseMemo" : item["memo"] as? String ?? "",
-                            "carbookRecordItemExpenseCost" : item["cost"] as? Double ?? 0.0,
-                            "carbookRecordItemCategoryName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
-                            "carbookRecordItemIsHidden" : item["isHidden"] as? Int ?? 0.0
+                            "repairSN" : id,
+                            "repairItemKey" : "확인",
+                            "repairltemIsHidden" : item["isHidden"] as? Int ?? 0,
+                            "repairltemCategoryCode" : item["Category"] as? String ?? "",
+                            "repairItemDivision" : 0,
+                            "repairltemName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
+                            "repairltemCost" : item["cost"] as? Double ?? 0.0,
+                            "repairltemMemo" : item["memo"] as? String ?? ""
                         ]
                         updatecarBookDataList.append(updateCarBookDatas)
                     }
