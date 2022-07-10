@@ -145,33 +145,25 @@ class TotalViewController: UIViewController {
             //저장에 필요한 변수들 선언
             var totalCost : Double = 0.0
             var totalDistance : Double = 0.0
-            var totalFuel : Double = 0.0
-            var totalFuelCost : Double = 0.0
-            var totalFuelEfficiency : Double = 0.0
+//            var totalFuel : Double = 0.0
+//            var totalFuelCost : Double = 0.0
             var date : String = ""
             //db에 있는 데이터들을 월별로 묶는다
             let groupRawData = Dictionary(grouping: list){$0["date"] as? String ?? ""}
             for (key,value) in groupRawData {
                 var monthCost : Double = 0.0
                 var monthDistance : Double = 0.0
-                var monthFuel : Double = 0.0
-                var monthFuelCost : Double = 0.0
-                var monthFuelEfficiency : Double = 0.0
+//                var monthFuel : Double = 0.0
+//                var monthFuelCost : Double = 0.0
                 date = key
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
                     totalCost += item["TotalCost"] as? Double ?? 0.0
-                
-//                    totalCost += item["carbookRecordWashCost"] as? Double ?? 0.0
-                    // totalDistance에 grouprawdata의 value값의 i번째["carbookRecordTotalDistance"]의 값을 더해준다
-                    totalDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
+                    totalDistance += item["repairDist"] as? Double ?? 0.0
                     monthCost += item["TotalCost"] as? Double ?? 0.0
-       
-//                    monthCost += item["carbookRecordWashCost"] as? Double ?? 0.0
-                    monthDistance += item["carbookRecordTotalDistance"] as? Double ?? 0.0
+                    monthDistance += item["repairDist"] as? Double ?? 0.0
                     
                 }
-                
                 let carbookdata :Dictionary<String,Any>  = [
                     //날짜는 grouprawdata의 key 값
                     "date" : date ,
@@ -190,9 +182,8 @@ class TotalViewController: UIViewController {
             yearTotalExpenseCostLabel.text = String(format: "%.f",totalCost)
             // yearTotalDistanceLabel에 monthDistance 적용
             yearTotalDistanceLabel.text = String(format: "%.f",totalDistance)
-            yearTotalFuelLabel.text = String(format: "%.2f",totalFuel)
-            yearTotalFuelCostLabel.text = String(format: "%.f",totalFuelCost)
-            yearTotalFuelEffiencyLabel.text = String(format: "%.f",totalFuelEfficiency)
+//            yearTotalFuelLabel.text = String(format: "%.2f",totalFuel)
+//            yearTotalFuelCostLabel.text = String(format: "%.f",totalFuelCost)
             // 저장된 데이터들을 월별로 내림차순으로 정리한다
             carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
         }
@@ -246,7 +237,7 @@ extension TotalViewController: UITableViewDataSource {
             let item = items[indexPath.row]
             // id는 item안의 carbookRecordId 값
             Swift.print("items\(item)")
-            let id = item["repairltemID"] as? Int ?? 0
+            let id = item["repairSN"] as? Int ?? 0
          
             Swift.print("키값1\(id)")
       
@@ -289,12 +280,12 @@ extension TotalViewController: UITableViewDataSource {
       
             cell.fuelCostBtn.isHidden  = true
             cell.fuelStatusBtn.isHidden = true
-//        cell.totalDistanceLabel.text = String(format: "%.f", item["carbookRecordTotalDistance"] as? Double ?? 0.0)
+        cell.totalDistanceLabel.text = String(format: "%.f", item["repairDist"] as? Double ?? 0.0)
         cell.rePairExpenseCost.text = String(format: "%.f", item["TotalCost"] as? Double ?? 0.0)
         // memoView를 숨겨준다
         cell.memoView.isHidden = true
         //cell의 ID값을 버튼의 태그 값에 저장을 합니다
-        cell.changeItemButton.tag = item["repairID"] as? Int ?? 0
+        cell.changeItemButton.tag = item["repairSN"] as? Int ?? 0
         //cell의 버튼의 액션을 할 수 있게 추가해줍니다.
         cell.changeItemButton.addTarget(self, action: #selector(changeItem(_:)), for: .touchUpInside)
         // 만약 item의 carbookRecordItemCategoryCode의 문자형이면 categoryName에 저장하고

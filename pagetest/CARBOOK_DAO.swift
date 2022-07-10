@@ -177,19 +177,19 @@ class CARBOOK_DAO {
         
         if carbookDB.open() {
             defer {carbookDB.close()}
-            let updateSQL = "UPDATE REPAIR SET repairIsHidden = '\(carbookData["repairIsHidden"]!)',repairMode = '\(carbookData["repairModeecordRepairMode"]!)', repairPlace = '\(carbookData["repairPlace"]!)', repairAddress = '\(carbookData["repairAddress"]!)', repairLatitude = '\(carbookData["repairLatitude"]!)', repairLongitude = '\(carbookData["repairLongitude"]!)',repairExpendDate = '\(carbookData["repairExpendDate"]!)',repairDist = '\(carbookData["repairDist"]!)',repairImage = '\(carbookData["repairImage"]!)', repairUploadTime = '\(uploadDateFormmatter.string(from: Date())) 'WHERE _id = '\(id)', repairUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE _id = '\(id)' "
+            let updateSQL = "UPDATE REPAIR SET repairIsHidden = '\(carbookData["repairIsHidden"]!)',repairMode = '\(carbookData["repairMode"]!)', repairPlace = '\(carbookData["repairPlace"]!)', repairAddress = '\(carbookData["repairAddress"]!)', repairLatitude = '\(carbookData["repairLatitude"]!)', repairLongitude = '\(carbookData["repairLongitude"]!)',repairExpendDate = '\(carbookData["repairExpendDate"]!)',repairDist = '\(carbookData["repairDist"]!)',repairImage = '\(carbookData["repairImage"]!)', repairUploadTime = '\(uploadDateFormmatter.string(from: Date()))', repairUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE _id = '\(id)' "
             
             let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
             Swift.print("insertSQL1:\(updateSQL)")
             if !result{
-                print("Error \(carbookDB.lastErrorMessage())")
+                print("Error33 \(carbookDB.lastErrorMessage())")
                 return false
             }else{
                 return true
             }
             
         }else{
-            print("Error \(carbookDB.lastErrorMessage())")
+            print("Error44 \(carbookDB.lastErrorMessage())")
             return false
         }
     }
@@ -213,7 +213,7 @@ class CARBOOK_DAO {
             defer {carbookDB.close()}
             if carbookDB.beginTransaction() {
                 carbookDataItem.forEach{ (item) in
-                    let updateSQL = "UPDATE REPAIRITEM SET repairltemID = '\(item["repairltemID"]!)',  repairltemIsHidden = '\(item["repairltemIsHidden"]!)', repairltemCategoryCode = '\(item["repairltemCategoryCode"]!)', repairItemDivision = '\(item["repairItemDivision"]!)', repairltemName = '\(item["repairltemName"]!)',repairltemCost = '\(item["repairltemCost"]!)',repairltemMemo = '\(item["repairltemMemo"]!)', repairUpdateTime = '\(uploadDateFormmatter.string(from: Date()))', repairUploadTime = '\(updateFormatter.string(from: Date())) 'WHERE repairltemID = '\(item["repairltemID"]!)' AND _id = '\(item["_id"]!)' "
+                    let updateSQL = "UPDATE REPAIRITEM SET repairSN = '\(item["repairSN"]!)',  repairltemIsHidden = '\(item["repairltemIsHidden"]!)', repairltemCategoryCode = '\(item["repairltemCategoryCode"]!)', repairItemDivision = '\(item["repairItemDivision"]!)', repairltemName = '\(item["repairltemName"]!)',repairltemCost = '\(item["repairltemCost"]!)',repairltemMemo = '\(item["repairltemMemo"]!)', repairltemUploadTime = '\(uploadDateFormmatter.string(from: Date()))', repairltemUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE repairSN = '\(item["repairSN"]!)' AND _id = '\(item["_id"]!)' "
         
                     let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
                     
@@ -264,7 +264,7 @@ class CARBOOK_DAO {
         
         if carbookDB.open() {
             defer {carbookDB.close()}
-            let updateSQL = "UPDATE CARBOOKRECORD SET repairIsHidden = 1 WHERE _id = '\(deleteId)'"
+            let updateSQL = "UPDATE REPAIR SET repairIsHidden = 1 WHERE _id = '\(deleteId)'"
             let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
             Swift.print("items:\(result)")
             Swift.print("insertSQL1:\(updateSQL)")
@@ -330,7 +330,7 @@ class CARBOOK_DAO {
     func selectCarbookDataList(id : String) -> [Dictionary<String, Any>]?{
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
-            let selectSQL = "SELECT * FROM REPAIRITEM WHERE repairltemID ='\(id)' AND repairltemIsHidden = 0 ORDER BY repairltemUpdateTime DESC"
+            let selectSQL = "SELECT * FROM REPAIRITEM WHERE repairSN ='\(id)' AND repairltemIsHidden = 0 ORDER BY repairltemUpdateTime DESC"
             var dictArray: [Dictionary<String, Any>]? = []
             if let result : FMResultSet = carbookDB.executeQuery(selectSQL, withArgumentsIn:  []) {
                 var dict : Dictionary<String, Any> = [:]
@@ -380,7 +380,7 @@ class CARBOOK_DAO {
             
             let yearSearchQuery = year != nil ? "WHERE date Like '\(year!)%'" : ""
             
-            let querySQL =  "SELECT * , substr(repairExpendDate,0,7) as 'date' FROM REPAIR as 'A' JOIN(SELECT carSN,repairID,repairKey,repairIsHidden,repairMode,repairPlace,repairAddress,repairLatitude,repairLongitude,repairExpendDate,repairDist,repairImage,repairRegTime,repairUploadTime,repairUpdateTime,repairGlobalTime,COUNT(*) as 'COUNT', SUM(repairltemCost) as 'TotalCost',group_concat(repairltemCategoryCode,',') as'categoryCodes',group_concat(repairltemName,',') as'categoryCodesName',group_concat(repairltemMemo,',') as'carbookRecordItemMemos',group_concat(repairltemCost,',') as 'categoryCodesCost' FROM REPAIRITEM WHERE repairltemIsHidden = 0 GROUP BY repairltemID ) as 'B' ON(A._id = B.repairltemID) AND A.repairIsHidden = 0 \(yearSearchQuery)ORDER BY A.repairExpendDate DESC  "
+            let querySQL =  "SELECT * , substr(repairExpendDate,0,7) as 'date' FROM REPAIR as 'A' JOIN(SELECT repairSN,repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime, COUNT(*) as 'COUNT', SUM(repairltemCost) as 'TotalCost',group_concat(repairltemCategoryCode,',') as'categoryCodes',group_concat(repairltemName,',') as'categoryCodesName',group_concat(repairltemMemo,',') as'carbookRecordItemMemos',group_concat(repairltemCost,',') as 'categoryCodesCost' FROM REPAIRITEM WHERE repairltemIsHidden = 0 GROUP BY repairSN ) as 'B' ON(A._id = B.repairSN) AND A.repairIsHidden = 0 \(yearSearchQuery) ORDER BY A.repairExpendDate DESC  "
             
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []

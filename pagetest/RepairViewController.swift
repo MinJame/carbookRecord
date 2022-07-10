@@ -39,15 +39,12 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         setNotification()
         setLists()
         setBtn()
-        finishButton.titleLabel?.text = "완료"
+   
         // 만약 celId가 있으면 getcarBookData 함수를 실행한다
         if celId != nil {
-            finishButton.titleLabel?.text = "수정"
             getCarBookData()
-        }else {
-            finishButton.titleLabel?.text = "완료"
-            
         }
+        
     }
     // 버튼 세팅하는 함수
     func setBtn() {
@@ -80,6 +77,12 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // finishButton을 완료로 선언 settitle ceLid 비교
      
         // todayDateLabel에 dateString 저장
+        if celId != nil {
+            finishButton.titleLabel?.text = "수정"
+        }else {
+            finishButton.titleLabel?.text = "완료"
+        }
+   
         todayDateLabel.text = formatter.string(for: Date()) ?? ""
         
     }
@@ -203,11 +206,14 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고 data item 변수 저장
         if let item : [String : Any] = carBookDatabase.selectCarbookData(id: String(celId ?? 0)) {
             // 테이블리스트의  "Distance"에  데이터를 업데이트 시켜준다
-            tablelist[0].updateValue(item["carbookRecordTotalDistance"] as? Double ?? 0, forKey: "Distance")
+            
+            Swift.print("아이템\(item)")
+            tablelist[0].updateValue(item["repairDist"] as? Double ?? 0, forKey: "Distance")
             // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
-            tablelist[0].updateValue(item["carbookRecordRepairMode"] as? Int ?? 0, forKey: "Type")
+            let modeNum = item["repairMode"] as? Int ?? 0
+            tablelist[0].updateValue(modeNum + 1, forKey: "Type")
             // list의 "carbookRecordExpendDate"가 문자형일 경우 date에 저장해준다
-            let date = item["carbookRecordExpendDate"] as? String ?? ""
+            let date = item["repairExpendDate"] as? String ?? ""
             // DateFormatter를 formatter에 저장한다
             let formatter = DateFormatter()
             // formatter 표시 형식을 "년월일시분초"형식으로 저장한다
@@ -225,7 +231,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             // todayDateLabel의 문자에 dateString 저장 비교해서
             todayDateLabel.text = formatter.string(for: dates) ?? ""
             // 만약 list의 "carbokRecordRepairMode"가 2일 경우
-            if item["carbookRecordRepairMode"] as? Int == 2 {
+            if modeNum == 1 {
                 // 자가정비모드버튼을 흰색으로하고
                 selfrepairButton.tintColor = UIColor.white
                 // 정비소버튼을 연한회색으로 나타내고
@@ -249,17 +255,18 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             // list의 item값 중에서
             for item in list {
                 // 불러올 정비기록들을 묶어서 저장
+                Swift.print("아이템2\(list)")
                 let registerCarBookRecordItem : Dictionary<String,Any> = [
                     // id 값은 item의 _id이고
                     "id" : item["_id"] as? Int ?? 0,
                     // category 값은 item의 carbookRecordItemCategoryCode
-                    "Category" : item["carbookRecordItemCategoryCode"] as? String ?? "",
+                    "Category" : item["repairltemCategoryCode"] as? String ?? "",
                     // cost 값은 item의 carbookRecordItemExpenseCost
-                    "cost" : item["carbookRecordItemExpenseCost"] as? Double ?? 0.0,
+                    "cost" : item["repairltemCost"] as? Double ?? 0.0,
                     // memo는 item의 carbookRecordItemExpenseMemo
-                    "memo" : item["carbookRecordItemExpenseMemo"] as? String ?? "",
+                    "memo" : item["repairltemMemo"] as? String ?? "",
                     // isHidden은 carbookRecordItemIsHidden이며
-                    "isHidden" : item["carbookRecordItemIsHidden"] as? Int ?? 0,
+                    "isHidden" : item["repairltemIsHidden"] as? Int ?? 0,
                     // Type 값은 3이다
                     "Type" : 3
                 ]
@@ -273,6 +280,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     // 데이터 수정하기
     func updateData() {
         //carbookdb 불러오기
+        finishButton.titleLabel?.text = "수정"
         let carBookDataBase = CARBOOK_DAO.sharedInstance
         // 테이블리스트첫번째데이터를 변수명으로 선언
         let upperDataList = tablelist[0]
@@ -292,7 +300,6 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         formatter.dateFormat = "yyyyMMddHHmmss"
         //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
         let carBookData : Dictionary<String, Any>  = [
-            "carSN" : 1,
             "repairKey" : "확인",
             "repairIsHidden" : 0,
             "repairMode" : upperDataList["Mode"] as? Int ?? 0,
@@ -326,7 +333,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 만약 repairList의 갯수와 테이블리스트의 갯수가 같지 않으면
         if rePairList.count != tablelist.count-1 {
             // 동일항목은 등록불가합니다 라는 알림 창이 발생하게 한다
-           
+            
             let alert = UIAlertController(title: "동일항목", message: "등록불가합니다", preferredStyle: .alert)
             let cancel = UIAlertAction.init(title: "확인", style: .cancel, handler: nil)
             alert.addAction(cancel)
@@ -342,10 +349,11 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
                 if let type = item["Type"] as? Int, type == 3 {
                     // item의 id 값을 Int형으로 선언하고 id로 저장
                     let id = item["id"] as? Int ?? 0
+                    Swift.print("아이디좀\(id)")
                     if id == 0 {     // 만약 id 값이 0이면 저장된 데이터들이 없으므로 새로운 정비기록들을 추가
                         // 새로 추가할 정비기록들을 묶어서 저장
                         let insertCarBookRecordItem : Dictionary<String,Any> = [
-                            "repairSN" : id,
+                            "repairSN" : celId ?? 0,
                             "repairItemKey" : "확인",
                             "repairltemIsHidden" : item["isHidden"] as? Int ?? 0,
                             "repairltemCategoryCode" : item["Category"] as? String ?? "",
@@ -360,7 +368,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
                         //수정해서 업데이트할 정비기록을 묶어서 저장
                         let updateCarBookDatas : Dictionary<String,Any> = [
                             "_id" : id ,
-                            "repairSN" : id,
+                            "repairSN" : celId ?? 0,
                             "repairItemKey" : "확인",
                             "repairltemIsHidden" : item["isHidden"] as? Int ?? 0,
                             "repairltemCategoryCode" : item["Category"] as? String ?? "",
