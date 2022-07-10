@@ -410,14 +410,15 @@ class CARBOOK_DAO {
     func searchCarbookDataList(name : String) -> [Dictionary<String, Any>]?{
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
-            let selectSQL = "SELECT * , substr(carbookRecordExpendDate,0,7) as 'date' FROM CARBOOKRECORD as 'A' JOIN(SELECT carbookRecordId,carbookRecordItemCategoryCode,carbookRecordItemExpenseMemo ,carbookRecordItemCategoryName,COUNT(*) as 'COUNT', SUM(carbookRecordItemExpenseCost) as 'TotalCost',group_concat(carbookRecordItemCategoryCode,',') as'categoryCodes',group_concat(carbookRecordItemCategoryName,',') as'categoryCodesName',group_concat(carbookRecordItemExpenseMemo,',') as'carbookRecordItemMemos',group_concat(carbookRecordItemExpenseCost,',') as 'categoryCodesCost' FROM CARBOOKRECORDITEM WHERE carbookRecordItemIsHidden = 0 GROUP BY carbookRecordId ) as 'B' ON(A._id = B.carbookRecordId) AND A.carbookRecordIsHidden = 0 WHERE A.carbookRecordType Like '%\(name)%'OR B.categoryCodesName Like '%\(name)%' OR B.carbookRecordItemMemos Like '%\(name)%' GROUP BY carbookRecordId ORDER BY A.carbookRecordExpendDate DESC"
+            let selectSQL = "SELECT * , substr(repairExpendDate,0,7) as 'date' FROM REPAIR as 'A' JOIN(SELECT repairSN,repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime, COUNT(*) as 'COUNT', SUM(repairltemCost) as 'TotalCost',group_concat(repairltemCategoryCode,',') as'categoryCodes',group_concat(repairltemName,',') as'categoryCodesName',group_concat(repairltemMemo,',') as'carbookRecordItemMemos',group_concat(repairltemCost,',') as 'categoryCodesCost' FROM REPAIRITEM WHERE repairltemIsHidden = 0 GROUP BY repairSN ) as 'B' ON(A._id = B.repairSN) AND A.repairIsHidden = 0 WHERE B.categoryCodesName Like '%\(name)%' OR B.carbookRecordItemMemos Like '%\(name)%' GROUP BY repairSN ORDER BY A.repairExpendDate DESC"
+
             var dictArray: [Dictionary<String, Any>]? = []
             if let result : FMResultSet = carbookDB.executeQuery(selectSQL, withArgumentsIn:  []) {
                 var dict : Dictionary<String, Any> = [:]
                 while result.next() {
                     dict = result.resultDictionary as! [String : Any]
-                    if let date = dict["carbookExpendTime"] as? String{
-                        dict.updateValue("\(date.components(separatedBy: ["-"]).joined())", forKey: "carbookExpendTime")
+                    if let date = dict["repairExpendDate"] as? String{
+                        dict.updateValue("\(date.components(separatedBy: ["-"]).joined())", forKey: "repairExpendDate")
                     }
                     dictArray?.append(dict)
                 }
