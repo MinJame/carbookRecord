@@ -18,7 +18,7 @@ class OilEditsViewController: UIViewController{
     var dateDelegate : selectDateDelegate?
     var startDate : Date?
     var finishDate : Date?
-    var cellId : Int?
+    var cellId : String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,7 +107,7 @@ class OilEditsViewController: UIViewController{
         let carBookDatabase = CARBOOK_DAO.sharedInstance
         // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고 data item 변수 저장
         // 형식
-        if let item : [String : Any] = carBookDatabase.selectFuelingData(id: String(cellId ?? 0)) {
+        if let item : Dictionary<String, Any> = carBookDatabase.selectFuelingData(id: cellId ?? "") {
             // 테이블리스트의  "Distance"에  데이터를 업데이트 시켜준다
             tablelist[0].updateValue(item["fuelingDist"] as? Double ?? 0, forKey: "Distance")
             // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
@@ -213,8 +213,8 @@ class OilEditsViewController: UIViewController{
             "fuelingID" :  formatter.string(for: Date()) ?? "",
             "fuelingKey" : "서버",
             "fuelingISHidden" : 0,
-            "fuelingPlace" : "확인",
-            "fuelingAddress" : "우리집",
+            "fuelingPlace" : "동일주유소",
+            "fuelingAddress" : "옆집동네점",
             "fuelingLatitude" : 39.1234,
             "fuelingLongitude" : 127.88,
             "fuelingExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",

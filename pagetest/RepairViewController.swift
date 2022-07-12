@@ -232,6 +232,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             todayDateLabel.text = formatter.string(for: dates) ?? ""
             // 만약 list의 "carbokRecordRepairMode"가 2일 경우
             if modeNum == 1 {
+                tablelist[0].updateValue(modeNum + 1, forKey: "Type")
                 // 자가정비모드버튼을 흰색으로하고
                 selfrepairButton.tintColor = UIColor.white
                 // 정비소버튼을 연한회색으로 나타내고
@@ -255,7 +256,6 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             // list의 item값 중에서
             for item in list {
                 // 불러올 정비기록들을 묶어서 저장
-                Swift.print("아이템2\(list)")
                 let registerCarBookRecordItem : Dictionary<String,Any> = [
                     // id 값은 item의 _id이고
                     "id" : item["_id"] as? Int ?? 0,
@@ -417,8 +417,8 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             "repairKey" : "확인",
             "repairIsHidden" : 0,
             "repairMode" : upperDataList["Mode"] as? Int ?? 0,
-            "repairPlace" : "우리집",
-            "repairAddress" : "내일시작",
+            "repairPlace" : "바름정비 안암동점",
+            "repairAddress" : "바름정비 안암동점",
             "repairLatitude" : 39.1234,
             "repairLongitude" : 127.88,
             "repairExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
@@ -500,6 +500,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         if  sender.tag == 0 {
             // 테이블리스트의 첫번째 데이터 모음의 Type 값을 1로 업데이트 시켜준다
             tablelist[0].updateValue(1, forKey: "Type")
+            
             // 테이블뷰의 열을 다시한번 불러준다
             rePairItemTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             // 정비소버튼을 색을 흰색으로
@@ -516,6 +517,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         else if sender.tag == 1 {
             // 테이블리스트의 첫번째 데이터 모음의 Type값을 2로 업데이트 시켜준다
             tablelist[0].updateValue(2, forKey: "Type")
+            tablelist[0].updateValue(1, forKey: "Mode")
             // 테이블뷰의 열을 다시한번 불러준다
             rePairItemTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             // 자가정비 버튼을 흰색으로

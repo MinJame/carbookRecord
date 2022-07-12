@@ -326,7 +326,7 @@ class CARBOOK_DAO {
     func selectFuelingData(id : String) -> Dictionary<String, Any>?{
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
-            let selectSQL = "SELECT * FROM FUELING WHERE _id = '\(id)' AND fuelingISHidden = 0"
+            let selectSQL = "SELECT * FROM FUELING WHERE fuelingID = '\(id)' AND fuelingISHidden = 0"
             if let result : FMResultSet = carbookDB.executeQuery(selectSQL, withArgumentsIn:  []) {
                 var dict : [String:Any] = [:]
                 while result.next() {
@@ -517,8 +517,8 @@ class CARBOOK_DAO {
                 var dict : Dictionary<String, Any> = [:]
                 while result.next() {
                     dict = result.resultDictionary as! [String : Any]
-                    if let date = dict["repairExpendDate"] as? String{
-                        dict.updateValue("\(date.components(separatedBy: ["-"]).joined())", forKey: "repairExpendDate")
+                    if let date = dict["fuelingExpendDate"] as? String{
+                        dict.updateValue("\(date.components(separatedBy: ["-"]).joined())", forKey: "fuelingExpendDate")
                     }
                     dictArray?.append(dict)
                 }
@@ -528,7 +528,7 @@ class CARBOOK_DAO {
                 return nil
             }
         }else {
-            print("Error \(carbookDB.lastErrorMessage())")
+          print("Error \(carbookDB.lastErrorMessage())")
             return nil
         }
     }

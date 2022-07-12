@@ -164,6 +164,9 @@ class TotalViewController: UIViewController {
             Swift.print("주유소1\(listItem)")
             var totalCost : Double = 0.0
             var totalDistance : Double = 0.0
+           
+            
+            carBooks = list + listItem
 //            var totalFuel : Double = 0.0
 //            var totalFuelCost : Double = 0.0
             var date : String = ""
@@ -175,9 +178,9 @@ class TotalViewController: UIViewController {
 //                var monthFuel : Double = 0.0
 //                var monthFuelCost : Double = 0.0
                 date = key
-                var values  = value
+   
 //               values.append(listItem)
-                Swift.print("트럭용\(values)")
+
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
                     totalCost += item["TotalCost"] as? Double ?? 0.0
@@ -258,9 +261,9 @@ extension TotalViewController: UITableViewDataSource {
             // id는 item안의 carbookRecordId 값
             Swift.print("items\(item)")
             let id = item["repairSN"] as? Int ?? 0
-         
+            let fuelid = item["fuelingID"] as? String ?? ""
             Swift.print("키값1\(id)")
-      
+            if fuelid == "" {
                 // 해당열을 눌렀을때에 "RepairViewController"로 이동
                 if let vc = self.storyboard?.instantiateViewController(withIdentifier: "RepairViewController")
                     as? RepairViewController  {
@@ -272,7 +275,22 @@ extension TotalViewController: UITableViewDataSource {
                     vc.repairDelegate = delegate
                     self.present(vc, animated: true, completion: nil)
                 }
+            }else {
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "OilEditsViewController")
+                    as? OilEditsViewController  {
+                    vc.modalTransitionStyle = .coverVertical
+                    vc.modalPresentationStyle = .fullScreen
+                    // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
+                    vc.cellId = fuelid
+                    // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
+                    vc.repairDelegate = delegate
+                    self.present(vc, animated: true, completion: nil)
+                }
+                
             }
+                
+            }
+              
         }
         
  
@@ -286,7 +304,6 @@ extension TotalViewController: UITableViewDataSource {
         let cell : rePairListTableViewCell  = totalTableView.dequeueReusableCell(withIdentifier: "rePairListTableViewCellID", for: indexPath) as! rePairListTableViewCell
         let items = carDataList[indexPath.section]["items"] as? [Dictionary<String,Any>] ?? []
         let item = items[indexPath.row] as? Dictionary<String,Any> ?? [:]
-        Swift.print("연료아이템\(item)")
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.locale = Locale(identifier: "ko_KR")
@@ -301,7 +318,8 @@ extension TotalViewController: UITableViewDataSource {
         cell.fuelCostBtn.isHidden  = true
         cell.fuelStatusBtn.isHidden = true
         if item["fuelingID"] as? String  != "" {
-            cell.rePairItemTitleLabel.text = item["fuelingAddress"] as? String ?? ""
+            cell.rePairItemTitleLabel.text = item["fuelingPlace"] as? String ?? ""
+            cell.rePairLocationLabel.text = item["fuelingAddress"] as? String ?? ""
             cell.totalDistanceLabel.text = String(format: "%.f", fuelDist)
             cell.rePairExpenseCost.text = String(format: "%.f", fuelCost)
             cell.rePairDateLabel.text = fuelDates
@@ -324,7 +342,9 @@ extension TotalViewController: UITableViewDataSource {
         if let TotalCost =  item["TotalCost"] as? Double  {
             cell.rePairExpenseCost.text = String(format: "%.f", item["TotalCost"] as? Double ?? 0.0)
         }
-
+        if let rePairAddress = item["repairAddress"] as? String {
+            cell.rePairLocationLabel.text = rePairAddress
+        }
       
         // memoView를 숨겨준다
         cell.memoView.isHidden = true
