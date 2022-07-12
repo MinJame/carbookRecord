@@ -10,6 +10,10 @@ import UIKit
 
 class RepairAddTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var oilMemoView: UITextView!
+    @IBOutlet weak var bottomView: UIView!
+    @IBOutlet weak var middleView: UIView!
+    @IBOutlet weak var topView: UIView!
     @IBOutlet weak var fuelCost: UITextField!
     @IBOutlet weak var totalFulCost: UITextField!
     @IBOutlet weak var fuelLiterField: UITextField!
@@ -27,8 +31,8 @@ class RepairAddTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-   
-        
+//
+//
         @objc func keydown() {
             /// picker와 같은 뷰를 닫는 함수
             self.totalFulCost.endEditing(true)
@@ -48,7 +52,7 @@ class RepairAddTableViewCell: UITableViewCell {
             totalFulCost.inputAccessoryView = toolbars
             fuelLiterField.inputAccessoryView = toolbars
             fuelCost.inputAccessoryView = toolbars
-            
+
         }
 
     }

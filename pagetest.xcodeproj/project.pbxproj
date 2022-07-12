@@ -33,8 +33,6 @@
 		3988AE4127D5C99F00DC82EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3988AE3F27D5C99F00DC82EC /* Main.storyboard */; };
 		3988AE4327D5C9A000DC82EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3988AE4227D5C9A000DC82EC /* Assets.xcassets */; };
 		3988AE4627D5C9A000DC82EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3988AE4427D5C9A000DC82EC /* LaunchScreen.storyboard */; };
-		398DAE9927D750E300384AAF /* directInputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398DAE9727D750E300384AAF /* directInputTableViewCell.swift */; };
-		398DAE9A27D750E300384AAF /* directInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 398DAE9827D750E300384AAF /* directInputTableViewCell.xib */; };
 		39B048BC27E852D700C2E86E /* RepairAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B048BA27E852D700C2E86E /* RepairAddTableViewCell.swift */; };
 		39B048BD27E852D700C2E86E /* RepairAddTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 39B048BB27E852D700C2E86E /* RepairAddTableViewCell.xib */; };
 		39B92E6B27FD6BA600BAE1D1 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B92E6A27FD6BA600BAE1D1 /* CalendarCell.swift */; };
@@ -43,11 +41,8 @@
 		39D63DC027F14F7900FCC34E /* repairsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 39D63DBE27F14F7900FCC34E /* repairsTableViewCell.xib */; };
 		39D7F747284F31750099B07F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D7F746284F31750099B07F /* SearchViewController.swift */; };
 		39EAE2BD280E9BEC001ADA46 /* repairItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EAE2BB280E9BEC001ADA46 /* repairItemsTableViewCell.swift */; };
-		39EAE2BE280E9BEC001ADA46 /* repairItemsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 39EAE2BC280E9BEC001ADA46 /* repairItemsTableViewCell.xib */; };
 		39EB0B06280FE72C00EB9B5C /* Manager_DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB0B05280FE72C00EB9B5C /* Manager_DB.swift */; };
 		39EB0B08280FF1B100EB9B5C /* CARBOOK_DAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB0B07280FF1B100EB9B5C /* CARBOOK_DAO.swift */; };
-		39F0581B27F3F5F000BD8E8D /* selectFueltypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F0581927F3F5F000BD8E8D /* selectFueltypeCell.swift */; };
-		39F0581C27F3F5F000BD8E8D /* selectFueltypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 39F0581A27F3F5F000BD8E8D /* selectFueltypeCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,8 +73,6 @@
 		3988AE4227D5C9A000DC82EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3988AE4527D5C9A000DC82EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3988AE4727D5C9A000DC82EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		398DAE9727D750E300384AAF /* directInputTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = directInputTableViewCell.swift; sourceTree = "<group>"; };
-		398DAE9827D750E300384AAF /* directInputTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = directInputTableViewCell.xib; sourceTree = "<group>"; };
 		39B048BA27E852D700C2E86E /* RepairAddTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairAddTableViewCell.swift; sourceTree = "<group>"; };
 		39B048BB27E852D700C2E86E /* RepairAddTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepairAddTableViewCell.xib; sourceTree = "<group>"; };
 		39B92E6A27FD6BA600BAE1D1 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -88,11 +81,8 @@
 		39D63DBE27F14F7900FCC34E /* repairsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = repairsTableViewCell.xib; sourceTree = "<group>"; };
 		39D7F746284F31750099B07F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		39EAE2BB280E9BEC001ADA46 /* repairItemsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = repairItemsTableViewCell.swift; sourceTree = "<group>"; };
-		39EAE2BC280E9BEC001ADA46 /* repairItemsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = repairItemsTableViewCell.xib; sourceTree = "<group>"; };
 		39EB0B05280FE72C00EB9B5C /* Manager_DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager_DB.swift; sourceTree = "<group>"; };
 		39EB0B07280FF1B100EB9B5C /* CARBOOK_DAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CARBOOK_DAO.swift; sourceTree = "<group>"; };
-		39F0581927F3F5F000BD8E8D /* selectFueltypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectFueltypeCell.swift; sourceTree = "<group>"; };
-		39F0581A27F3F5F000BD8E8D /* selectFueltypeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = selectFueltypeCell.xib; sourceTree = "<group>"; };
 		8ECC9369ED53EF31C8556612 /* Pods-pagetest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pagetest.release.xcconfig"; path = "Target Support Files/Pods-pagetest/Pods-pagetest.release.xcconfig"; sourceTree = "<group>"; };
 		9C6DDD24CE0D142E4B198B82 /* Pods_pagetest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pagetest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C577F27C694F24683887019C /* Pods-pagetest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pagetest.debug.xcconfig"; path = "Target Support Files/Pods-pagetest/Pods-pagetest.debug.xcconfig"; sourceTree = "<group>"; };
@@ -130,8 +120,6 @@
 				39D63DBD27F14F7900FCC34E /* repairsTableViewCell.swift */,
 				391DBF4F27FE713100FAC250 /* CollectionViewCellModel.swift */,
 				398561C827F6B162007A4745 /* ImageCollectionViewCell.swift */,
-				39F0581927F3F5F000BD8E8D /* selectFueltypeCell.swift */,
-				398DAE9727D750E300384AAF /* directInputTableViewCell.swift */,
 				398561CC27F6B609007A4745 /* TableViewCellModel.swift */,
 				39B92E6A27FD6BA600BAE1D1 /* CalendarCell.swift */,
 				39EAE2BB280E9BEC001ADA46 /* repairItemsTableViewCell.swift */,
@@ -154,9 +142,6 @@
 				393B7C2227EC57E400A13C6A /* repairlocateTableViewCell.xib */,
 				39D63DBE27F14F7900FCC34E /* repairsTableViewCell.xib */,
 				398561C927F6B162007A4745 /* ImageCollectionViewCell.xib */,
-				39F0581A27F3F5F000BD8E8D /* selectFueltypeCell.xib */,
-				398DAE9827D750E300384AAF /* directInputTableViewCell.xib */,
-				39EAE2BC280E9BEC001ADA46 /* repairItemsTableViewCell.xib */,
 			);
 			path = layout;
 			sourceTree = "<group>";
@@ -276,14 +261,11 @@
 				3986B37B27EAAE8700591148 /* RepairSelfTableViewCell.xib in Resources */,
 				393B7C2427EC57E400A13C6A /* repairlocateTableViewCell.xib in Resources */,
 				398561CB27F6B162007A4745 /* ImageCollectionViewCell.xib in Resources */,
-				39F0581C27F3F5F000BD8E8D /* selectFueltypeCell.xib in Resources */,
-				398DAE9A27D750E300384AAF /* directInputTableViewCell.xib in Resources */,
 				39D63DC027F14F7900FCC34E /* repairsTableViewCell.xib in Resources */,
 				394DDC392807A036004F56B3 /* OilMonthTotalTableViewCell.xib in Resources */,
 				39B048BD27E852D700C2E86E /* RepairAddTableViewCell.xib in Resources */,
 				390F85E6280FC9BF00E6FD30 /* rePairListTableViewCell.xib in Resources */,
 				3988AE4127D5C99F00DC82EC /* Main.storyboard in Resources */,
-				39EAE2BE280E9BEC001ADA46 /* repairItemsTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,7 +322,6 @@
 				39B92E6B27FD6BA600BAE1D1 /* CalendarCell.swift in Sources */,
 				398767892806B95300262FD5 /* TotalTableViewCell.swift in Sources */,
 				394DDC382807A036004F56B3 /* OilMonthTotalTableViewCell.swift in Sources */,
-				39F0581B27F3F5F000BD8E8D /* selectFueltypeCell.swift in Sources */,
 				3921F3D727D6FC9700495259 /* repairTableViewCell.swift in Sources */,
 				391DBF5027FE713100FAC250 /* CollectionViewCellModel.swift in Sources */,
 				3988AE3E27D5C99F00DC82EC /* CarBudgetViewController.swift in Sources */,
@@ -359,7 +340,6 @@
 				390B6890285FDB2D009F6D50 /* SceneDelegate.swift in Sources */,
 				39B048BC27E852D700C2E86E /* RepairAddTableViewCell.swift in Sources */,
 				39D63DBF27F14F7900FCC34E /* repairsTableViewCell.swift in Sources */,
-				398DAE9927D750E300384AAF /* directInputTableViewCell.swift in Sources */,
 				398561CA27F6B162007A4745 /* ImageCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
