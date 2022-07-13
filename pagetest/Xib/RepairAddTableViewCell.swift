@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class RepairAddTableViewCell: UITableViewCell {
+class RepairAddTableViewCell: UITableViewCell, UITextViewDelegate {
 
     @IBOutlet weak var oilMemoView: UITextView!
     @IBOutlet weak var bottomView: UIView!
@@ -22,6 +22,8 @@ class RepairAddTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        oilMemoView.layer.cornerRadius = 10
+        memoPlaceholderSetting()
         toolbarItem()
     }
 
@@ -41,6 +43,12 @@ class RepairAddTableViewCell: UITableViewCell {
             self.oilMemoView.endEditing(true)
         }
 
+    func memoPlaceholderSetting() {
+        oilMemoView.delegate = self // txtvReview가 유저가 선언한 outlet
+        oilMemoView.text = "메모,특이사항\n(250자,이모티콘 불가)"
+        oilMemoView.textColor = .lightGray
+    }
+    
         func toolbarItem() {
             let doneBT = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(self.keydown))
             let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

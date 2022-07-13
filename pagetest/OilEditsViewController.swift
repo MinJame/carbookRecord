@@ -355,17 +355,23 @@ extension OilEditsViewController: UITableViewDataSource {
                 let fuelLiter = tablelist[1]["Liter"] as? Double ?? 0.0
                 cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
                 cell.fuelCost.text = String(format: "%.f", fuelcost)
-              
+                cell.fuelLiterField.text = String(format: "%.f", fuelLiter)
                 if cellCost != 0 {
                     cell.fuelLiterField.text = String(format: "%.2f", cellCost/fuelcost)
                     tablelist[1].updateValue(NumberFormatter().number(from: cell.fuelLiterField.text?.replacingOccurrences(of: ",", with: "") ?? "0.00")?.doubleValue as Any , forKey: "Liter")
-                } else if fuelLiter != 0.0 {
-                    cell.totalFulCost.text = String(format: "%.2f", fuelcost * fuelLiter)
-                    Swift.print("\(cell.totalFulCost.text)")
+                }
+                
+                if fuelLiter != 0.0 {
+                    cell.totalFulCost.text = String(format: "%.f", fuelcost * fuelLiter)
+                    Swift.print("맞죠\(cell.totalFulCost.text)")
+                    Swift.print("맞죠\(cell.fuelLiterField.text)")
+                    cell.fuelLiterField.text = String(format: "%.2f", fuelLiter)
                     tablelist[1].updateValue(NumberFormatter().number(from: cell.totalFulCost.text?.replacingOccurrences(of: ",", with: "") ?? "0")?.doubleValue as Any , forKey: "Cost")
                     tablelist[1].updateValue(NumberFormatter().number(from: cell.fuelLiterField.text?.replacingOccurrences(of: ",", with: "") ?? "0.00")?.doubleValue as Any , forKey: "Liter")
                 }else {
-                    cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
+                    cell.totalFulCost.text = String(format: "%.2f", tablelist[1]["Cost"] as? Double ?? 0.0)
+                    Swift.print("맞죠1\(cell.fuelLiterField.text)")
+                    tablelist[1].updateValue(NumberFormatter().number(from: cell.fuelLiterField.text?.replacingOccurrences(of: ",", with: "") ?? "0.00")?.doubleValue as Any , forKey: "Liter")
                 }
                 
                 
@@ -520,11 +526,6 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
             textView.text = "메모 250자 기입가능\n(이모티콘 불가)"
             // 텍스트뷰의 문자색을 연한 갈색으로 정한다
             textView.textColor = UIColor.lightGray
-            if textView.tag == 9 {
-                // 해당되는 텍스트 필드의 값을 더블형으로 변환시켜서 테이블리스트 "Distance"에 업데이트 시킨다
-                tablelist[1].updateValue("", forKey: "Memo")
-            }
-            
         }else {
             // 만약 텍스트 뷰가 비어 있지 않다면 텍스트뷰의 데이터를 memo에 저장한다
             if textView.tag == 9 {

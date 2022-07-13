@@ -138,13 +138,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="총 주유비" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FMe-5d-Oax">
-                                        <rect key="frame" x="189" y="14" width="49" height="16"/>
+                                        <rect key="frame" x="187" y="14" width="51" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20,000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OmT-0B-knA">
-                                        <rect key="frame" x="190" y="33" width="49" height="18"/>
+                                        <rect key="frame" x="187" y="33" width="52" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -167,6 +167,7 @@
                                     <constraint firstItem="OmT-0B-knA" firstAttribute="centerY" secondItem="6rB-6X-RZ5" secondAttribute="centerY" id="gfn-pw-9cw"/>
                                     <constraint firstItem="9R9-Cx-HpM" firstAttribute="top" secondItem="blq-H1-Sh5" secondAttribute="top" constant="14" id="hhH-lD-1nx"/>
                                     <constraint firstItem="6rB-6X-RZ5" firstAttribute="leading" secondItem="blq-H1-Sh5" secondAttribute="leading" constant="17" id="tfg-Z5-V1j"/>
+                                    <constraint firstItem="OmT-0B-knA" firstAttribute="leading" secondItem="FMe-5d-Oax" secondAttribute="leading" id="uLJ-SZ-OPy"/>
                                     <constraint firstItem="9R9-Cx-HpM" firstAttribute="leading" secondItem="blq-H1-Sh5" secondAttribute="leading" constant="17" id="xIo-0P-Fka"/>
                                 </constraints>
                             </view>
@@ -234,6 +235,7 @@
                             <constraint firstItem="blq-H1-Sh5" firstAttribute="height" secondItem="YYO-m3-KAN" secondAttribute="height" multiplier="0.25" id="hec-K5-NKy"/>
                             <constraint firstItem="F0q-aE-CQE" firstAttribute="height" secondItem="YYO-m3-KAN" secondAttribute="height" multiplier="0.266667" id="hgL-Bc-B60"/>
                             <constraint firstAttribute="bottom" secondItem="ZT2-Ns-A1H" secondAttribute="bottom" id="iIb-5H-8Rs"/>
+                            <constraint firstItem="FMe-5d-Oax" firstAttribute="leading" secondItem="goU-D0-I3h" secondAttribute="leading" id="iPR-b9-yfC"/>
                             <constraint firstAttribute="trailing" secondItem="qgg-rd-Pjj" secondAttribute="trailing" id="jjS-TZ-Vs9"/>
                             <constraint firstItem="qgg-rd-Pjj" firstAttribute="leading" secondItem="YYO-m3-KAN" secondAttribute="leading" constant="63" id="l4Q-Ma-t3Y"/>
                             <constraint firstAttribute="trailing" secondItem="F0q-aE-CQE" secondAttribute="trailing" id="oqO-ak-arX"/>

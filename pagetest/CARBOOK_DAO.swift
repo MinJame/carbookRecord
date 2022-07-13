@@ -452,7 +452,7 @@ class CARBOOK_DAO {
             
             let yearSearchQuery = year != nil ? "WHERE date Like '\(year!)%'" : ""
             
-            let querySQL =  "SELECT * FROM FUELING WHERE fuelingISHidden = 0 ORDER BY fuelingExpendDate DESC "
+            let querySQL =  "SELECT *,substr(fuelingExpendDate,0,7) as 'date' FROM FUELING WHERE fuelingISHidden = 0 ORDER BY fuelingExpendDate DESC "
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []
             if let result : FMResultSet = carbookDB.executeQuery(querySQL, withArgumentsIn: []) {
