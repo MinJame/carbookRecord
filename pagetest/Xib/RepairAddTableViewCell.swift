@@ -38,6 +38,7 @@ class RepairAddTableViewCell: UITableViewCell {
             self.totalFulCost.endEditing(true)
             self.fuelLiterField.endEditing(true)
             self.fuelCost.endEditing(true)
+            self.oilMemoView.endEditing(true)
         }
 
         func toolbarItem() {
@@ -52,6 +53,7 @@ class RepairAddTableViewCell: UITableViewCell {
             totalFulCost.inputAccessoryView = toolbars
             fuelLiterField.inputAccessoryView = toolbars
             fuelCost.inputAccessoryView = toolbars
+            oilMemoView.inputAccessoryView = toolbars
 
         }
 

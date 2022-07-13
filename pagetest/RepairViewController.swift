@@ -75,12 +75,13 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 날짜표시를 년.월.일(요일)형식으로 선언
         formatter.dateFormat = "yyyy.MM.dd(E)"
         // finishButton을 완료로 선언 settitle ceLid 비교
-     
-        // todayDateLabel에 dateString 저장
+
         if celId != nil {
-            finishButton.titleLabel?.text = "수정"
+            finishButton.setTitle("수정", for: .normal)
+       
         }else {
-            finishButton.titleLabel?.text = "완료"
+            finishButton.setTitle("완료", for: .normal)
+          
         }
    
         todayDateLabel.text = formatter.string(for: Date()) ?? ""
@@ -333,7 +334,6 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 만약 repairList의 갯수와 테이블리스트의 갯수가 같지 않으면
         if rePairList.count != tablelist.count-1 {
             // 동일항목은 등록불가합니다 라는 알림 창이 발생하게 한다
-            
             let alert = UIAlertController(title: "동일항목", message: "등록불가합니다", preferredStyle: .alert)
             let cancel = UIAlertAction.init(title: "확인", style: .cancel, handler: nil)
             alert.addAction(cancel)

@@ -29,13 +29,9 @@ class OilEditsViewController: UIViewController{
         initTitle()
         finishButton.titleLabel?.text = ""
         if cellId != nil {
-            // 따로 빼서 관리
-            finishButton.titleLabel?.text = "수정"
             getCarBookData()
-        }else {
-            finishButton.titleLabel?.text = "완료"
         }
-        
+
     }
     func initTableViews() {
         
@@ -57,7 +53,7 @@ class OilEditsViewController: UIViewController{
     func setItems(){
         tablelist = [
             ["Type": 1,"Distance" :"","isLocation": false],
-            ["Type": 2,"Cost" : 0,"Fuel": 0,"Liter" : 0.00,"id": 0,"FuelType" : "경유","Memo": "","Image" :"주소"]
+            ["Type": 2,"Cost" : 0,"Fuel": 2100.0,"Liter" : 0.00,"Id": 0,"FuelType" : "경유","Memo": "","Image" :"주소"]
       
         ]
     }
@@ -73,6 +69,14 @@ class OilEditsViewController: UIViewController{
         
         // todayDateLabel에 dateString 저장
         todayDayLabel.text = formatter.string(for: Date()) ?? ""
+        
+        if cellId != nil {
+            finishButton.setTitle("수정", for: .normal)
+       
+        }else {
+            finishButton.setTitle("완료", for: .normal)
+          
+        }
         
         
     }
@@ -108,7 +112,7 @@ class OilEditsViewController: UIViewController{
         // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고 data item 변수 저장
         // 형식
         if let item : Dictionary<String, Any> = carBookDatabase.selectFuelingData(id: cellId ?? "") {
-            // 테이블리스트의  "Distance"에  데이터를 업데이트 시켜준다
+            // 테이블리스트의  "Distance"에  데이터를 업데이트 시켜준다0.0
             tablelist[0].updateValue(item["fuelingDist"] as? Double ?? 0, forKey: "Distance")
             // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
             // list의 "carbookRecordExpendDate"가 문자형일 경우 date에 저장해준다
@@ -126,7 +130,6 @@ class OilEditsViewController: UIViewController{
             // formatter형식을 "년월일(요일)"으로 표시할수 있게 저장한다
             formatter.dateFormat = "yyyy.MM.dd(E)"
             // finishButton의 문자를 수정으로 저장한다 setTitle
-            finishButton.titleLabel?.text = "수정"
             // todayDateLabel의 문자에 dateString 저장 비교해서
             todayDayLabel.text = formatter.string(for: dates) ?? ""
             // 만약 list의 "carbokRecordRepairMode"가 2일 경우
@@ -134,7 +137,7 @@ class OilEditsViewController: UIViewController{
             // getcarBookDatas 함수를 호출한다
             
             
-            tablelist[1].updateValue(item["fuelingID"] as? String ?? "", forKey: "id")
+            tablelist[1].updateValue(item["fuelingID"] as? String ?? "", forKey: "Id")
 
             tablelist[1].updateValue(item["carbookRecordOilItemFillFuel"] as? Int ?? 0, forKey: "Fuel")
             // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
@@ -169,7 +172,12 @@ class OilEditsViewController: UIViewController{
         formatter.dateFormat = "yyyyMMddHHmmss"
         //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
         let upDateFuelingDataList : Dictionary<String,Any>  = [
-            "fuelingID" :  downerDataList["id"] as? String ?? "",
+            "fuelingID" :  downerDataList["Id"] as? String ?? "",
+            "fuelingISHidden" : 0,
+            "fuelingPlace" : "동일주유소",
+            "fuelingAddress" : "옆집동네점",
+            "fuelingLatitude" : 39.1234,
+            "fuelingLongitude" : 127.88,
             "fuelingExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
             "fuelingDist" : upperDataList["Distance"] as? Double ?? 0.0,
             "fuelingTotalCost":downerDataList["Cost"] as? Double ?? 0.0,
@@ -331,27 +339,41 @@ extension OilEditsViewController: UITableViewDataSource {
         case 2 :
             if let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID") as?
                 RepairAddTableViewCell{
-              
+                cell.oilMemoView.delegate = self
                 cell.totalFulCost.delegate = self
                 cell.fuelLiterField.delegate = self
-//
+                cell.fuelCost.delegate = self
                 if cellId != nil {
-                    cell.fuelTypeButton.titleLabel?.text = "단가"
+                    cell.fuelTypeButton.setTitle("단가", for: .normal)
                 }else {
                     cell.fuelTypeButton.addTarget(self, action: #selector(changereOilFuelButton(_ :)), for:  .touchUpInside)
-                   cell.fuelTypeButton.titleLabel?.text = tablelist[1]["FuelType"] as? String ?? ""
+                    cell.fuelTypeButton.setTitle(tablelist[1]["FuelType"] as? String ?? "", for: .normal)
                     
                 }
                 let cellCost = tablelist[1]["Cost"] as? Double ?? 0.0
-                
+                let fuelcost = tablelist[1]["Fuel"] as? Double ?? 0.0
+                let fuelLiter = tablelist[1]["Liter"] as? Double ?? 0.0
                 cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
-                cell.fuelCost.text = String(format: "%.f", 2100.0)
+                cell.fuelCost.text = String(format: "%.f", fuelcost)
+              
                 if cellCost != 0 {
-                    cell.fuelLiterField.text = String(format: "%.2f", cellCost/2100.0)
+                    cell.fuelLiterField.text = String(format: "%.2f", cellCost/fuelcost)
+                    tablelist[1].updateValue(NumberFormatter().number(from: cell.fuelLiterField.text?.replacingOccurrences(of: ",", with: "") ?? "0.00")?.doubleValue as Any , forKey: "Liter")
+                } else if fuelLiter != 0.0 {
+                    cell.totalFulCost.text = String(format: "%.2f", fuelcost * fuelLiter)
+                    Swift.print("\(cell.totalFulCost.text)")
+                    tablelist[1].updateValue(NumberFormatter().number(from: cell.totalFulCost.text?.replacingOccurrences(of: ",", with: "") ?? "0")?.doubleValue as Any , forKey: "Cost")
                     tablelist[1].updateValue(NumberFormatter().number(from: cell.fuelLiterField.text?.replacingOccurrences(of: ",", with: "") ?? "0.00")?.doubleValue as Any , forKey: "Liter")
                 }else {
-                    cell.fuelLiterField.text = "0.00"
+                    cell.totalFulCost.text = String(format: "%.f", tablelist[1]["Cost"] as? Double ?? 0.0)
                 }
+                
+                
+                if let memo = item["Memo"] as? String, memo != "" {
+                    cell.oilMemoView.text = memo
+                    
+                }
+                
                 return cell
             }else {
                 let cell = OilTableView.dequeueReusableCell(withIdentifier: "RepairAddTableViewCellID")
@@ -498,10 +520,18 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
             textView.text = "메모 250자 기입가능\n(이모티콘 불가)"
             // 텍스트뷰의 문자색을 연한 갈색으로 정한다
             textView.textColor = UIColor.lightGray
-            tablelist[textView.tag].updateValue("", forKey: "memo")
+            if textView.tag == 9 {
+                // 해당되는 텍스트 필드의 값을 더블형으로 변환시켜서 테이블리스트 "Distance"에 업데이트 시킨다
+                tablelist[1].updateValue("", forKey: "Memo")
+            }
+            
         }else {
             // 만약 텍스트 뷰가 비어 있지 않다면 텍스트뷰의 데이터를 memo에 저장한다
-            tablelist[textView.tag].updateValue(textView.text ?? "", forKey: "memo")
+            if textView.tag == 9 {
+                // 해당되는 텍스트 필드의 값을 더블형으로 변환시켜서 테이블리스트 "Distance"에 업데이트 시킨다
+                tablelist[1].updateValue(textView.text ?? "", forKey: "Memo")
+            }
+            
         }
         
     }
@@ -525,12 +555,18 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
         }
         if textField.tag == 6 {
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Cost")
+            self.OilTableView.reloadData()
             
         }
-        if textField.tag == 9 {
-            tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "washCost")
-            
-        }else {
+        if textField.tag == 7 {
+            tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Fuel")
+            self.OilTableView.reloadData()
+        }
+        if textField.tag == 8 {
+            tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
+            self.OilTableView.reloadData()
+        }
+        else {
             
         }
     }

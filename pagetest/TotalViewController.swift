@@ -125,6 +125,7 @@ class TotalViewController: UIViewController {
     func setCarbookDateList(){
         let carbookDataBase = CARBOOK_DAO.sharedInstance
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
+            
             let groupRawData = Dictionary(grouping: list){$0["year"] as? String ?? ""}
             for (key,value) in groupRawData {
                 let months = value.map { (dic) -> String in
@@ -155,6 +156,9 @@ class TotalViewController: UIViewController {
     // db에서 데이터를 년도 별로 가져오는 함수
     func setCarbookDataList(year : String?) {
         let carbookDataBase = CARBOOK_DAO.sharedInstance
+        var fuelCost : Double = 0.0
+        var fuelLiter : Double = 0.0
+        var Dist : Double = 0.0
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeyearCarBookDataList(year: year) {
             //저장에 필요한 변수들 선언
             
@@ -164,23 +168,38 @@ class TotalViewController: UIViewController {
             Swift.print("주유소1\(listItem)")
             var totalCost : Double = 0.0
             var totalDistance : Double = 0.0
-           
             
-            carBooks = list + listItem
+            
 //            var totalFuel : Double = 0.0
 //            var totalFuelCost : Double = 0.0
             var date : String = ""
             //db에 있는 데이터들을 월별로 묶는다
             let groupRawData = Dictionary(grouping: list){$0["date"] as? String ?? ""}
+            let groupRawDatas = Dictionary(grouping: listItem){$0["date"] as? String ?? ""}
+            for (key,value) in groupRawDatas {
+                var monthFuelCost : Double = 0.0
+                var monthFuelDistance : Double = 0.0
+                var monthFuelLiter : Double = 0.0
+                for item in value {
+                    // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
+                    monthFuelCost += item["fuelingTotalCost"] as? Double ?? 0.0
+                    monthFuelDistance += item["fuelingDist"] as? Double ?? 0.0
+                    monthFuelLiter += item["fuelingItemVolume"] as? Double ?? 0.0
+                }
+                fuelCost = monthFuelCost
+                fuelLiter = monthFuelLiter
+                Dist = monthFuelDistance
+                totalCost += monthFuelCost
+                totalDistance += monthFuelDistance
+                Swift.print("좋아요\(monthFuelCost)")
+                Swift.print("좋아요\(fuelLiter)")
+                yearTotalFuelLabel.text = String(format: "%.2f",fuelCost)
+                yearTotalFuelCostLabel.text = String(format: "%.f",monthFuelCost)
+            }
             for (key,value) in groupRawData {
                 var monthCost : Double = 0.0
                 var monthDistance : Double = 0.0
-//                var monthFuel : Double = 0.0
-//                var monthFuelCost : Double = 0.0
                 date = key
-   
-//               values.append(listItem)
-
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
                     totalCost += item["TotalCost"] as? Double ?? 0.0
@@ -189,11 +208,15 @@ class TotalViewController: UIViewController {
                     monthDistance += item["repairDist"] as? Double ?? 0.0
                     
                 }
+                monthDistance += Dist
+                monthCost += fuelCost
                 let carbookdata :Dictionary<String,Any>  = [
                     //날짜는 grouprawdata의 key 값
                     "date" : date ,
                     "monthDistance"  : monthDistance,
                     "monthCost" : monthCost,
+                    "monthfuelCost"  : fuelCost,
+                    "monthfuelLiter" : fuelLiter,
                     "items": value + listItem
                 ]
 //                Swift.print("트럭용\(listItem)")
@@ -202,6 +225,7 @@ class TotalViewController: UIViewController {
                 
             }
             // yearTotalExpenseCostLabel에 monthCost 적용
+            
             yearTotalExpenseCostLabel.text = String(format: "%.f",totalCost)
             // yearTotalDistanceLabel에 monthDistance 적용
             yearTotalDistanceLabel.text = String(format: "%.f",totalDistance)
@@ -248,7 +272,8 @@ extension TotalViewController: UITableViewDataSource {
         headerView?.totalDistacneLabel.text = String(format: "%.f",carDataList[section]["monthDistance"] as? Double ?? "")
         //헤더뷰의 totalCostLabel에 cardatalist[section]에["totalCost"]값이 더블형인데 스트링형으로 변환해서 보여준다
         headerView?.totalCostLabel.text = String(format: "%.f",carDataList[section]["monthCost"] as? Double ?? "")
-   
+        headerView?.totalFuelCostLabel.text = String(format: "%.f",carDataList[section]["monthfuelCost"] as? Double ?? 0.0)
+        headerView?.totalFuelLabel.text = String(format: "%.f",carDataList[section]["monthfuelLiter"] as? Double ?? 0.0)
         return headerView
     }
     //  열을 눌렀을때 동작하는 함수
@@ -312,11 +337,12 @@ extension TotalViewController: UITableViewDataSource {
         let fuelCost = item["fuelingTotalCost"] as? Double ?? 0.0
         let fuelDist = item["fuelingDist"] as? Double ?? 0.0
         let fuelDate = formatter.date(from : item["fuelingExpendDate"] as? String ?? "")
-      
         formatter.dateFormat = "MM.dd"
         let fuelDates = formatter.string(for: fuelDate) ?? ""
-        cell.fuelCostBtn.isHidden  = true
         cell.fuelStatusBtn.isHidden = true
+        cell.fuelCostBtn.isHidden  = true
+        // memoView를 숨겨준다
+        cell.memoView.isHidden = true
         if item["fuelingID"] as? String  != "" {
             cell.rePairItemTitleLabel.text = item["fuelingPlace"] as? String ?? ""
             cell.rePairLocationLabel.text = item["fuelingAddress"] as? String ?? ""
@@ -324,9 +350,27 @@ extension TotalViewController: UITableViewDataSource {
             cell.rePairExpenseCost.text = String(format: "%.f", fuelCost)
             cell.rePairDateLabel.text = fuelDates
             cell.rePairItemListView.isHidden = true
-            cell.fuelCostBtn.isHidden  = false
+            cell.memoView.isHidden = false
             
         }
+        
+        if let fuelingFuelCost = item["fuelingFuelCost"] as? Double  {
+            cell.fuelCostBtn.setTitle(String(format: "%.f", fuelingFuelCost) + "/" + "L", for: .normal)
+            cell.fuelCostBtn.titleLabel?.font = UIFont.systemFont(ofSize: 8)
+            cell.fuelCostBtn.isHidden  = false
+        }
+    
+        if let memoText = item["fuelingMemo"] as? String  {
+            // 만약 memoText 값이 있으면
+            if memoText != "" {
+                // memoView를 숨기지 않고 memoText값을 memoTextView에 넣어준다
+                cell.memoView.isHidden = false
+                cell.memoTextView.text = memoText
+            }else {
+                cell.memoView.isHidden = true
+            }
+        }
+        
         if let dateString =  item["repairExpendDate"] as? String  {
             let formatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .gregorian)
@@ -337,17 +381,15 @@ extension TotalViewController: UITableViewDataSource {
             cell.rePairDateLabel.text = formatter.string(for: dateString) ?? ""
         }
         if let rePairDist = item["repairDist"] as? Double {
-            cell.totalDistanceLabel.text = String(format: "%.f", item["repairDist"] as? Double ?? 0.0)
+            cell.totalDistanceLabel.text = String(format: "%.f", rePairDist ?? 0.0)
         }
         if let TotalCost =  item["TotalCost"] as? Double  {
-            cell.rePairExpenseCost.text = String(format: "%.f", item["TotalCost"] as? Double ?? 0.0)
+            cell.rePairExpenseCost.text = String(format: "%.f", TotalCost ?? 0.0)
         }
         if let rePairAddress = item["repairAddress"] as? String {
             cell.rePairLocationLabel.text = rePairAddress
         }
-      
-        // memoView를 숨겨준다
-        cell.memoView.isHidden = true
+
         //cell의 ID값을 버튼의 태그 값에 저장을 합니다
         cell.changeItemButton.tag = item["repairSN"] as? Int ?? 0
         //cell의 버튼의 액션을 할 수 있게 추가해줍니다.
@@ -372,6 +414,9 @@ extension TotalViewController: UITableViewDataSource {
                 // memoView를 숨기지 않고 memoText값을 memoTextView에 넣어준다
                 cell.memoView.isHidden = false
                 cell.memoTextView.text = memoText
+            }
+            else {
+                cell.memoView.isHidden = true
             }
         }
         // 만약 item의 "categoryCodes"가 문자형이고,item의 "categoryCodesCost"가 문자형이면

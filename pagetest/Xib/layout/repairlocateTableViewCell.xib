@@ -200,7 +200,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JBS-1t-mj1">
-                                        <rect key="frame" x="607.5" y="-3.5" width="59.5" height="44"/>
+                                        <rect key="frame" x="600" y="0.5" width="60" height="42"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="변경">
                                             <imageReference key="image" image="arrowtriangle.down.fill" catalog="system" symbolScale="small" renderingMode="hierarchical-single">
@@ -214,7 +214,7 @@
                                         </buttonConfiguration>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fy3-sW-HcF">
-                                        <rect key="frame" x="571" y="57.5" width="96" height="25"/>
+                                        <rect key="frame" x="563" y="57.5" width="96" height="25"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="장소없음">
                                             <imageReference key="image" image="delete.left" catalog="system" renderingMode="hierarchical-single">
@@ -253,18 +253,18 @@
                                     <constraint firstItem="fy3-sW-HcF" firstAttribute="centerY" secondItem="4X8-Dy-zyb" secondAttribute="centerY" id="1aC-H7-44A"/>
                                     <constraint firstItem="T9I-m3-k2n" firstAttribute="leading" secondItem="kt7-b1-IYK" secondAttribute="trailing" constant="32" id="3FW-62-RTX"/>
                                     <constraint firstAttribute="bottom" secondItem="fy3-sW-HcF" secondAttribute="bottom" constant="3" id="8cM-9s-nWc"/>
-                                    <constraint firstAttribute="trailing" secondItem="fy3-sW-HcF" secondAttribute="trailing" constant="2" id="9QU-qX-Kcg"/>
+                                    <constraint firstAttribute="trailing" secondItem="fy3-sW-HcF" secondAttribute="trailing" constant="10" id="9QU-qX-Kcg"/>
                                     <constraint firstItem="kt7-b1-IYK" firstAttribute="top" secondItem="m0d-zl-QMh" secondAttribute="top" constant="3.5" id="EcX-nD-X6X"/>
                                     <constraint firstItem="4X8-Dy-zyb" firstAttribute="leading" secondItem="m0d-zl-QMh" secondAttribute="leading" constant="82" id="LqC-hA-PRa"/>
                                     <constraint firstItem="4X8-Dy-zyb" firstAttribute="top" secondItem="T9I-m3-k2n" secondAttribute="bottom" constant="27" id="Rxk-Ie-1fn"/>
-                                    <constraint firstItem="JBS-1t-mj1" firstAttribute="centerY" secondItem="kt7-b1-IYK" secondAttribute="centerY" id="WUF-xF-y2c"/>
+                                    <constraint firstItem="JBS-1t-mj1" firstAttribute="centerY" secondItem="kt7-b1-IYK" secondAttribute="centerY" constant="3" id="WUF-xF-y2c"/>
                                     <constraint firstItem="T9I-m3-k2n" firstAttribute="centerY" secondItem="kt7-b1-IYK" secondAttribute="centerY" id="agM-ln-LFH"/>
                                     <constraint firstItem="4X8-Dy-zyb" firstAttribute="leading" secondItem="T9I-m3-k2n" secondAttribute="leading" id="bGl-KS-OBq"/>
                                     <constraint firstItem="4X8-Dy-zyb" firstAttribute="centerY" secondItem="fTH-jP-Jkw" secondAttribute="centerY" id="bYT-O1-J2d"/>
-                                    <constraint firstItem="fy3-sW-HcF" firstAttribute="top" secondItem="JBS-1t-mj1" secondAttribute="bottom" constant="17" id="fgQ-32-DWW"/>
+                                    <constraint firstItem="fy3-sW-HcF" firstAttribute="top" secondItem="JBS-1t-mj1" secondAttribute="bottom" constant="15" id="fgQ-32-DWW"/>
                                     <constraint firstAttribute="bottom" secondItem="4X8-Dy-zyb" secondAttribute="bottom" constant="2" id="fsP-0A-vK1"/>
                                     <constraint firstItem="fTH-jP-Jkw" firstAttribute="leading" secondItem="4X8-Dy-zyb" secondAttribute="trailing" constant="16" id="jAP-h5-veI"/>
-                                    <constraint firstItem="fy3-sW-HcF" firstAttribute="trailing" secondItem="JBS-1t-mj1" secondAttribute="trailing" id="mva-Bf-xHa"/>
+                                    <constraint firstItem="fy3-sW-HcF" firstAttribute="trailing" secondItem="JBS-1t-mj1" secondAttribute="trailing" constant="-1" id="mva-Bf-xHa"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a5f-R0-ya3">
@@ -302,7 +302,7 @@
                                         <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Km" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CBs-ac-HLQ">
-                                        <rect key="frame" x="628" y="21" width="26" height="20.5"/>
+                                        <rect key="frame" x="622" y="21" width="26" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -332,7 +332,7 @@
                                     <constraint firstItem="LKl-3j-dZx" firstAttribute="top" secondItem="bSR-ao-UYH" secondAttribute="top" constant="-1" id="Pxh-uz-23L"/>
                                     <constraint firstAttribute="trailing" secondItem="sE6-dW-Abp" secondAttribute="trailing" constant="54" id="SdM-HA-pVy"/>
                                     <constraint firstItem="LKl-3j-dZx" firstAttribute="centerY" secondItem="CBs-ac-HLQ" secondAttribute="centerY" id="bu0-24-8rm"/>
-                                    <constraint firstItem="CBs-ac-HLQ" firstAttribute="leading" secondItem="sE6-dW-Abp" secondAttribute="trailing" constant="13" id="ewJ-xT-Q16"/>
+                                    <constraint firstItem="CBs-ac-HLQ" firstAttribute="leading" secondItem="sE6-dW-Abp" secondAttribute="trailing" constant="7" id="ewJ-xT-Q16"/>
                                     <constraint firstItem="LKl-3j-dZx" firstAttribute="leading" secondItem="T2j-ol-e2b" secondAttribute="leading" constant="22" id="j6R-Iw-jfq"/>
                                     <constraint firstItem="bSR-ao-UYH" firstAttribute="leading" secondItem="LKl-3j-dZx" secondAttribute="trailing" constant="13" id="pdH-5z-rQj"/>
                                 </constraints>

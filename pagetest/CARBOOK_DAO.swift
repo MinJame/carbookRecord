@@ -229,7 +229,7 @@ class CARBOOK_DAO {
     
     
     
-    func modifyCarBookDataOilItem(carbookDataOilItem : [String:Any]) -> Bool{
+    func modifyCarBookDataOilItem(carbookDataOilItem : Dictionary<String,Any>) -> Bool{
         let carbookDB = FMDatabase(path: databaseURL?.path)
         let dateFormatter = DateFormatter()
         
@@ -242,16 +242,14 @@ class CARBOOK_DAO {
         updateFormatter.locale = Locale(identifier: "ko_KR")
         if carbookDB.open() {
             defer {carbookDB.close()}
-       
-
-                    let updateSQL = "UPDATE FUELING SET fuelingID = '\(carbookDataOilItem["fuelingID"]!)',  fuelingISHidden = '\(carbookDataOilItem["fuelingISHidden"]!)', fuelingPlace = '\(carbookDataOilItem["fuelingPlace"]!)', fuelingAddress = '\(carbookDataOilItem["fuelingAddress"]!)',fuelingLatitude = '\(carbookDataOilItem["fuelingLatitude"]!)',fuelingLongitude = '\(carbookDataOilItem["fuelingLongitude"]!)',fuelingExpendDate = '\(carbookDataOilItem["fuelingExpendDate"]!)',fuelingDist = '\(carbookDataOilItem["fuelingDist"]!)',fuelingTotalCost = '\(carbookDataOilItem["fuelingTotalCost"]!)',fuelingFuelCost = '\(carbookDataOilItem["fuelingFuelCost"]!)',fuelingItemVolume = '\(carbookDataOilItem["fuelingItemVolume"]!)',fuelingImage = '\(carbookDataOilItem["fuelingImage"]!)',fuelingMemo = '\(carbookDataOilItem["fuelingMemo"]!)',fuelingRegTime = '\(dateFormatter.string(from: Date()))', fuelingUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE fuelingID = '\(carbookDataOilItem["fuelingID"]!)' AND _id = '\(carbookDataOilItem["_id"]!)'"
+    
+                    let updateSQL = "UPDATE FUELING SET fuelingID = '\(carbookDataOilItem["fuelingID"]!)',  fuelingISHidden = '\(carbookDataOilItem["fuelingISHidden"]!)', fuelingPlace = '\(carbookDataOilItem["fuelingPlace"]!)', fuelingAddress = '\(carbookDataOilItem["fuelingAddress"]!)',fuelingLatitude = '\(carbookDataOilItem["fuelingLatitude"]!)',fuelingLongitude = '\(carbookDataOilItem["fuelingLongitude"]!)',fuelingExpendDate = '\(carbookDataOilItem["fuelingExpendDate"]!)',fuelingDist = '\(carbookDataOilItem["fuelingDist"]!)',fuelingTotalCost = '\(carbookDataOilItem["fuelingTotalCost"]!)',fuelingFuelCost = '\(carbookDataOilItem["fuelingFuelCost"]!)',fuelingItemVolume = '\(carbookDataOilItem["fuelingItemVolume"]!)',fuelingImage = '\(carbookDataOilItem["fuelingImage"]!)',fuelingMemo = '\(carbookDataOilItem["fuelingMemo"]!)',fuelingRegTime = '\(dateFormatter.string(from: Date()))', fuelingUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE fuelingID = '\(carbookDataOilItem["fuelingID"]!)'"
         
                     let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
                     
                     Swift.print("items:\(result)")
                     Swift.print("insertSQL:\(updateSQL)")
                
-                carbookDB.commit()
                 return true
             }
         Swift.print("Error \(carbookDB.lastErrorMessage())")
