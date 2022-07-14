@@ -7,7 +7,7 @@
 
 import UIKit
 
-class rePairListTableViewCell: UITableViewCell {
+class RepairListTableViewCell: UITableViewCell {
     @IBOutlet weak var fuelStatusBtn: UIButton!
     @IBOutlet weak var fuelCostBtn: UIButton!
     @IBOutlet weak var memoTextView: UITextView!
@@ -49,9 +49,6 @@ class rePairListTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    @IBAction func addMemoView(_ sender: Any) {
-  
-    }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

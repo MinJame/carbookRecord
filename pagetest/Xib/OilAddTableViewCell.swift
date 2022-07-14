@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class RepairAddTableViewCell: UITableViewCell, UITextViewDelegate {
+class OilAddTableViewCell: UITableViewCell, UITextViewDelegate {
 
     @IBOutlet weak var oilMemoView: UITextView!
     @IBOutlet weak var bottomView: UIView!
@@ -67,7 +67,7 @@ class RepairAddTableViewCell: UITableViewCell, UITextViewDelegate {
 
     }
 
-extension RepairAddTableViewCell : UITextFieldDelegate {
+extension OilAddTableViewCell : UITextFieldDelegate {
 func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         // replacementString : 방금 입력된 문자 하나, 붙여넣기 시에는 붙여넣어진 문자열 전체
         // return -> 텍스트가 바뀌어야 한다면 true, 아니라면 false

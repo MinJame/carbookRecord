@@ -7,7 +7,7 @@
 
 import UIKit
 
-class repairlocateTableViewCell: UITableViewCell {
+class OilLocateTableViewCell: UITableViewCell {
     
     @IBOutlet weak var totalDistanceField: UITextField!
     @IBOutlet weak var oilStationLabel: UILabel!
@@ -53,46 +53,6 @@ class repairlocateTableViewCell: UITableViewCell {
         // Configure the view for the selected statev
         
     }
-    @IBAction func changeLabels(_ sender: Any) {
-        
-        let messageitem: String? = "가까운 장소"
-        let messageitem2: String? = "방문 장소"
-        
-      
-        var messagetitle = rePairStationDistance!.text
-        if  messagetitle == "방문 장소 기준" {
-            messagetitle = messageitem2
-        }else {
-            messagetitle = messageitem
-        }
-       
-        
-        let alert = UIAlertController(title: "장소 검색 기준", message: "장소 검색 기준에 따라 자동으로 장소가 선택됩니다.\n 현재 검색 기준이 '\(messagetitle!)'로 설정되어있습니다.원하시는 기준을 설정해주세요", preferredStyle: UIAlertController.Style.alert)
-        let addDistance = UIAlertAction(title: "가까운 장소", style: UIAlertAction.Style.default, handler:{ [self]
-            action in
-            rePairStationDistance.text = "\(messageitem!) 기준"
-            rePairStationDistance.textColor = .lightGray
-            
-            UserDefaults.standard.set(rePairStationDistance.text,forKey: "distance")
-      
-            
-        })
-        let selectionDistance = UIAlertAction(title: "방문 장소", style: UIAlertAction.Style.default, handler:{ [self]
-            action in
-            rePairStationDistance.text = "\(messageitem2!) 기준"
-            rePairStationDistance.textColor = .lightGray
-            
-            UserDefaults.standard.set(rePairStationDistance.text,forKey: "distance")
-        
-            
-        })
-        let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
-        
-        alert.addAction(addDistance)
-        alert.addAction(selectionDistance)
-        alert.addAction(cancel)
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-         }
     
     @IBAction func changeDistance(_ sender: Any) {
         
@@ -146,7 +106,7 @@ class repairlocateTableViewCell: UITableViewCell {
         
     }
 }
-extension repairlocateTableViewCell : UITextFieldDelegate {
+extension OilLocateTableViewCell : UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             // replacementString : 방금 입력된 문자 하나, 붙여넣기 시에는 붙여넣어진 문자열 전체
             // return -> 텍스트가 바뀌어야 한다면 true, 아니라면 false

@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" restorationIdentifier="repairsTableViewCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="repairsTableViewCelllID" rowHeight="263" id="KGk-i7-Jjw" customClass="repairsTableViewCell" customModule="pagetest" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" restorationIdentifier="RepairsTableViewCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepairsTableViewCellID" rowHeight="263" id="KGk-i7-Jjw" customClass="RepairsTableViewCell" customModule="pagetest" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="709" height="263"/>
             <autoresizingMask key="autoresizingMask" heightSizable="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -280,17 +280,6 @@
                                             </hierarchicalColors>
                                         </imageReference>
                                     </imageView>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="dL2-Uz-3EC">
-                                        <rect key="frame" x="351" y="19" width="240" height="61"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="a1a-TD-dhE">
-                                            <size key="itemSize" width="128" height="128"/>
-                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        </collectionViewFlowLayout>
-                                    </collectionView>
                                     <button opaque="NO" tag="105" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EcQ-uT-d8g">
                                         <rect key="frame" x="65" y="7" width="130" height="88"/>
                                         <color key="backgroundColor" red="0.92845708130000004" green="0.92845720050000002" blue="0.92845708130000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -309,9 +298,6 @@
                                             <fontDescription key="titleFontDescription" type="system" pointSize="13"/>
                                             <color key="baseForegroundColor" red="0.58380502460000006" green="0.58380502460000006" blue="0.58380502460000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="selectImages:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="z6A-4S-vhu"/>
-                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0/5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ruh-pS-4aE">
                                         <rect key="frame" x="17" y="37" width="16" height="12"/>
@@ -367,13 +353,12 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="addImageButton" destination="EcQ-uT-d8g" id="1ea-a7-kbQ"/>
+                <outlet property="addImageButton" destination="EcQ-uT-d8g" id="Z0l-0J-q9T"/>
                 <outlet property="addRepairShopView" destination="8q2-AG-Hbp" id="O4k-vl-cUK"/>
                 <outlet property="addShopBtn" destination="I4L-sR-bM8" id="BRm-lN-L0E"/>
                 <outlet property="addimageViews" destination="gJl-nH-w7h" id="dfO-Ye-Hd3"/>
                 <outlet property="changeLabelButton" destination="D9L-5Q-OBQ" id="1cc-fY-AfO"/>
                 <outlet property="changeRepairIabel" destination="Zev-Vs-plX" id="cqf-YJ-Uor"/>
-                <outlet property="collectionView" destination="dL2-Uz-3EC" id="bA1-Gg-LgI"/>
                 <outlet property="driveDistance" destination="HTA-Ui-HGu" id="aDn-Im-f4J"/>
                 <outlet property="firstView" destination="IUt-oe-oTN" id="64L-Ku-Tbi"/>
                 <outlet property="noLocateBtn" destination="3ZP-re-iGT" id="6Rh-Tm-TM5"/>

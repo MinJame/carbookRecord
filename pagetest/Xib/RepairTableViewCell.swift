@@ -8,7 +8,7 @@
 import UIKit
 
 
-class repairTableViewCell: UITableViewCell, UITextViewDelegate {
+class RepairTableViewCell: UITableViewCell, UITextViewDelegate {
 
     @IBOutlet weak var rePairNums: UILabel!
     @IBOutlet weak var rePairView: UIView!

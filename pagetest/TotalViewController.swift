@@ -51,8 +51,8 @@ class TotalViewController: UIViewController {
         self.totalTableView.register(cell1, forCellReuseIdentifier: "TotalTableViewCellID")
         let cell2: UINib = UINib(nibName: "OilMonthTotalTableViewCell", bundle: nil)
         self.totalTableView.register(cell2, forHeaderFooterViewReuseIdentifier: "OilMonthTotalTableViewCellID")
-        let cell3: UINib = UINib(nibName: "rePairListTableViewCell", bundle: nil)
-        self.totalTableView.register(cell3, forCellReuseIdentifier: "rePairListTableViewCellID")
+        let cell3: UINib = UINib(nibName: "RepairListTableViewCell", bundle: nil)
+        self.totalTableView.register(cell3, forCellReuseIdentifier: "RepairListTableViewCellID")
         self.totalTableView.sectionHeaderTopPadding = 0.0
         totalTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         
@@ -135,27 +135,30 @@ class TotalViewController: UIViewController {
             var years : [String] = []
             let groupRawData = Dictionary(grouping: dateList){$0["year"] as? String ?? ""}
             for (key,value) in groupRawData {
-                for item in value {
-                    // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
-                    month = item["month"] as? String ?? ""
-                 
-                    if !months.contains(item["month"] as? String ?? "") {
-                        months.append(month)
-                    }
-                 
-                }
+//                for item in value {
+//                    // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
+//                    month = item["month"] as? String ?? ""
+//
+//                    if !months.contains(item["month"] as? String ?? "") {
+//                        months.append(month)
+//                    }
+//
+//                }
                 
                 Swift.print("달력\(groupRawData)")
 ////                }
-//                let months = value.map { (dic) -> String in
-//                    return dic["month"] as? String ?? ""
-//                }
-//
+                let months = value.map { (dic) -> String in
+                    return dic["month"] as? String ?? ""
+                }
 
-             
+                Swift.print("달력\(months)")
+            
                 searchDates.append(dates(year: key, month: months))
                 
             }
+            
+//            carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
+//            searchDates = searchDates.sorted{$0.month > $1.month}
             searchDates = searchDates.sorted{$0.year > $1.year}
             
             Swift.print("주유소1\(searchDates)")
@@ -182,15 +185,12 @@ class TotalViewController: UIViewController {
             var date : String = ""
             //db에 있는 데이터들을 월별로 묶는다
             let groupRawData = Dictionary(grouping: carBookDatas){$0["date"] as? String ?? ""}
-            Swift.print("날짜값\(groupRawData)")
-
             for (key,value) in groupRawData {
                 var monthCost : Double = 0.0
                 var monthDistance : Double = 0.0
                 var monthFuelCost : Double = 0.0
                 var monthFuelLiter : Double = 0.0
                 date = key
-                Swift.print("날짜값\(date)")
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
                     totalCost += item["TotalCost"] as? Double ?? 0.0
@@ -230,9 +230,10 @@ class TotalViewController: UIViewController {
             yearTotalFuelCostLabel.text = String(format: "%.f",totalFuelCost)
             // 저장된 데이터들을 월별로 내림차순으로 정리한다
             carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
+            Swift.print("자동차용\(groupRawData)")
         }
         
-        Swift.print("자동차용\(carDataList)")
+       
     }
     // 이전 페이지로 이동하는 함수
     @IBAction func dismissView(_ sender: Any) {
@@ -292,7 +293,7 @@ extension TotalViewController: UITableViewDataSource {
                     vc.modalTransitionStyle = .coverVertical
                     vc.modalPresentationStyle = .fullScreen
                     // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
-                    vc.celId = id
+                    vc.cellId = String(id)
                     // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
                     vc.repairDelegate = delegate
                     self.present(vc, animated: true, completion: nil)
@@ -323,165 +324,168 @@ extension TotalViewController: UITableViewDataSource {
     }
     // 테이블뷰 셀안에 들어갈 것들 선언
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell : rePairListTableViewCell  = totalTableView.dequeueReusableCell(withIdentifier: "rePairListTableViewCellID", for: indexPath) as! rePairListTableViewCell
+        let cell : RepairListTableViewCell  = totalTableView.dequeueReusableCell(withIdentifier: "RepairListTableViewCellID", for: indexPath) as! RepairListTableViewCell
         let items = carDataList[indexPath.section]["items"] as? [Dictionary<String,Any>] ?? []
         let item = items[indexPath.row] as? Dictionary<String,Any> ?? [:]
-        let formatter = DateFormatter()
-        formatter.calendar = Calendar(identifier: .gregorian)
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "yyyyMMddHHmmss"
-       
-        let fuelCost = item["fuelingTotalCost"] as? Double ?? 0.0
-        let fuelDist = item["fuelingDist"] as? Double ?? 0.0
-        let fuelDate = formatter.date(from : item["fuelingExpendDate"] as? String ?? "")
-        formatter.dateFormat = "MM.dd"
-        let fuelDates = formatter.string(for: fuelDate) ?? ""
-        cell.fuelStatusBtn.isHidden = true
+        Swift.print("정렬\(items.count)")
+        let fuelID = item["fuelingID"] as? String ?? ""
         cell.fuelCostBtn.isHidden  = true
-        // memoView를 숨겨준다
-        cell.memoView.isHidden = true
-        if item["fuelingID"] as? String  != "" {
-            cell.rePairItemTitleLabel.text = item["fuelingPlace"] as? String ?? ""
-            cell.rePairLocationLabel.text = item["fuelingAddress"] as? String ?? ""
-            cell.totalDistanceLabel.text = String(format: "%.f", fuelDist)
-            cell.rePairExpenseCost.text = String(format: "%.f", fuelCost)
-            cell.rePairDateLabel.text = fuelDates
-            cell.rePairItemListView.isHidden = true
-            cell.memoView.isHidden = false
-            
-        }
-        
-        if let fuelingFuelCost = item["fuelingFuelCost"] as? Double  {
-            cell.fuelCostBtn.setTitle(String(format: "%.f", fuelingFuelCost) + "/" + "L", for: .normal)
-            cell.fuelCostBtn.titleLabel?.font = UIFont.systemFont(ofSize: 8)
-            cell.fuelCostBtn.isHidden  = false
-        }
-    
-        if let memoText = item["fuelingMemo"] as? String  {
-            // 만약 memoText 값이 있으면
-            if memoText != "" {
-                // memoView를 숨기지 않고 memoText값을 memoTextView에 넣어준다
-                cell.memoView.isHidden = false
-                cell.memoTextView.text = memoText
-            }else {
-                cell.memoView.isHidden = true
-            }
-        }
-        
-        if let dateString =  item["repairExpendDate"] as? String  {
+        if fuelID != "" {
             let formatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .gregorian)
             formatter.locale = Locale(identifier: "ko_KR")
             formatter.dateFormat = "yyyyMMddHHmmss"
-            let dateString = formatter.date(from : item["repairExpendDate"] as? String ?? "")
+            let fuelCost = item["fuelingTotalCost"] as? Double ?? 0.0
+            let fuelDist = item["fuelingDist"] as? Double ?? 0.0
+            let fuelDate = formatter.date(from : item["fuelingExpendDate"] as? String ?? "")
             formatter.dateFormat = "MM.dd"
-            cell.rePairDateLabel.text = formatter.string(for: dateString) ?? ""
-        }
-        if let rePairDist = item["repairDist"] as? Double {
-            cell.totalDistanceLabel.text = String(format: "%.f", rePairDist ?? 0.0)
-        }
-        if let TotalCost =  item["TotalCost"] as? Double  {
-            cell.rePairExpenseCost.text = String(format: "%.f", TotalCost ?? 0.0)
-        }
-        if let rePairAddress = item["repairAddress"] as? String {
-            cell.rePairLocationLabel.text = rePairAddress
-        }
-
-        //cell의 ID값을 버튼의 태그 값에 저장을 합니다
-        cell.changeItemButton.tag = item["repairSN"] as? Int ?? 0
-        //cell의 버튼의 액션을 할 수 있게 추가해줍니다.
-        cell.changeItemButton.addTarget(self, action: #selector(changeItem(_:)), for: .touchUpInside)
-        // 만약 item의 carbookRecordItemCategoryCode의 문자형이면 categoryName에 저장하고
-        if let categoryName = item["repairltemCategoryCode"] as? String {
-            // 아이템의 "COUNT"를 items로 저장
-            let items = item["COUNT"] as? Int ?? 0
-            // 만약 items가 2보다 크거나 같으면
-            if items >= 2{
-                // repairItemTitleLabel는 categoryName을 정비목록으로 바꾸고 추가로 정비목록 갯수를 뺀 것의 숫자를 표기
-                cell.rePairItemTitleLabel.text = getCodeText(Code: categoryName) + (" 외 \((item["COUNT"] as? Int ?? 1)-1)건")
-            }else{
-                // 2보다 작을 경우 하나의 항목만 보여준다
-                cell.rePairItemTitleLabel.text = getCodeText(Code: categoryName)
-            }
-        }
-        // 만약 item의 carbookRecordItemExpenseMemo가 문자형이면 memoText에 저장하고
-        if let memoText = item["repairltemMemo"] as? String  {
-            // 만약 memoText 값이 있으면
-            if memoText != "" {
-                // memoView를 숨기지 않고 memoText값을 memoTextView에 넣어준다
-                cell.memoView.isHidden = false
-                cell.memoTextView.text = memoText
-            }
-            else {
-                cell.memoView.isHidden = true
-            }
-        }
-        // 만약 item의 "categoryCodes"가 문자형이고,item의 "categoryCodesCost"가 문자형이면
-        if let categoryCodes = item["categoryCodes"] as? String, let categoryCodesCost = item["categoryCodesCost"] as? String{
-            // 정비항목 코드를,를 이용해 분리해서 codeList에 저장한다
-            let codeList = categoryCodes.components(separatedBy: ",")
-            // 정비항목비용코드를,를 이용해 분리해서 costList에 저장한다
-            let costList = categoryCodesCost.components(separatedBy: ",")
-            // 만약 codeList와 costList의 수가 1보다 크면
-            if codeList.count > 1, costList.count > 1 {
-                cell.rePairItmeStackView.removeAllArrangedSubviews()
-                //repairItemListView를 숨기지않는다
-                cell.rePairItemListView.isHidden = false
-                // 코드리스트의 갯수만큼 for문 동작
-                for (index,value) in codeList.enumerated() {
-                    // UIView의 높이를 30으로 지정하고 폭은 repairitemListview의 폭으로 줘서 itemView에 저장한다
-                    let itemView = UIView(frame: CGRect(x: 0, y: 0, width: cell.rePairItemListView.frame.width, height: 30))
-                    // titleLabel의 값을 폭은 100 높이는 30으로 지정해서 저장한다
-                    let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
-                    // valueLabel의 값을 폭은 100 높이는 30으로 지정해서 저장한다
-                    let valueLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
-                    itemView.translatesAutoresizingMaskIntoConstraints = false
-                    titleLabel.translatesAutoresizingMaskIntoConstraints = false
-                    valueLabel.translatesAutoresizingMaskIntoConstraints = false
-                    // titleLabel의 텍스트는 value 정비항목 코드를 변환해서 보여준다
-                    titleLabel.text = getCodeText(Code: value)
-                    // valueLabel은 costList의 값을 index순서에 맞게 보여준다
-                    valueLabel.text =  "₩ \((Double(costList[index]) ?? 0.0).clean)"
-                    // titleLabel 폰트 사이즈를 지정해준다
-                    titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-                    // valueLabel 폰트 사이즈를 지정해준다
-                    valueLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-                    // valueLabel의 문자 위치를 지정해준다
-                    valueLabel.textAlignment = .right
-                    // titleLabel의 문자 색을 지정해준다
-                    titleLabel.textColor = .lightGray
-                    // valueLabel의 문자 색을 지정해준다
-                    valueLabel.textColor = .darkGray
-                    // 아이템 뷰에 titleLabel을 추가해준다
-                    itemView.addSubview(titleLabel)
-                    // 아이템 뷰에 valueLabel을 추가해준다
-                    itemView.addSubview(valueLabel)
-                    //titleLabel leading값을 지정해준다
-                    titleLabel.leadingAnchor.constraint(equalTo: itemView.leadingAnchor, constant: 10).isActive = true
-                    //titleLabel width값의 간격을 지정해준다
-                    titleLabel.widthAnchor.constraint(equalTo: itemView.widthAnchor, multiplier: 0.5).isActive = true
-                    titleLabel.centerYAnchor.constraint(equalTo: itemView.centerYAnchor, constant: 0).isActive = true
-                    //valueLabel trailing값의 간격을 지정해준다
-                    valueLabel.trailingAnchor.constraint(equalTo: itemView.trailingAnchor, constant: -10).isActive = true
-                    //valueLabel width값의 간격을 지정해준다
-                    valueLabel.widthAnchor.constraint(equalTo: itemView.widthAnchor, multiplier: 0.5).isActive = true
-                    valueLabel.centerYAnchor.constraint(equalTo: itemView.centerYAnchor, constant: 0).isActive = true
-                    // repairItemStackView에 itemview를 추가해준다
-                    cell.rePairItmeStackView.addArrangedSubview(itemView)
-                    // itemView의 width값을 지정해준다
-                    itemView.widthAnchor.constraint(equalTo: cell.rePairItmeStackView.widthAnchor, constant: 0).isActive = true
-                    // itemView의 높이값을 지정해준다
-                    itemView.heightAnchor.constraint(equalToConstant: 30).isActive = true
-                }
-            }else {
-                // 1보다 작을 경우 rePairItemListView를 숨긴다
+            let fuelDates = formatter.string(for: fuelDate) ?? ""
+            // memoView를 숨겨준다
+            cell.memoView.isHidden = true
+            if item["fuelingID"] as? String  != "" {
+                cell.rePairItemTitleLabel.text = item["fuelingPlace"] as? String ?? ""
+                cell.rePairLocationLabel.text = item["fuelingAddress"] as? String ?? ""
+                cell.totalDistanceLabel.text = String(format: "%.f", fuelDist)
+                cell.rePairExpenseCost.text = String(format: "%.f", fuelCost)
+                cell.rePairDateLabel.text = fuelDates
                 cell.rePairItemListView.isHidden = true
+                cell.memoView.isHidden = false
+                
+            }
+            cell.changeItemButton.addTarget(self, action: #selector(changeOilItem(_:)), for: .touchUpInside)
+            if let fuelingFuelCost = item["fuelingFuelCost"] as? Double  {
+                cell.fuelCostBtn.setTitle(String(format: "%.f", fuelingFuelCost) + "/" + "L", for: .normal)
+                cell.fuelCostBtn.titleLabel?.font = UIFont.systemFont(ofSize: 8)
+                cell.fuelCostBtn.isHidden  = false
+            }
+        
+            if let memoText = item["fuelingMemo"] as? String  {
+                // 만약 memoText 값이 있으면
+                if memoText != "" {
+                    // memoView를 숨기지 않고 memoText값을 memoTextView에 넣어준다
+                    cell.memoView.isHidden = false
+                    cell.memoTextView.text = memoText
+                }else {
+                    cell.memoView.isHidden = true
+                }
             }
             
-//            if fuels["fuelingID"] != ""{
-//
-//            }
+        }else {
+                let formatter = DateFormatter()
+                formatter.calendar = Calendar(identifier: .gregorian)
+                formatter.locale = Locale(identifier: "ko_KR")
+                formatter.dateFormat = "yyyyMMddHHmmss"
+                let dateStrings = formatter.date(from : item["repairExpendDate"] as? String ?? "")
+                formatter.dateFormat = "MM.dd"
+                cell.rePairDateLabel.text = formatter.string(for: dateStrings) ?? ""
+        
+            let rePairDist = item["repairDist"] as? Double ?? 0.0
+                cell.totalDistanceLabel.text = String(format: "%.f", rePairDist )
+            
+            let TotalCost =  item["TotalCost"] as? Double ?? 0.0
+                cell.rePairExpenseCost.text = String(format: "%.f", TotalCost)
+            
+             let rePairAddress = item["repairAddress"] as? String ?? ""
+                cell.rePairLocationLabel.text = rePairAddress
+            
+
+            //cell의 ID값을 버튼의 태그 값에 저장을 합니다
+            cell.changeItemButton.tag = item["repairSN"] as? Int ?? 0
+            //cell의 버튼의 액션을 할 수 있게 추가해줍니다.
+            cell.changeItemButton.addTarget(self, action: #selector(changeRepairItem(_:)), for: .touchUpInside)
+            // 만약 item의 carbookRecordItemCategoryCode의 문자형이면 categoryName에 저장하고
+            if let categoryName = item["repairltemCategoryCode"] as? String {
+                // 아이템의 "COUNT"를 items로 저장
+                let items = item["COUNT"] as? Int ?? 0
+                // 만약 items가 2보다 크거나 같으면
+                if items >= 2{
+                    // repairItemTitleLabel는 categoryName을 정비목록으로 바꾸고 추가로 정비목록 갯수를 뺀 것의 숫자를 표기
+                    cell.rePairItemTitleLabel.text = getCodeText(Code: categoryName) + (" 외 \((item["COUNT"] as? Int ?? 1)-1)건")
+                }else{
+                    // 2보다 작을 경우 하나의 항목만 보여준다
+                    cell.rePairItemTitleLabel.text = getCodeText(Code: categoryName)
+                }
+            }
+            // 만약 item의 carbookRecordItemExpenseMemo가 문자형이면 memoText에 저장하고
+            if let memoText = item["repairltemMemo"] as? String  {
+                // 만약 memoText 값이 있으면
+                if memoText != "" {
+                    // memoView를 숨기지 않고 memoText값을 memoTextView에 넣어준다
+                    cell.memoView.isHidden = false
+                    cell.memoTextView.text = memoText
+                }
+                else {
+                    cell.memoView.isHidden = true
+                }
+            }
+            // 만약 item의 "categoryCodes"가 문자형이고,item의 "categoryCodesCost"가 문자형이면
+            if let categoryCodes = item["categoryCodes"] as? String, let categoryCodesCost = item["categoryCodesCost"] as? String{
+                // 정비항목 코드를,를 이용해 분리해서 codeList에 저장한다
+                let codeList = categoryCodes.components(separatedBy: ",")
+                // 정비항목비용코드를,를 이용해 분리해서 costList에 저장한다
+                let costList = categoryCodesCost.components(separatedBy: ",")
+                // 만약 codeList와 costList의 수가 1보다 크면
+                if codeList.count > 1, costList.count > 1 {
+                    cell.rePairItmeStackView.removeAllArrangedSubviews()
+                    //repairItemListView를 숨기지않는다
+                    cell.rePairItemListView.isHidden = false
+                    // 코드리스트의 갯수만큼 for문 동작
+                    for (index,value) in codeList.enumerated() {
+                        // UIView의 높이를 30으로 지정하고 폭은 repairitemListview의 폭으로 줘서 itemView에 저장한다
+                        let itemView = UIView(frame: CGRect(x: 0, y: 0, width: cell.rePairItemListView.frame.width, height: 30))
+                        // titleLabel의 값을 폭은 100 높이는 30으로 지정해서 저장한다
+                        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+                        // valueLabel의 값을 폭은 100 높이는 30으로 지정해서 저장한다
+                        let valueLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+                        itemView.translatesAutoresizingMaskIntoConstraints = false
+                        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+                        valueLabel.translatesAutoresizingMaskIntoConstraints = false
+                        // titleLabel의 텍스트는 value 정비항목 코드를 변환해서 보여준다
+                        titleLabel.text = getCodeText(Code: value)
+                        // valueLabel은 costList의 값을 index순서에 맞게 보여준다
+                        valueLabel.text =  "₩ \((Double(costList[index]) ?? 0.0).clean)"
+                        // titleLabel 폰트 사이즈를 지정해준다
+                        titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+                        // valueLabel 폰트 사이즈를 지정해준다
+                        valueLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+                        // valueLabel의 문자 위치를 지정해준다
+                        valueLabel.textAlignment = .right
+                        // titleLabel의 문자 색을 지정해준다
+                        titleLabel.textColor = .lightGray
+                        // valueLabel의 문자 색을 지정해준다
+                        valueLabel.textColor = .darkGray
+                        // 아이템 뷰에 titleLabel을 추가해준다
+                        itemView.addSubview(titleLabel)
+                        // 아이템 뷰에 valueLabel을 추가해준다
+                        itemView.addSubview(valueLabel)
+                        //titleLabel leading값을 지정해준다
+                        titleLabel.leadingAnchor.constraint(equalTo: itemView.leadingAnchor, constant: 10).isActive = true
+                        //titleLabel width값의 간격을 지정해준다
+                        titleLabel.widthAnchor.constraint(equalTo: itemView.widthAnchor, multiplier: 0.5).isActive = true
+                        titleLabel.centerYAnchor.constraint(equalTo: itemView.centerYAnchor, constant: 0).isActive = true
+                        //valueLabel trailing값의 간격을 지정해준다
+                        valueLabel.trailingAnchor.constraint(equalTo: itemView.trailingAnchor, constant: -10).isActive = true
+                        //valueLabel width값의 간격을 지정해준다
+                        valueLabel.widthAnchor.constraint(equalTo: itemView.widthAnchor, multiplier: 0.5).isActive = true
+                        valueLabel.centerYAnchor.constraint(equalTo: itemView.centerYAnchor, constant: 0).isActive = true
+                        // repairItemStackView에 itemview를 추가해준다
+                        cell.rePairItmeStackView.addArrangedSubview(itemView)
+                        // itemView의 width값을 지정해준다
+                        itemView.widthAnchor.constraint(equalTo: cell.rePairItmeStackView.widthAnchor, constant: 0).isActive = true
+                        // itemView의 높이값을 지정해준다
+                        itemView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+                    }
+                }else {
+                    // 1보다 작을 경우 rePairItemListView를 숨긴다
+                    cell.rePairItemListView.isHidden = true
+                }
+
+            }
+            
         }
+        
+        
+      
       
         return cell
     }
@@ -491,7 +495,7 @@ extension TotalViewController: UITableViewDataSource {
         // Dispose of any resources that can be recreated.
     }
     // 셀의 버튼을 눌렀을때에 동작하는 함수
-    @objc func changeItem(_ sender: UIButton) {
+    @objc func changeRepairItem(_ sender: UIButton) {
         // 각 셀의 Id 아이디 값을 버튼 태그 값에 저장했으므로 ID 값을 다시 불러 옵니다.
         let Id = sender.tag
         Swift.print("키값\(Id)")
@@ -506,7 +510,7 @@ extension TotalViewController: UITableViewDataSource {
                 vc.modalTransitionStyle = .coverVertical
                 vc.modalPresentationStyle = .fullScreen
                 // 이동시 Id 값이랑 delegate값을 전달해줍니다
-                vc.celId = Id
+                vc.cellId = String(Id)
                 vc.repairDelegate = delegate
                 self.present(vc, animated: true, completion: nil)
             }
@@ -530,6 +534,47 @@ extension TotalViewController: UITableViewDataSource {
         self.present(alert, animated: true, completion: nil)
         
     }
+    
+    @objc func changeOilItem(_ sender: UIButton) {
+        // 각 셀의 Id 아이디 값을 버튼 태그 값에 저장했으므로 ID 값을 다시 불러 옵니다.
+        let Id = sender.tag
+        Swift.print("키값\(Id)")
+        // 버튼 클릭시 수정 또는 삭제 문구가 액션시트 형식으로 나오게 해줍니다.
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        //수정 버튼을 클릭시 동작하는 방식
+        let updateData = UIAlertAction(title: "수정", style: UIAlertAction.Style.default, handler:{ [self]
+            action in
+            // 수정 버튼을 클릭하면 repairViewController로 이도한다
+            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "OilEditsViewController")
+                as? OilEditsViewController  {
+                vc.modalTransitionStyle = .coverVertical
+                vc.modalPresentationStyle = .fullScreen
+                // 이동시 Id 값이랑 delegate값을 전달해줍니다
+                vc.cellId = String(Id)
+                vc.repairDelegate = delegate
+                self.present(vc, animated: true, completion: nil)
+            }
+            
+        })
+        // 삭제 버튼을 클릭했을때 동작하는 방식
+        let deleteData = UIAlertAction(title: "삭제", style: UIAlertAction.Style.default, handler:{ [self]
+            action in
+            // 선택한 셀의 데이터를 삭제합니다.
+            let carBookDataBase = CARBOOK_DAO.sharedInstance
+            _ = carBookDataBase.deleteCarBookData(deleteId: Id)
+            // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
+            setRepairData(year: nil)
+        })
+        let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
+        
+        alert.addAction(updateData)
+        alert.addAction(deleteData)
+        alert.addAction(cancel)
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension

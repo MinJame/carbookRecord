@@ -6,40 +6,35 @@
 //
 import Foundation
 import UIKit
-import BSImagePicker
-import Photos
 
-protocol CollectionViewCellDelegate: class {
-    func CollectionView(collectionviewcell: ImageCollectionViewCell?, index: Int, didTappedInTableViewCell: repairsTableViewCell)
-}
 
-class repairsTableViewCell: UITableViewCell {
+class RepairsTableViewCell: UITableViewCell {
 
-    weak var  cellDelegate: CollectionViewCellDelegate?
-    
-    var rowWithColors: [CollectionViewCellModel]?
-    
     @IBOutlet weak var rePairShopView: UIView!
     @IBOutlet weak var addShopBtn: UIButton!
-    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var changeRepairIabel: UIButton!
     @IBOutlet weak var rePairDistance: UILabel!
     @IBOutlet weak var changeLabelButton: UIButton!
     @IBOutlet weak var driveDistance: UITextField!
-//    @IBOutlet weak var rePairDistanceInfoView: UIView!    
     @IBOutlet weak var rePairLocationView: UIView!
     @IBOutlet weak var addRepairShopView: UIView!
     @IBOutlet weak var rePairTitleView: UIView!
-    @IBOutlet weak var addLocation: UIButton!
     @IBOutlet weak var firstView: UIView!
     @IBOutlet weak var addimageViews: UIView!
-    public private(set) var assets: [PHAsset] = []
     @IBOutlet weak var noLocateBtn: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         
         firstView.isHidden = false
+        setBtn()
+        toolbarItems()
+        driveDistance.delegate = self
+      
+
+    }
+    
+    func setBtn() {
         addShopBtn.layer.borderWidth = 1
         addShopBtn.layer.borderColor = UIColor.lightGray.cgColor
         addShopBtn.layer.cornerRadius = 10
@@ -47,13 +42,7 @@ class repairsTableViewCell: UITableViewCell {
         changeRepairIabel.layer.borderWidth = 1
         changeRepairIabel.layer.cornerRadius = 3
         addImageButton.layer.cornerRadius = 5
-        toolbarItems()
-        self.collectionView.dataSource = self
-        self.collectionView.delegate = self
-        driveDistance.delegate = self
-        let cellNib = UINib(nibName: "ImageCollectionViewCell", bundle: nil)
-        self.collectionView.register(cellNib, forCellWithReuseIdentifier: "ImageCollectionViewCellID")
-
+        
     }
 
     @IBAction func changeViews(_ sender: Any) {
@@ -173,100 +162,9 @@ class repairsTableViewCell: UITableViewCell {
       }
     }
     
-    @IBAction func selectImages(_ sender: UIButton) {
-        Swift.print("action")
-        //멀티 사진 선택
-        let imagePicker = ImagePickerController()
-//        imagePicker.delegate = self
-        imagePicker.settings.selection.max = 5
-        imagePicker.settings.theme.selectionStyle = .numbered
-        imagePicker.settings.fetch.assets.supportedMediaTypes = [.image, .video]
-        imagePicker.settings.selection.unselectOnReachingMax = true
-       
-        
-        let vc = self.window?.rootViewController
-        vc!.presentImagePicker(imagePicker, select: { (asset) in
-            
-        }, deselect: { (asset) in
-            
-        }, cancel: { (assets) in
-            
-        }, finish: { (assets) in
-            
-            for i in 0..<assets.count {
-                self.assets.append(assets[i])
-                let imageManager = PHImageManager.default()
-                let option = PHImageRequestOptions()
-                option.isSynchronous = true
-                var thumbnail = UIImage()
-                
-                imageManager.requestImage(for: assets[i],
-                                          targetSize: CGSize(width: 200, height: 200),
-                                          contentMode: .aspectFit,
-                                          options: option) { (result, info) in
-                    thumbnail = result!
-                }
-                
-                let data = thumbnail.jpegData(compressionQuality: 1)
-                let newImage = UIImage(data: data!)
-  
-                var imageView : UIImageView!
-                imageView = UIImageView(frame: CGRect(x:20,y:40,width:200,height:200))
-                imageView.image = newImage
-                
-                self.addimageViews.addSubview(imageView)
-                
-                Swift.print("\(self.assets.append(assets[i]))")
-            }
-            
-          
-            
-        }, completion: {
-        })
-    }
 }
 
-
-extension repairsTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    // The data we passed from the TableView send them to the CollectionView Model
-    func updateCellWith(row: [CollectionViewCellModel]) {
-        self.rowWithColors = row
-        self.collectionView.reloadData()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell
-        print("I'm tapping the \(indexPath.item)")
-        self.cellDelegate?.CollectionView(collectionviewcell: cell, index: indexPath.item, didTappedInTableViewCell: self)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.rowWithColors?.count ?? 0
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    // Set the data for each cell (color and color name)
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCellID", for: indexPath) as? ImageCollectionViewCell {
-//            cell.colorView.backgroundColor = self.rowWithColors?[indexPath.item].color ?? UIColor.black
-//            cell.nameLabel.text = self.rowWithColors?[indexPath.item].name ?? ""
-            Swift.print("나옵다")
-            return cell
-        }
-        return UICollectionViewCell()
-    }
-    
-    // Add spaces at the beginning and the end of the collection view
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-    }
-}
-
-extension repairsTableViewCell : UITextFieldDelegate {
+extension RepairsTableViewCell : UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             // replacementString : 방금 입력된 문자 하나, 붙여넣기 시에는 붙여넣어진 문자열 전체

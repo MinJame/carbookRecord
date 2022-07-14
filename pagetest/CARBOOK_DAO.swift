@@ -31,11 +31,9 @@ class CARBOOK_DAO {
             dateFormatter.dateFormat = "yyyyMMddHHmmss"
             let date = Date()
             let regDateFormmatter = DateFormatter()
-            let uploadDateFormmatter = DateFormatter()
             let updateFormatter = DateFormatter()
             let globalDateFormatter = DateFormatter()
             regDateFormmatter.dateFormat = "yyyyMMddHHmmss"
-            uploadDateFormmatter.dateFormat = "yyyyMMddHHmmss"
             updateFormatter.dateFormat = "yyyyMMddHHmmss"
             globalDateFormatter.dateFormat =  "yyyyMMddHHmmss"
             updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
@@ -43,10 +41,9 @@ class CARBOOK_DAO {
             
             dateFormatter.locale = Locale(identifier: "ko_KR")
             regDateFormmatter.locale = Locale(identifier: "ko_KR")
-            uploadDateFormmatter.locale = Locale(identifier: "ko_KR")
             updateFormatter.locale = Locale(identifier: "ko_KR")
             globalDateFormatter.locale =  Locale(identifier: "ko_KR")
-            let insertSQL = "Insert Into REPAIR ( carSN,repairID,repairKey,repairIsHidden,repairMode,repairPlace,repairAddress,repairLatitude,repairLongitude,repairExpendDate,repairDist,repairImage,repairRegTime,repairUploadTime,repairUpdateTime,repairGlobalTime) Values('\(carbookData["carSN"]!)','\(dateFormatter.string(from:date))','\(carbookData["repairKey"]!)','\(carbookData["repairIsHidden"]!)','\(carbookData["repairMode"]!)','\(carbookData["repairPlace"]!)','\(carbookData["repairAddress"]!)','\(carbookData["repairLatitude"]!)','\(carbookData["repairLongitude"]!)','\(carbookData["repairExpendDate"]!)','\(carbookData["repairDist"]!)','\(carbookData["repairImage"]!)','\(regDateFormmatter.string(from: date))','\(uploadDateFormmatter.string(from: date))','\(updateFormatter.string(from: date))','\(globalDateFormatter.string(from: date))')"
+            let insertSQL = "Insert Into REPAIR ( carSN,repairID,repairIsHidden,repairMode,repairPlace,repairAddress,repairLatitude,repairLongitude,repairExpendDate,repairDist,repairImage,repairRegTime,repairUpdateTime,repairGlobalTime) Values('\(carbookData["carSN"]!)','\(dateFormatter.string(from:date))','\(carbookData["repairIsHidden"]!)','\(carbookData["repairMode"]!)','\(carbookData["repairPlace"]!)','\(carbookData["repairAddress"]!)','\(carbookData["repairLatitude"]!)','\(carbookData["repairLongitude"]!)','\(carbookData["repairExpendDate"]!)','\(carbookData["repairDist"]!)','\(carbookData["repairImage"]!)','\(regDateFormmatter.string(from: date))','\(updateFormatter.string(from: date))','\(globalDateFormatter.string(from: date))')"
             
             Swift.print("저기는 : \(insertSQL)")
             
@@ -81,18 +78,15 @@ class CARBOOK_DAO {
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
         let date = Date()
         let regDateFormmatter = DateFormatter()
-        let uploadDateFormmatter = DateFormatter()
         let updateFormatter = DateFormatter()
         let globalDateFormatter = DateFormatter()
         regDateFormmatter.dateFormat = "yyyyMMddHHmmss"
-        uploadDateFormmatter.dateFormat = "yyyyMMddHHmmss"
         updateFormatter.dateFormat = "yyyyMMddHHmmss"
         globalDateFormatter.dateFormat =  "yyyyMMddHHmmss"
         updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
         
         dateFormatter.locale = Locale(identifier: "ko_KR")
         regDateFormmatter.locale = Locale(identifier: "ko_KR")
-        uploadDateFormmatter.locale = Locale(identifier: "ko_KR")
         updateFormatter.locale = Locale(identifier: "ko_KR")
         globalDateFormatter.locale =  Locale(identifier: "ko_KR")
         if carbookDB.open() {
@@ -100,7 +94,7 @@ class CARBOOK_DAO {
             if carbookDB.beginTransaction() {
                 
                 carbookDataItems.forEach{ (item) in
-                    let insertSQL = "Insert Into REPAIRITEM (repairSN, repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime) Values('\(item["repairSN"]!)','\(dateFormatter.string(from: date))','\(item["repairItemKey"]!)','\(item["repairltemIsHidden"]!)','\(item[ "repairltemCategoryCode"]!)','\(item["repairItemDivision"]!)', '\(item["repairltemName"]!)','\(item["repairltemCost"]!)','\(item["repairltemMemo"]!)','\(regDateFormmatter.string(from: date))','\(uploadDateFormmatter.string(from: date))','\(updateFormatter.string(from: date))', '\(globalDateFormatter.string(from: date))')"
+                    let insertSQL = "Insert Into REPAIRITEM (repairSN, repairltemID,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUpdateTime,repairltemGlobalTime) Values('\(item["repairSN"]!)','\(item["repairItemID"]!)','\(item["repairltemIsHidden"]!)','\(item[ "repairltemCategoryCode"]!)','\(item["repairItemDivision"]!)', '\(item["repairltemName"]!)','\(item["repairltemCost"]!)','\(item["repairltemMemo"]!)','\(regDateFormmatter.string(from: date))','\(updateFormatter.string(from: date))', '\(globalDateFormatter.string(from: date))')"
                     
                     let result = carbookDB.executeUpdate(insertSQL, withArgumentsIn: [])
                     
@@ -132,7 +126,7 @@ class CARBOOK_DAO {
             dateFormatter.locale = Locale(identifier: "ko_KR")
             updateFormatter.locale = Locale(identifier: "ko_KR")
             globalDateFormatter.locale =  Locale(identifier: "ko_KR")
-            let insertSQL = "Insert Into FUELING (carSN, fuelingID,fuelingKey,fuelingISHidden,fuelingPlace,fuelingAddress,fuelingLatitude,fuelingLongitude ,fuelingExpendDate,fuelingDist,fuelingTotalCost,fuelingItem,fuelingFuelCost,fuelingItemVolume,fuelingImage,fuelingMemo,fuelingRegTime,fuelingUpdateTime,fuelingGlobalTime) Values('\(carbookDataOilItems["carSN"]!)','\(carbookDataOilItems[ "fuelingID"]!)','\(carbookDataOilItems["fuelingKey"]!)','\(carbookDataOilItems["fuelingISHidden"]!)','\(carbookDataOilItems["fuelingPlace"]!)', '\(carbookDataOilItems["fuelingAddress"]!)', '\(carbookDataOilItems["fuelingLatitude"]!)', '\(carbookDataOilItems["fuelingLongitude"]!)', '\(carbookDataOilItems["fuelingExpendDate"]!)','\(carbookDataOilItems["fuelingDist"]!)','\(carbookDataOilItems["fuelingTotalCost"]!)','\(carbookDataOilItems["fuelingItem"]!)','\(carbookDataOilItems["fuelingFuelCost"]!)','\(carbookDataOilItems["fuelingItemVolume"]!)','\(carbookDataOilItems["fuelingImage"]!)','\(carbookDataOilItems["fuelingMemo"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))', '\(globalDateFormatter.string(from: date))')"
+            let insertSQL = "Insert Into FUELING (carSN, fuelingID,fuelingISHidden,fuelingPlace,fuelingAddress,fuelingLatitude,fuelingLongitude ,fuelingExpendDate,fuelingDist,fuelingTotalCost,fuelType,fuelingFuelCost,fuelingItemVolume,fuelingImage,fuelingMemo,fuelingRegTime,fuelingUpdateTime,fuelingGlobalTime) Values('\(carbookDataOilItems["carSN"]!)','\(carbookDataOilItems[ "fuelingID"]!)','\(carbookDataOilItems["fuelingISHidden"]!)','\(carbookDataOilItems["fuelingPlace"]!)', '\(carbookDataOilItems["fuelingAddress"]!)', '\(carbookDataOilItems["fuelingLatitude"]!)', '\(carbookDataOilItems["fuelingLongitude"]!)', '\(carbookDataOilItems["fuelingExpendDate"]!)','\(carbookDataOilItems["fuelingDist"]!)','\(carbookDataOilItems["fuelingTotalCost"]!)','\(carbookDataOilItems["fuelType"]!)','\(carbookDataOilItems["fuelingFuelCost"]!)','\(carbookDataOilItems["fuelingItemVolume"]!)','\(carbookDataOilItems["fuelingImage"]!)','\(carbookDataOilItems["fuelingMemo"]!)','\(dateFormatter.string(from: date))', '\(updateFormatter.string(from: date))', '\(globalDateFormatter.string(from: date))')"
             //
             
             Swift.print("저기는 : \(insertSQL)")
@@ -140,15 +134,6 @@ class CARBOOK_DAO {
             let result = carbookDB.executeUpdate(insertSQL, withArgumentsIn: [])
             if !result {
                 Swift.print("Error \(carbookDB.lastErrorMessage())")
-            }else {
-                let checkSQL = "select last_insert_rowid() as  'id'"
-                if let result = carbookDB.executeQuery(checkSQL, withArgumentsIn: []){
-                    var id = 0
-                    while result.next() {
-                        id = Int(result.int(forColumn : "id"))
-                    }
-                    return["result" : true, "id" : id]
-                }
             }
             return ["result" : result]
             
@@ -176,7 +161,7 @@ class CARBOOK_DAO {
         
         if carbookDB.open() {
             defer {carbookDB.close()}
-            let updateSQL = "UPDATE REPAIR SET repairIsHidden = '\(carbookData["repairIsHidden"]!)',repairMode = '\(carbookData["repairMode"]!)', repairPlace = '\(carbookData["repairPlace"]!)', repairAddress = '\(carbookData["repairAddress"]!)', repairLatitude = '\(carbookData["repairLatitude"]!)', repairLongitude = '\(carbookData["repairLongitude"]!)',repairExpendDate = '\(carbookData["repairExpendDate"]!)',repairDist = '\(carbookData["repairDist"]!)',repairImage = '\(carbookData["repairImage"]!)', repairUploadTime = '\(uploadDateFormmatter.string(from: Date()))', repairUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE _id = '\(id)' "
+            let updateSQL = "UPDATE REPAIR SET repairIsHidden = '\(carbookData["repairIsHidden"]!)',repairMode = '\(carbookData["repairMode"]!)', repairPlace = '\(carbookData["repairPlace"]!)', repairAddress = '\(carbookData["repairAddress"]!)', repairLatitude = '\(carbookData["repairLatitude"]!)', repairLongitude = '\(carbookData["repairLongitude"]!)',repairExpendDate = '\(carbookData["repairExpendDate"]!)',repairDist = '\(carbookData["repairDist"]!)',repairImage = '\(carbookData["repairImage"]!)',repairUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE _id = '\(id)' "
             
             let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
             Swift.print("insertSQL1:\(updateSQL)")
@@ -231,19 +216,16 @@ class CARBOOK_DAO {
     
     func modifyCarBookDataOilItem(carbookDataOilItem : Dictionary<String,Any>) -> Bool{
         let carbookDB = FMDatabase(path: databaseURL?.path)
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "yyyyMMddHHmmss"
+ 
         let updateFormatter = DateFormatter()
         updateFormatter.dateFormat = "yyyyMMddHHmmss"
         updateFormatter.timeZone = TimeZone(identifier: TimeZone.current.identifier)
-        
-        dateFormatter.locale = Locale(identifier: "ko_KR")
+      
         updateFormatter.locale = Locale(identifier: "ko_KR")
         if carbookDB.open() {
             defer {carbookDB.close()}
     
-                    let updateSQL = "UPDATE FUELING SET fuelingID = '\(carbookDataOilItem["fuelingID"]!)',  fuelingISHidden = '\(carbookDataOilItem["fuelingISHidden"]!)', fuelingPlace = '\(carbookDataOilItem["fuelingPlace"]!)', fuelingAddress = '\(carbookDataOilItem["fuelingAddress"]!)',fuelingLatitude = '\(carbookDataOilItem["fuelingLatitude"]!)',fuelingLongitude = '\(carbookDataOilItem["fuelingLongitude"]!)',fuelingExpendDate = '\(carbookDataOilItem["fuelingExpendDate"]!)',fuelingDist = '\(carbookDataOilItem["fuelingDist"]!)',fuelingTotalCost = '\(carbookDataOilItem["fuelingTotalCost"]!)',fuelingFuelCost = '\(carbookDataOilItem["fuelingFuelCost"]!)',fuelingItemVolume = '\(carbookDataOilItem["fuelingItemVolume"]!)',fuelingImage = '\(carbookDataOilItem["fuelingImage"]!)',fuelingMemo = '\(carbookDataOilItem["fuelingMemo"]!)',fuelingRegTime = '\(dateFormatter.string(from: Date()))', fuelingUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE fuelingID = '\(carbookDataOilItem["fuelingID"]!)'"
+                    let updateSQL = "UPDATE FUELING SET fuelingID = '\(carbookDataOilItem["fuelingID"]!)',  fuelingISHidden = '\(carbookDataOilItem["fuelingISHidden"]!)', fuelingPlace = '\(carbookDataOilItem["fuelingPlace"]!)', fuelingAddress = '\(carbookDataOilItem["fuelingAddress"]!)',fuelingLatitude = '\(carbookDataOilItem["fuelingLatitude"]!)',fuelingLongitude = '\(carbookDataOilItem["fuelingLongitude"]!)',fuelingExpendDate = '\(carbookDataOilItem["fuelingExpendDate"]!)',fuelingDist = '\(carbookDataOilItem["fuelingDist"]!)',fuelingTotalCost = '\(carbookDataOilItem["fuelingTotalCost"]!)',fuelingFuelCost = '\(carbookDataOilItem["fuelingFuelCost"]!)',fuelingItemVolume = '\(carbookDataOilItem["fuelingItemVolume"]!)',fuelingImage = '\(carbookDataOilItem["fuelingImage"]!)',fuelingMemo = '\(carbookDataOilItem["fuelingMemo"]!)', fuelingUpdateTime = '\(updateFormatter.string(from: Date())) 'WHERE fuelingID = '\(carbookDataOilItem["fuelingID"]!)'"
         
                     let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
                     

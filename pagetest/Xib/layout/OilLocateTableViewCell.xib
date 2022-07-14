@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" restorationIdentifier="repairlocateTableViewCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="repairlocateTableViewCellID" rowHeight="153" id="KGk-i7-Jjw" customClass="repairlocateTableViewCell" customModule="pagetest" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" restorationIdentifier="OilLocateTableViewCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="OilLocateTableViewCellID" rowHeight="153" id="KGk-i7-Jjw" customClass="OilLocateTableViewCell" customModule="pagetest" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="669" height="153"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -160,7 +160,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lKB-Lc-5oy">
                                 <rect key="frame" x="0.0" y="0.0" width="669" height="1"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="QOV-sT-6GR"/>
                                 </constraints>
@@ -169,9 +169,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="669" height="85.5"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kt7-b1-IYK">
-                                        <rect key="frame" x="20" y="2.5" width="30" height="31.5"/>
+                                        <rect key="frame" x="20" y="9.5" width="30" height="31.5"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="kt7-b1-IYK" secondAttribute="height" multiplier="1:1" id="HJe-Ee-Ydd"/>
                                             <constraint firstAttribute="height" constant="30" id="HVQ-X1-QS2"/>
                                             <constraint firstAttribute="width" constant="30" id="X4Z-ek-pxB"/>
                                         </constraints>
@@ -184,7 +183,7 @@
                                         </imageReference>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="동일 주유소" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T9I-m3-k2n">
-                                        <rect key="frame" x="82" y="7.5" width="78" height="22"/>
+                                        <rect key="frame" x="82" y="15.5" width="78" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -200,7 +199,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JBS-1t-mj1">
-                                        <rect key="frame" x="600" y="0.5" width="60" height="42"/>
+                                        <rect key="frame" x="599.5" y="8.5" width="59.5" height="34"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="변경">
                                             <imageReference key="image" image="arrowtriangle.down.fill" catalog="system" symbolScale="small" renderingMode="hierarchical-single">
@@ -210,11 +209,11 @@
                                                     <color systemColor="tertiaryLabelColor"/>
                                                 </hierarchicalColors>
                                             </imageReference>
-                                            <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="baseForegroundColor" systemColor="labelColor"/>
                                         </buttonConfiguration>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fy3-sW-HcF">
-                                        <rect key="frame" x="563" y="57.5" width="96" height="25"/>
+                                        <rect key="frame" x="564" y="57.5" width="96" height="25"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="장소없음">
                                             <imageReference key="image" image="delete.left" catalog="system" renderingMode="hierarchical-single">
@@ -242,10 +241,6 @@
                                                 </hierarchicalColors>
                                             </imageReference>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="askPlacelocation:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="3aI-kB-KNX"/>
-                                            <action selector="changeLabels:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="4ZA-Z0-Ljj"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -253,24 +248,23 @@
                                     <constraint firstItem="fy3-sW-HcF" firstAttribute="centerY" secondItem="4X8-Dy-zyb" secondAttribute="centerY" id="1aC-H7-44A"/>
                                     <constraint firstItem="T9I-m3-k2n" firstAttribute="leading" secondItem="kt7-b1-IYK" secondAttribute="trailing" constant="32" id="3FW-62-RTX"/>
                                     <constraint firstAttribute="bottom" secondItem="fy3-sW-HcF" secondAttribute="bottom" constant="3" id="8cM-9s-nWc"/>
-                                    <constraint firstAttribute="trailing" secondItem="fy3-sW-HcF" secondAttribute="trailing" constant="10" id="9QU-qX-Kcg"/>
-                                    <constraint firstItem="kt7-b1-IYK" firstAttribute="top" secondItem="m0d-zl-QMh" secondAttribute="top" constant="3.5" id="EcX-nD-X6X"/>
+                                    <constraint firstAttribute="trailing" secondItem="fy3-sW-HcF" secondAttribute="trailing" constant="9" id="9QU-qX-Kcg"/>
+                                    <constraint firstItem="kt7-b1-IYK" firstAttribute="top" secondItem="m0d-zl-QMh" secondAttribute="top" constant="10.5" id="EcX-nD-X6X"/>
                                     <constraint firstItem="4X8-Dy-zyb" firstAttribute="leading" secondItem="m0d-zl-QMh" secondAttribute="leading" constant="82" id="LqC-hA-PRa"/>
-                                    <constraint firstItem="4X8-Dy-zyb" firstAttribute="top" secondItem="T9I-m3-k2n" secondAttribute="bottom" constant="27" id="Rxk-Ie-1fn"/>
-                                    <constraint firstItem="JBS-1t-mj1" firstAttribute="centerY" secondItem="kt7-b1-IYK" secondAttribute="centerY" constant="3" id="WUF-xF-y2c"/>
-                                    <constraint firstItem="T9I-m3-k2n" firstAttribute="centerY" secondItem="kt7-b1-IYK" secondAttribute="centerY" id="agM-ln-LFH"/>
+                                    <constraint firstItem="JBS-1t-mj1" firstAttribute="centerY" secondItem="kt7-b1-IYK" secondAttribute="centerY" id="WUF-xF-y2c"/>
+                                    <constraint firstItem="T9I-m3-k2n" firstAttribute="centerY" secondItem="kt7-b1-IYK" secondAttribute="centerY" constant="0.25" id="agM-ln-LFH"/>
                                     <constraint firstItem="4X8-Dy-zyb" firstAttribute="leading" secondItem="T9I-m3-k2n" secondAttribute="leading" id="bGl-KS-OBq"/>
                                     <constraint firstItem="4X8-Dy-zyb" firstAttribute="centerY" secondItem="fTH-jP-Jkw" secondAttribute="centerY" id="bYT-O1-J2d"/>
                                     <constraint firstItem="fy3-sW-HcF" firstAttribute="top" secondItem="JBS-1t-mj1" secondAttribute="bottom" constant="15" id="fgQ-32-DWW"/>
                                     <constraint firstAttribute="bottom" secondItem="4X8-Dy-zyb" secondAttribute="bottom" constant="2" id="fsP-0A-vK1"/>
                                     <constraint firstItem="fTH-jP-Jkw" firstAttribute="leading" secondItem="4X8-Dy-zyb" secondAttribute="trailing" constant="16" id="jAP-h5-veI"/>
-                                    <constraint firstItem="fy3-sW-HcF" firstAttribute="trailing" secondItem="JBS-1t-mj1" secondAttribute="trailing" constant="-1" id="mva-Bf-xHa"/>
+                                    <constraint firstItem="fy3-sW-HcF" firstAttribute="trailing" secondItem="JBS-1t-mj1" secondAttribute="trailing" constant="1" id="mva-Bf-xHa"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a5f-R0-ya3">
                                 <rect key="frame" x="0.0" y="86.5" width="669" height="1"/>
                                 <viewLayoutGuide key="safeArea" id="Ey1-OA-cyy"/>
-                                <color key="backgroundColor" systemColor="systemGray3Color"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="vnD-mz-lqC"/>
                                 </constraints>
@@ -314,12 +308,9 @@
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="누적주행거리" titleAlignment="automatic">
-                                            <imageReference key="image" image="arrowtriangle.down.fill" catalog="system" symbolScale="medium"/>
+                                            <imageReference key="image" image="arrowtriangle.down.fill" catalog="system" symbolScale="small"/>
                                             <color key="baseForegroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="changeDistance:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="HMZ-km-Gai"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -392,14 +383,17 @@
         <image name="gauge" catalog="system" width="128" height="121"/>
         <image name="location" catalog="system" width="128" height="118"/>
         <image name="questionmark.circle" catalog="system" width="128" height="121"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemGray3Color">
-            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tertiaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>

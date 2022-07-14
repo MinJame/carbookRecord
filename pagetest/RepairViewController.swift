@@ -15,7 +15,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var todayDateLabel: UILabel!
     @IBOutlet weak var rePairTitleLabel: UILabel!
     @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var finishButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var titleButton: UIButton!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var selfrepairButton: UIButton!
@@ -23,9 +23,8 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var addCell: UIButton!
     var dateDelegate : selectDateDelegate?
     var startDate : Date?
-    var finishDate : Date?
     // 전체기록에서 정비기록페이지로 돌아올때 필요한 아이디
-    var celId : Int?
+    var cellId : String = ""
     // 페이지에서 삭제되는 아이디들을 모음
     var deleteIds : [Int] = []
     var tablelist : [Dictionary<String,Any>] = []
@@ -36,16 +35,18 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidLoad()
         dateDelegate = self
         initTableView()
+        
         setNotification()
         setLists()
         setBtn()
    
         // 만약 celId가 있으면 getcarBookData 함수를 실행한다
-        if celId != nil {
+        if cellId != "" {
             getCarBookData()
         }
         
     }
+
     // 버튼 세팅하는 함수
     func setBtn() {
         // repairButton 두께는 1
@@ -76,11 +77,11 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         formatter.dateFormat = "yyyy.MM.dd(E)"
         // finishButton을 완료로 선언 settitle ceLid 비교
 
-        if celId != nil {
-            finishButton.setTitle("수정", for: .normal)
+        if cellId != "" {
+            saveButton.setTitle("수정", for: .normal)
        
         }else {
-            finishButton.setTitle("완료", for: .normal)
+            saveButton.setTitle("완료", for: .normal)
           
         }
    
@@ -94,7 +95,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             ["Type": 1,"Distance" :"","Mode" : 0,"isLocation": false],
             // ["Type": 2],
             // cellId 있는 경우와 없는 경우 구분
-            ["Type" :3, "Category": "1", "cost" : 0 ,"memo":"","Num": 1
+            ["Type" :3, "Category": "1", "Cost" : 0 ,"Memo":"","Num": 1
              ,"id": 0,"isHidden":0 ]
         ]
     }
@@ -107,15 +108,15 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // cell1은 RepairSelfTableViewCell로 선언하고
         let cell1: UINib = UINib(nibName: "RepairSelfTableViewCell", bundle: nil)
         // repairItemTableView에 cell1을 등록한다
-        self.rePairItemTableView.register(cell1, forCellReuseIdentifier: "repairSelfTableViewCellID")
+        self.rePairItemTableView.register(cell1, forCellReuseIdentifier: "RepairSelfTableViewCellID")
         // cell2는 repairsTableViewCell로 선언하고
-        let cell2: UINib = UINib(nibName: "repairsTableViewCell", bundle: nil)
+        let cell2: UINib = UINib(nibName: "RepairsTableViewCell", bundle: nil)
         //   repairItemTableView에 cell2를 등록한다
-        self.rePairItemTableView.register(cell2, forCellReuseIdentifier: "repairsTableViewCelllID")
+        self.rePairItemTableView.register(cell2, forCellReuseIdentifier: "RepairsTableViewCellID")
         // cell3은 repairTableViewCell로 선언하고
-        let cell3: UINib = UINib(nibName: "repairTableViewCell", bundle: nil)
+        let cell3: UINib = UINib(nibName: "RepairTableViewCell", bundle: nil)
         // repairItemTableView에 cell3을 등록한다
-        self.rePairItemTableView.register(cell3, forCellReuseIdentifier: "repairTableViewCellID")
+        self.rePairItemTableView.register(cell3, forCellReuseIdentifier: "RepairTableViewCellID")
         // repairTItemTableView 리로드 시켜준다
         rePairItemTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
     }
@@ -205,7 +206,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     func getCarBookData() {
         let carBookDatabase = CARBOOK_DAO.sharedInstance
         // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고 data item 변수 저장
-        if let item : [String : Any] = carBookDatabase.selectCarbookData(id: String(celId ?? 0)) {
+        if let item : [String : Any] = carBookDatabase.selectCarbookData(id: cellId) {
             // 테이블리스트의  "Distance"에  데이터를 업데이트 시켜준다
             
             Swift.print("아이템\(item)")
@@ -228,7 +229,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             // formatter형식을 "년월일(요일)"으로 표시할수 있게 저장한다
             formatter.dateFormat = "yyyy.MM.dd(E)"
             // finishButton의 문자를 수정으로 저장한다 setTitle
-            finishButton.titleLabel?.text = "수정"
+            saveButton.titleLabel?.text = "수정"
             // todayDateLabel의 문자에 dateString 저장 비교해서
             todayDateLabel.text = formatter.string(for: dates) ?? ""
             // 만약 list의 "carbokRecordRepairMode"가 2일 경우
@@ -251,7 +252,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     func getcarBookDatas() {
         let carBookDatabase = CARBOOK_DAO.sharedInstance
         // db에서 celId에 해당되는 데이터가 있을경우 list에 저장하고
-        if let list : [Dictionary<String,Any>] = carBookDatabase.selectCarbookDataList(id: String(celId ?? 0)) {
+        if let list : [Dictionary<String,Any>] = carBookDatabase.selectCarbookDataList(id: cellId) {
             // 정비기록의 비어있는 첫번째 것을 제거해준다 remove 충돌소지가 있음
             tablelist.remove(at: 1)
             // list의 item값 중에서
@@ -263,9 +264,9 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
                     // category 값은 item의 carbookRecordItemCategoryCode
                     "Category" : item["repairltemCategoryCode"] as? String ?? "",
                     // cost 값은 item의 carbookRecordItemExpenseCost
-                    "cost" : item["repairltemCost"] as? Double ?? 0.0,
+                    "Cost" : item["repairltemCost"] as? Double ?? 0.0,
                     // memo는 item의 carbookRecordItemExpenseMemo
-                    "memo" : item["repairltemMemo"] as? String ?? "",
+                    "Memo" : item["repairltemMemo"] as? String ?? "",
                     // isHidden은 carbookRecordItemIsHidden이며
                     "isHidden" : item["repairltemIsHidden"] as? Int ?? 0,
                     // Type 값은 3이다
@@ -281,7 +282,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     // 데이터 수정하기
     func updateData() {
         //carbookdb 불러오기
-        finishButton.titleLabel?.text = "수정"
+        saveButton.titleLabel?.text = "수정"
         let carBookDataBase = CARBOOK_DAO.sharedInstance
         // 테이블리스트첫번째데이터를 변수명으로 선언
         let upperDataList = tablelist[0]
@@ -340,7 +341,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             self.present(alert, animated: true, completion: nil)
         }else {
             // carbookdatadb에 수정한 항목들을 해당한 셀 아이디에 값에 맞게 저장해 주어야함으로 수정한 항목과 셀아이디값별로 구분해서 db저장
-            let _ = carBookDataBase.modifyCarBookData(carbookData: carBookData, id: String(celId ?? 0))
+            let _ = carBookDataBase.modifyCarBookData(carbookData: carBookData, id: cellId)
             //테이블리스트 갯수 만큼 for문이 돈다
             for i in 0..<tablelist.count {
                 // 테이블리스트 i번째 데이터를 item이라고 선언
@@ -349,18 +350,17 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
                 if let type = item["Type"] as? Int, type == 3 {
                     // item의 id 값을 Int형으로 선언하고 id로 저장
                     let id = item["id"] as? Int ?? 0
-                    Swift.print("아이디좀\(id)")
                     if id == 0 {     // 만약 id 값이 0이면 저장된 데이터들이 없으므로 새로운 정비기록들을 추가
                         // 새로 추가할 정비기록들을 묶어서 저장
                         let insertCarBookRecordItem : Dictionary<String,Any> = [
-                            "repairSN" : celId ?? 0,
-                            "repairItemKey" : "확인",
+                            "repairSN" : Int(cellId) ?? 0,
+                            "repairItemID" : id,
                             "repairltemIsHidden" : item["isHidden"] as? Int ?? 0,
                             "repairltemCategoryCode" : item["Category"] as? String ?? "",
                             "repairItemDivision" : 0,
                             "repairltemName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
-                            "repairltemCost" : item["cost"] as? Double ?? 0.0,
-                            "repairltemMemo" : item["memo"] as? String ?? ""
+                            "repairltemCost" : item["Cost"] as? Double ?? 0.0,
+                            "repairltemMemo" : item["Memo"] as? String ?? ""
                         ]
                         insertcarBookDataList.append(insertCarBookRecordItem)
                         
@@ -368,14 +368,14 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
                         //수정해서 업데이트할 정비기록을 묶어서 저장
                         let updateCarBookDatas : Dictionary<String,Any> = [
                             "_id" : id ,
-                            "repairSN" : celId ?? 0,
-                            "repairItemKey" : "확인",
+                            "repairSN" :  Int(cellId) ?? 0,
+                            "repairItemID" : id,
                             "repairltemIsHidden" : item["isHidden"] as? Int ?? 0,
                             "repairltemCategoryCode" : item["Category"] as? String ?? "",
                             "repairItemDivision" : 0,
                             "repairltemName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
-                            "repairltemCost" : item["cost"] as? Double ?? 0.0,
-                            "repairltemMemo" : item["memo"] as? String ?? ""
+                            "repairltemCost" : item["Cost"] as? Double ?? 0.0,
+                            "repairltemMemo" : item["Memo"] as? String ?? ""
                         ]
                         updatecarBookDataList.append(updateCarBookDatas)
                     }
@@ -414,7 +414,6 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 새로 저장에 필요한 정비기록 기본정보들을 저장
         let carBookData : Dictionary<String, Any>  = [
             "carSN" : 1,
-            "repairKey" : "확인",
             "repairIsHidden" : 0,
             "repairMode" : upperDataList["Mode"] as? Int ?? 0,
             "repairPlace" : "바름정비 안암동점",
@@ -455,7 +454,6 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             for i in 0..<tablelist.count {
                 // 새로 생성할 정비기록항목들은 위에서 생성한 데이터의 id값과 동일한 곳에 들어가야하고 id값은 Int형임으로 Int형으로 선언
                 if let id = insertCarBookdata["id"] as? Int {
-                    Swift.print("testId\(id)")
                     // 테이블리스트 i번째 데이터를 item이라고 선언
                     let item = tablelist[i]
                     // item중에 type이 Int형이고 type 값이 3이면 동작실행
@@ -463,13 +461,13 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
                         // 새로 추가할 정비기록항목들을 묶어서 저장
                         let insertCarBookRecordItem : Dictionary<String,Any> = [
                             "repairSN" : id,
-                            "repairItemKey" : "확인",
+                            "repairItemID" : id,
                             "repairltemIsHidden" : item["isHidden"] as? Int ?? 0,
                             "repairltemCategoryCode" : item["Category"] as? String ?? "",
                             "repairItemDivision" : 0,
                             "repairltemName" : getRePairItemCodeTitle(code: item["Category"] as? String ?? ""),
-                            "repairltemCost" : item["cost"] as? Double ?? 0.0,
-                            "repairltemMemo" : item["memo"] as? String ?? ""
+                            "repairltemCost" : item["Cost"] as? Double ?? 0.0,
+                            "repairltemMemo" : item["Memo"] as? String ?? ""
                         ]
                         // insertcarBookDataItemList에 insertCarBookRecordItem를 더해준다
                         insertcarBookDataItemList.append(insertCarBookRecordItem)
@@ -488,7 +486,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     // 정비한 기록들을 저장하기 위한 버튼
     @IBAction func saveDataButton(_ sender: Any) {
         // 전체기록 페이지에서 정비기록을 클릭후 정비기록 페이지 들어온 경우와 정비기록 페이지로 들어와서 데이터 저장하는 것을 구분하기 위한 if문
-        if celId != nil {
+        if cellId != "" {
             updateData()
         }  else {
             insertDatas()
@@ -532,7 +530,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         
     }
     //뷰를 지우는 함수
-    @IBAction func moveView(_ sender: Any) {
+    @IBAction func dismissView(_ sender: Any) {
         dismiss(animated: true)
         
     }
@@ -542,7 +540,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 테이블리스트의 갯수가 10개보다 같거나 작을 경우
         if tablelist.count <= 10 {
             // 테이블 리스트에 데이터를 추가해준다
-            tablelist.append(["Type" :3, "Category": "1", "cost" : 0 ,"memo":"메모 250자 기입가능\n(이모티콘 불가)"])
+            tablelist.append(["Type" :3, "Category": "1", "Cost" : 0 ,"Memo":"메모 250자 기입가능\n(이모티콘 불가)"])
             rePairItemTableView.insertRows(at: [IndexPath(row: tablelist.count-1, section: 0)], with: .automatic)
             let indexPath = IndexPath(row: tablelist.count-1, section: 0)
             // 셀을 추가해줄 경우 추가한 셀로 스크롤이 올라갈수 있게 동작하는 함수 입니다.
@@ -621,8 +619,8 @@ extension RepairViewController: UITableViewDataSource {
         switch type   {
         case 1 :
             // 만약 타입이 1일 경우 repairsTableViewCell을 재사용한다
-            if let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "repairsTableViewCelllID") as?
-                repairsTableViewCell {
+            if let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairsTableViewCellID") as?
+                RepairsTableViewCell {
                 // 셀의 noLacteBtn를 누를경우 changereFilButton 함수 동작
                 cell.noLocateBtn.addTarget(self, action:#selector(changereFilButton(_ :)), for: .touchUpInside)
                 // 만약 테이블리스트 첫번째의 islocation이 bool형이면 islocation에 저장
@@ -638,12 +636,12 @@ extension RepairViewController: UITableViewDataSource {
                 cell.driveDistance.text = String(format: "%.f", tablelist[0]["Distance"] as? Double ?? 0.0)
                 return cell
             } else {
-                let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "repairSelfTableViewCellID")
+                let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairSelfTableViewCellID")
                 return cell!
             }
         case 2 :
             // 타입이 2인경우 RepairSelfTableViewCell을 재사용한다
-            if let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "repairSelfTableViewCellID") as?
+            if let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairSelfTableViewCellID") as?
                 RepairSelfTableViewCell {
                 // distanceField가 텍스트 필드임으로 텍스트필드 delegate 적용
                 cell.distanceField.delegate = self
@@ -651,13 +649,13 @@ extension RepairViewController: UITableViewDataSource {
                 cell.distanceField.text = String(format: "%.f", tablelist[0]["Distance"] as? Double ?? 0.0)
                 return cell
             }else {
-                let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "repairSelfTableViewCellID")
+                let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairSelfTableViewCellID")
                 return cell!
             }
         case 3 :
             // 타입이 3인경우 repairTableViewCell을 재사용한다
-            if let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "repairTableViewCellID") as?
-                repairTableViewCell {
+            if let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairTableViewCellID") as?
+                RepairTableViewCell {
                 // 메모뷰가 텍스트 뷰 형식이여서 텍스트뷰 delegate 적용
                 cell.repairMemoView.delegate = self
                 // 비용 입력하는 텍스트가   텍스트필드 delegate 적용
@@ -675,23 +673,23 @@ extension RepairViewController: UITableViewDataSource {
                 //  repaircostfield의 placeholder(초기에 아무것도 입력안했을때 보여지는 것) 값을 0으로 지정
                 cell.repairCostField.placeholder = "0"
                 // 아이템의 "cost" 값을 costs로 선언한다
-                let costs = item["cost"] as? Double ?? 0.0
+                let costs = item["Cost"] as? Double ?? 0.0
                 // repaircostfield의 문자를 문자열로 변환한 cost값 입력
                 cell.repairCostField.text = String(Int(costs))
                 // repaircostfield의 문자색을 연한갈색으로 선언
                 cell.repairCostField.textColor = .lightGray
                 // 만약 item의 "memo"가 문자열이면 memo에 저장하고, memo에 문자열이 있으면 repairMemoView의 문자에 memo를 입력한다.
-                if let memo = item["memo"] as? String, memo != "" {
+                if let memo = item["Memo"] as? String, memo != "" {
                     cell.repairMemoView.text = memo
                     
                 }
                 return cell
             }else {
-                let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "repairTableViewCellID")
+                let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairTableViewCellID")
                 return cell!
             }
         default :
-            let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "repairTableViewCellID")
+            let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairTableViewCellID")
             return cell!
         }
     }
@@ -756,15 +754,8 @@ extension RepairViewController : selectDateDelegate {
         // format의 날짜 표기 형식을 "년.월.일(요일)"로 저장
         format.dateFormat = "yyyy.MM.dd(E)"
         
-        if finishDate == nil {
-            startDate = date
-            finishDate = nil
-            // 오늘 날짜의 문자를 선택한 날짜로 저장
-            todayDateLabel.text = format.string(for: date) ?? ""
-        }else {
-            finishDate = date
-            todayDateLabel.text = format.string(for: date) ?? ""
-        }
+        startDate = date
+        todayDateLabel.text = format.string(for: date) ?? ""
         
     }
 }
@@ -778,10 +769,10 @@ extension RepairViewController : UITextViewDelegate,UITextFieldDelegate {
             textView.text = "메모 250자 기입가능\n(이모티콘 불가)"
             // 텍스트뷰의 문자색을 연한 갈색으로 정한다
             textView.textColor = UIColor.lightGray
-            tablelist[textView.tag].updateValue("", forKey: "memo")
+            tablelist[textView.tag].updateValue("", forKey: "Memo")
         }else {
             // 만약 텍스트 뷰가 비어 있지 않다면 텍스트뷰의 데이터를 memo에 저장한다
-            tablelist[textView.tag].updateValue(textView.text ?? "", forKey: "memo")
+            tablelist[textView.tag].updateValue(textView.text ?? "", forKey: "Memo")
         }
 
     }
@@ -804,7 +795,7 @@ extension RepairViewController : UITextViewDelegate,UITextFieldDelegate {
             tablelist[textField.tag].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Distance")
         }else{
             // 텍스트 필드의 태그 값이 0이 아닌경우 지출비용이므로  더블형으로 변환시켜서 테이블리스트의 "cost"에 업데이트 시킨다
-            tablelist[textField.tag].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any, forKey: "cost")
+            tablelist[textField.tag].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any, forKey: "Cost")
         }
     }
     // 텍스트 필드가 입력시작될때 동작하는 함수

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class repairItemsTableViewCell: UITableViewCell {
+class RepairItemsTableViewCell: UITableViewCell {
 
     @IBOutlet weak var rePairCostLabel: UILabel!
     @IBOutlet weak var rePairListLabel: UILabel!
