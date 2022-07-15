@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import AVFAudio
 
 class OilEditsViewController: UIViewController{
     @IBOutlet weak var finishButton: UIButton!
@@ -17,7 +18,6 @@ class OilEditsViewController: UIViewController{
     var repairDelegate : RepairCallbackDelegate?
     var dateDelegate : selectDateDelegate?
     var startDate : Date?
-    var finishDate : Date?
     var cellId : String?
     
     override func viewDidLoad() {
@@ -534,21 +534,13 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
             tablelist[0].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Distance")
         }
         if textField.tag == 6 {
-            
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Cost")
-            self.oilTableView.reloadData()
-      
-            
         }
         if textField.tag == 7 {
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Fuel")
-            self.oilTableView.reloadData()
-       
         }
         if textField.tag == 8 {
-            tablelist[1].removeValue(forKey: "Liter")
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
-            self.oilTableView.reloadData()
             
         }
         
@@ -559,12 +551,15 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
         if cellCost != 0 {
             tablelist[1].updateValue(cellCost/fuelCost, forKey: "Liter")
             tablelist[1].updateValue(cellCost, forKey: "Cost")
+        }else {
+            tablelist[1].updateValue(fuelCost * fuelLiter, forKey: "Cost")
         }
         
         if fuelLiter != 0.0 {
             tablelist[1].updateValue(fuelCost * fuelLiter, forKey: "Cost")
             tablelist[1].updateValue(fuelLiter, forKey: "Liter")
-            
+        }else {
+            tablelist[1].updateValue(cellCost/fuelCost, forKey: "Liter")
         }
 
         self.oilTableView.reloadData()
@@ -580,17 +575,18 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
             textField.textColor = UIColor.black
         }
         if textField.tag == 6 {
-            tablelist[1].removeValue(forKey: "Cost")
+            tablelist[1].updateValue(0, forKey: "Cost")
+
             textField.text = nil
             
         }
         if textField.tag == 7 {
-            tablelist[1].removeValue(forKey: "Fuel")
-           
+            tablelist[1].updateValue(0, forKey: "Fuel")
+          
             textField.text = nil
         }
         if textField.tag == 8 {
-            tablelist[1].removeValue(forKey: "Liter")
+            tablelist[1].updateValue(0, forKey: "Liter")
             textField.text = nil
         }
       

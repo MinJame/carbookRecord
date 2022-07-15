@@ -129,10 +129,7 @@ class TotalViewController: UIViewController {
             let oillist : [Dictionary<String,Any>] = carbookDataBase.selectRangefuelingDataList() ?? []
             dateList += list
             dateList += oillist
-            var months : [String] = []
-            var month : String = ""
-            
-            var years : [String] = []
+            var month : [String] = []
             let groupRawData = Dictionary(grouping: dateList){$0["year"] as? String ?? ""}
             for (key,value) in groupRawData {
 //                for item in value {
@@ -160,11 +157,17 @@ class TotalViewController: UIViewController {
 //            carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
 //            searchDates = searchDates.sorted{$0.month > $1.month}
             searchDates = searchDates.sorted{$0.year > $1.year}
-            
+       
             Swift.print("주유소1\(searchDates)")
         }
         yearField.text = (searchDates.first?.year ?? "") + "년"
         setRepairData(year: searchDates.first?.year)
+    }
+    
+    func removeDuplication(in array: [String]) -> [String]{
+        let set = Set(array)
+        let duplicationRemovedArray = Array(set)
+        return duplicationRemovedArray
     }
     
     // db에서 데이터를 년도 별로 가져오는 함수
@@ -650,5 +653,12 @@ extension TotalViewController:UIPickerViewDelegate,UIPickerViewDataSource {
             selectDate.yearRow = pickerView.selectedRow(inComponent: 0)
             selectDate.monthRow = pickerView.selectedRow(inComponent: 1)
         }
+    }
+}
+
+extension Sequence where Element: Hashable {
+    func uniqued() -> [Element] {
+        var set = Set<Element>()
+        return filter { set.insert($0).inserted }
     }
 }
