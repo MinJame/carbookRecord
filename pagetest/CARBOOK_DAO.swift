@@ -375,7 +375,7 @@ class CARBOOK_DAO {
         let carbookDB = FMDatabase(path: databaseURL?.path)
         if carbookDB.open(){
 
-            let querySQL = "SELECT DISTINCT substr(fuelingExpendDate,0,5) as 'year',substr(fuelingExpendDate,5,2) as 'month' FROM FUELING Where fuelingISHidden = 0 ORDER BY year DESC, month DESC"
+            let querySQL = "SELECT DISTINCT substr(fuelingExpendDate,0,5) as 'year',substr(fuelingExpendDate,5,2) as 'month' FROM FUELING Where fuelingIsHidden = 0 ORDER BY year DESC, month DESC"
        
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []
@@ -402,7 +402,7 @@ class CARBOOK_DAO {
             
             let yearSearchQuery = year != nil ? "WHERE date Like '\(year!)%'" : ""
             
-            let querySQL =  "SELECT * , substr(repairExpendDate,0,7) as 'date' FROM REPAIR as 'A' JOIN(SELECT repairSN,repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime, COUNT(*) as 'COUNT', SUM(repairltemCost) as 'TotalCost',group_concat(repairltemCategoryCode,',') as'categoryCodes',group_concat(repairltemName,',') as'categoryCodesName',group_concat(repairltemMemo,',') as'carbookRecordItemMemos',group_concat(repairltemCost,',') as 'categoryCodesCost' FROM REPAIRITEM WHERE repairltemIsHidden = 0 GROUP BY repairSN ) as 'B' ON(A._id = B.repairSN) AND A.repairIsHidden = 0 \(yearSearchQuery) ORDER BY A.repairExpendDate DESC  "
+            let querySQL =  "SELECT * , substr(repairExpendDate,0,7) as 'date',substr(repairExpendDate,0,9) as 'dates' FROM REPAIR as 'A' JOIN(SELECT repairSN,repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime, COUNT(*) as 'COUNT', SUM(repairltemCost) as 'TotalCost',group_concat(repairltemCategoryCode,',') as'categoryCodes',group_concat(repairltemName,',') as'categoryCodesName',group_concat(repairltemMemo,',') as'carbookRecordItemMemos',group_concat(repairltemCost,',') as 'categoryCodesCost' FROM REPAIRITEM WHERE repairltemIsHidden = 0 GROUP BY repairSN ) as 'B' ON(A._id = B.repairSN) AND A.repairIsHidden = 0 \(yearSearchQuery) ORDER BY A.repairExpendDate DESC  "
             
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []
@@ -432,20 +432,19 @@ class CARBOOK_DAO {
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
             
-            let yearSearchQuery = year != nil ? "WHERE date Like '\(year!)%'" : ""
+            let yearSearchQuery = year != nil ? "AND date Like '\(year!)%'" : ""
             
-            let querySQL =  "SELECT *,substr(fuelingExpendDate,0,7) as 'date' FROM FUELING WHERE fuelingISHidden = 0 ORDER BY fuelingExpendDate DESC "
+            let querySQL =  "SELECT *,substr(fuelingExpendDate,0,7) as 'date',substr(fuelingExpendDate,0,9) as 'dates' FROM FUELING WHERE fuelingISHidden = 0 \(yearSearchQuery) ORDER BY fuelingExpendDate DESC "
             print("querySQL :\(querySQL)")
             var dictArray : [Dictionary<String, Any>]? = []
             if let result : FMResultSet = carbookDB.executeQuery(querySQL, withArgumentsIn: []) {
                 var dict : Dictionary<String, Any> = [:]
                 while result.next() {
                     dict = result.resultDictionary as! [String : Any]
-                    if let date = dict["repairExpendDate"] as? String{
-                        dict.updateValue("\(date.components(separatedBy: ["-"]).joined())", forKey: "repairExpendDate")
+                    if let date = dict["fuelingExpendDate"] as? String{
+                        dict.updateValue("\(date.components(separatedBy: ["-"]).joined())", forKey: "fuelingExpendDate")
                     }
                     Swift.print("items:\(result)")
-                    Swift.print("insertSQL:\(dictArray)")
                     dictArray?.append(dict)
                 }
                 

@@ -534,34 +534,41 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
             tablelist[0].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Distance")
         }
         if textField.tag == 6 {
+            self.oilTableView.reloadData()
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Cost")
         }
         if textField.tag == 7 {
+            self.oilTableView.reloadData()
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Fuel")
         }
         if textField.tag == 8 {
+            self.oilTableView.reloadData()
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Liter")
             
         }
         
+        
         let cellCost = tablelist[1]["Cost"] as? Double ?? 0.0
         let fuelCost = tablelist[1]["Fuel"] as? Double ?? 0.0
         let fuelLiter = tablelist[1]["Liter"] as? Double ?? 0.0
-        
+ 
         if cellCost != 0 {
             tablelist[1].updateValue(cellCost/fuelCost, forKey: "Liter")
             tablelist[1].updateValue(cellCost, forKey: "Cost")
-        }else {
-            tablelist[1].updateValue(fuelCost * fuelLiter, forKey: "Cost")
-        }
-        
-        if fuelLiter != 0.0 {
+        }else  if fuelLiter != 0.0 && cellCost != 0  {
             tablelist[1].updateValue(fuelCost * fuelLiter, forKey: "Cost")
             tablelist[1].updateValue(fuelLiter, forKey: "Liter")
-        }else {
+        }else  if fuelLiter == 0.0 && cellCost != 0  {
             tablelist[1].updateValue(cellCost/fuelCost, forKey: "Liter")
+            tablelist[1].updateValue(fuelLiter, forKey: "Liter")
+        }else  if fuelLiter != 0.0 && cellCost == 0  {
+            tablelist[1].updateValue(fuelCost * fuelLiter, forKey: "Cost")
+            tablelist[1].updateValue(fuelLiter, forKey: "Liter")
+        } else {
+            tablelist[1].updateValue(cellCost/fuelCost, forKey: "Liter")
+            tablelist[1].updateValue(cellCost, forKey: "Cost")
         }
-
+        
         self.oilTableView.reloadData()
     }
     // 텍스트 필드가 입력시작될때 동작하는 함수
@@ -576,18 +583,19 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
         }
         if textField.tag == 6 {
             tablelist[1].updateValue(0, forKey: "Cost")
-
             textField.text = nil
-            
+      
+         
         }
         if textField.tag == 7 {
             tablelist[1].updateValue(0, forKey: "Fuel")
-          
             textField.text = nil
+       
         }
         if textField.tag == 8 {
             tablelist[1].updateValue(0, forKey: "Liter")
             textField.text = nil
+
         }
       
     }

@@ -125,32 +125,24 @@ class TotalViewController: UIViewController {
     func setCarbookDateList(){
         let carbookDataBase = CARBOOK_DAO.sharedInstance
         var dateList : [Dictionary<String,Any>] = []
+      
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
             let oillist : [Dictionary<String,Any>] = carbookDataBase.selectRangefuelingDataList() ?? []
             dateList += list
             dateList += oillist
-            var month : [String] = []
             let groupRawData = Dictionary(grouping: dateList){$0["year"] as? String ?? ""}
             for (key,value) in groupRawData {
-//                for item in value {
-//                    // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
-//                    month = item["month"] as? String ?? ""
-//
-//                    if !months.contains(item["month"] as? String ?? "") {
-//                        months.append(month)
-//                    }
-//
-//                }
+
                 
-                Swift.print("달력\(groupRawData)")
-////                }
                 let months = value.map { (dic) -> String in
                     return dic["month"] as? String ?? ""
                 }
 
-                Swift.print("달력\(months)")
+                let monthIs: Set = Set(months)
             
-                searchDates.append(dates(year: key, month: months))
+                var monthDate = [String](monthIs)
+                monthDate.sort(by: >)
+                searchDates.append(dates(year: key, month: monthDate))
                 
             }
             
@@ -163,13 +155,7 @@ class TotalViewController: UIViewController {
         yearField.text = (searchDates.first?.year ?? "") + "년"
         setRepairData(year: searchDates.first?.year)
     }
-    
-    func removeDuplication(in array: [String]) -> [String]{
-        let set = Set(array)
-        let duplicationRemovedArray = Array(set)
-        return duplicationRemovedArray
-    }
-    
+
     // db에서 데이터를 년도 별로 가져오는 함수
     func setCarbookDataList(year : String?) {
         let carbookDataBase = CARBOOK_DAO.sharedInstance
@@ -186,6 +172,7 @@ class TotalViewController: UIViewController {
             var totalFuel : Double = 0.0
             var totalFuelCost : Double = 0.0
             var date : String = ""
+            var dates: String = ""
             //db에 있는 데이터들을 월별로 묶는다
             let groupRawData = Dictionary(grouping: carBookDatas){$0["date"] as? String ?? ""}
             for (key,value) in groupRawData {
@@ -194,6 +181,8 @@ class TotalViewController: UIViewController {
                 var monthFuelCost : Double = 0.0
                 var monthFuelLiter : Double = 0.0
                 date = key
+                var monthDates : String = ""
+         
                 for item in value {
                     // totalCost에 grouprawdata의 value값의 i번째["TotalCost"]의 값을 더해준다
                     totalCost += item["TotalCost"] as? Double ?? 0.0
@@ -202,22 +191,23 @@ class TotalViewController: UIViewController {
                     monthFuelCost += item["fuelingTotalCost"] as? Double ?? 0.0
                     monthDistance += item["fuelingDist"] as? Double ?? 0.0
                     monthFuelLiter += item["fuelingItemVolume"] as? Double ?? 0.0
-                    
+                    monthDates = item["dates"] as? String ?? ""
                 }
+                dates = monthDates
                 totalCost += monthFuelCost
                 totalDistance += monthDistance
                 monthCost += monthFuelCost
                 totalFuel += monthFuelLiter
                 totalFuelCost += monthFuelCost
-                Swift.print("결과값\(totalDistance)")
                 let carbookdata :Dictionary<String,Any>  = [
                     //날짜는 grouprawdata의 key 값
                     "date" : date ,
+                    "dates" : dates,
                     "monthDistance"  : monthDistance,
                     "monthCost" : monthCost,
                     "monthfuelCost"  : monthFuelCost,
                     "monthfuelLiter" : monthFuelLiter,
-                    "items": value
+                    "items": value.sorted {$0["dates"] as? String ?? "" > $1["dates"] as? String ?? ""}
                 ]
 //                Swift.print("트럭용\(listItem)")
                 // cardataList에 carbookdata들을 더해준다
@@ -225,15 +215,12 @@ class TotalViewController: UIViewController {
                 
             }
             // yearTotalExpenseCostLabel에 monthCost 적용
-            
             yearTotalExpenseCostLabel.text = String(format: "%.f",totalCost)
             // yearTotalDistanceLabel에 monthDistance 적용
             yearTotalDistanceLabel.text = String(format: "%.f",totalDistance)
             yearTotalFuelLabel.text = String(format: "%.2f",totalFuel)
             yearTotalFuelCostLabel.text = String(format: "%.f",totalFuelCost)
-            // 저장된 데이터들을 월별로 내림차순으로 정리한다
-            carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
-            Swift.print("자동차용\(groupRawData)")
+            carDataList = carDataList.sorted {$0["dates"] as? String ?? "" > $1["dates"] as? String ?? ""}
         }
         
        
