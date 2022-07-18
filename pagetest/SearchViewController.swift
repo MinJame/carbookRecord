@@ -25,7 +25,10 @@ class SearchViewController: UIViewController {
     var delegate : SearchCallbackDelegate?
     var totalDelegate : RepairCallbackDelegate?
     var categoryNames : String = ""
-    
+    var memoTitle : String = ""
+    var searchTitle : String = ""
+    var startDate : String = ""
+    var yearList : [String] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         setDelegates()
@@ -43,6 +46,9 @@ class SearchViewController: UIViewController {
         let cell: UINib = UINib(nibName: "RepairListTableViewCell", bundle: nil)
         // searchTableView에 등록한다
         self.searchTableView.register(cell, forCellReuseIdentifier: "RepairListTableViewCellID")
+        let cell1: UINib = UINib(nibName: "YearListTableViewCell", bundle: nil)
+        // searchTableView에 등록한다
+        self.searchTableView.register(cell1, forHeaderFooterViewReuseIdentifier: "YearListTableViewCellID")
         // searchTableView 열의 높이가 지정
         searchTableView.rowHeight = UITableView.automaticDimension
         searchTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
@@ -76,7 +82,7 @@ class SearchViewController: UIViewController {
     @IBAction func dismissView(_ sender: Any) {
         
         self.dismiss(animated: true) {
-            self.totalDelegate?.setRepairData(year: nil)
+            self.totalDelegate?.setRepairData(year: self.startDate)
         }
         
         
@@ -144,16 +150,17 @@ class SearchViewController: UIViewController {
                 categoryMemo = item["repairItemMemo"] as? String ?? ""
                 categoryMemos = item["carbookRecordItemMemos"] as? String ?? ""
                 let codeList = categoryCodes.components(separatedBy: ",")
-                let memoList = categoryMemos.components(separatedBy: ",")
+                var memoList = categoryMemos.components(separatedBy: ",")
                 for (index,value) in codeList.enumerated() {
                     categoryName = getCodeText(Code: value)
                     categoryMemoitem = memoList[index]
                 }
+                Swift.print("이름가져와1\(categoryMemoitem)")
+                memoTitle = categoryMemoitem
                 // 만약 차량정비 목록이 searItemText의 내용을 가지고 있으면
                 if categoryName.contains(searchItemText.text ?? "") && !categoryMemoitem.contains(searchItemText.text ?? "")   {
                     //categoryNames에 categoryName 저장
                     categoryNames = categoryName
-                    Swift.print("이름가져와\(categoryName)")
                 }
                 
                 
@@ -179,7 +186,7 @@ class SearchViewController: UIViewController {
                 oilSearchItem = oilItem
                 dataList.append(oilSearchItem)
             }
-            Swift.print("이름가져와\(dataList)")
+            searchTitle = searchItemText.text ?? ""
         }
     }
     // 키보드가 내려가는 함수 입니다
@@ -194,15 +201,34 @@ extension SearchViewController: UITableViewDelegate {
     
 }
 extension SearchViewController : UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return yearList.count
+    }
+    // 테이블뷰 헤더 섹션의 높이 선언
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    // 테이블뷰 헤더뷰의 데이터들 선언
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // 헤더뷰로 재사용할 셀을 선언
+        let headerView = searchTableView.dequeueReusableHeaderFooterView(withIdentifier: "YearListTableViewCellID") as?
+        YearListTableViewCell
+        let date = yearList[section] as? String ?? ""
+
+        headerView?.yearListLabel.text = date
+
+        return headerView
+    }
+    
     // 테이블뷰의 열을 선택했을때 동작하는 함수
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath : IndexPath) {
         // dataList의 값들을 item에 저장
         let item = dataList[indexPath.row]
         // 저장된 데이터 중에 정비기록Id 값을 불러와서 id에 저장
-        let types = item["carbookRecordType"] as? String
         let id = item["repairSN"] as? Int ?? 0
         let fuelId = item["fuelingID"] as? String ?? ""
-        Swift.print("키값1\(fuelId)")
+    
         if id != 0 {
             // 해당열을 눌렀을때에 "RepairViewController"로 이동
             if let vc = self.storyboard?.instantiateViewController(withIdentifier: "RepairViewController")
@@ -213,6 +239,7 @@ extension SearchViewController : UITableViewDataSource {
                 vc.cellId = String(id)
                 // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
                 vc.searchDelegate = delegate
+                vc.searchTitle = searchTitle
                 self.present(vc, animated: true, completion: nil)
             }
         }else {
@@ -224,6 +251,7 @@ extension SearchViewController : UITableViewDataSource {
                 vc.cellId = fuelId
                 // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
                 vc.searchDelegate = delegate
+                vc.searchTitle = searchTitle
                 self.present(vc, animated: true, completion: nil)
             }
             
@@ -237,7 +265,6 @@ extension SearchViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : RepairListTableViewCell  = searchTableView.dequeueReusableCell(withIdentifier: "RepairListTableViewCellID", for: indexPath) as! RepairListTableViewCell
         let item = dataList[indexPath.row]
-        
         let fuelId = item["fuelingID"] as? String ?? ""
         
         if fuelId != "" {
@@ -288,6 +315,7 @@ extension SearchViewController : UITableViewDataSource {
             formatter.dateFormat = "yyyyMMddHHmmss"
             let dateStrings = formatter.date(from : item["repairExpendDate"] as? String ?? "")
             formatter.dateFormat = "MM.dd"
+            cell.fuelCostBtn.isHidden  = true
             cell.rePairDateLabel.text = formatter.string(for: dateStrings) ?? ""
             
             let rePairDist = item["repairDist"] as? Double ?? 0.0
@@ -318,6 +346,7 @@ extension SearchViewController : UITableViewDataSource {
                 }
             }
             // 만약 item의 carbookRecordItemExpenseMemo가 문자형이면 memoText에 저장하고
+            Swift.print("타이틀\(memoTitle)")
             if let memoText = item["repairltemMemo"] as? String  {
                 // 만약 memoText 값이 있으면
                 if memoText != "" {
@@ -415,6 +444,7 @@ extension SearchViewController : UITableViewDataSource {
                 vc.modalPresentationStyle = .fullScreen
                 vc.cellId = String(Id)
                 vc.searchDelegate = delegate
+                vc.searchTitle = searchTitle
                 self.present(vc, animated: true, completion: nil)
             }
             
@@ -454,6 +484,7 @@ extension SearchViewController : UITableViewDataSource {
                 vc.modalPresentationStyle = .fullScreen
                 // 이동시 Id 값이랑 delegate값을 전달해줍니다
                 vc.cellId = String(Id)
+                vc.searchTitle = searchTitle
 //                vc.searchDelegate = delegate
                 self.present(vc, animated: true, completion: nil)
             }

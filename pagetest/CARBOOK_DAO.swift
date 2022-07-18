@@ -485,6 +485,7 @@ class CARBOOK_DAO {
     func searchCarbookDataList(name : String) -> [Dictionary<String, Any>]?{
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
+            
             let selectSQL = "SELECT * , substr(repairExpendDate,0,7) as 'date' FROM REPAIR as 'A' JOIN(SELECT repairSN,repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime, COUNT(*) as 'COUNT', SUM(repairltemCost) as 'TotalCost',group_concat(repairltemCategoryCode,',') as'categoryCodes',group_concat(repairltemName,',') as'categoryCodesName',group_concat(repairltemMemo,',') as'carbookRecordItemMemos',group_concat(repairltemCost,',') as 'categoryCodesCost' FROM REPAIRITEM WHERE repairltemIsHidden = 0 GROUP BY repairSN ) as 'B' ON(A._id = B.repairSN) AND A.repairIsHidden = 0  WHERE B.repairltemName Like '%\(name)%' OR B.carbookRecordItemMemos Like '%\(name)%' GROUP BY repairSN ORDER BY A.repairExpendDate DESC"
 
             var dictArray: [Dictionary<String, Any>]? = []

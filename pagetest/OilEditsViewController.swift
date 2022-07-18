@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import AVFAudio
+
 
 class OilEditsViewController: UIViewController{
     @IBOutlet weak var finishButton: UIButton!
@@ -19,6 +19,7 @@ class OilEditsViewController: UIViewController{
     var dateDelegate : selectDateDelegate?
     var searchDelegate : SearchCallbackDelegate?
     var startDate : Date?
+    var searchTitle : String = ""
     var cellId : String?
     
     override func viewDidLoad() {
@@ -88,26 +89,7 @@ class OilEditsViewController: UIViewController{
         self.view.addGestureRecognizer(tap)
     }
     // db에서 정비목록을 불러올때 정비목록 변환해주는 함수
-    func getOilTypeCodeTitle(code : String) -> String {
-        
-        switch code {
-        case "1" :
-            return "휘발유"
-        case "2":
-            return"경유"
-        case "3":
-            return "LPG"
-        case "4" :
-            return "에탄올"
-        case "5":
-            return  "메탄올"
-        case "6" :
-            return "전기"
-        default :
-            return "휘발유"
-        }
-        
-    }
+
     //네이밍 수정
     func getCarBookData() {
         let carBookDatabase = CARBOOK_DAO.sharedInstance
@@ -173,6 +155,10 @@ class OilEditsViewController: UIViewController{
         // 날짜 형식의 포맷 선언
         formatter.dateFormat = "yyyyMMddHHmmss"
         //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
+        let years = formatter.string(for: startDate ?? Date()) ?? ""
+        let year = String(years.dropLast(10))
+        Swift.print("년\(year)")
+        
         let updateFuelingDataList : Dictionary<String,Any>  = [
             "fuelingID" :  downerDataList["Id"] as? String ?? "",
             "fuelingIsHidden" : 0,
@@ -195,7 +181,8 @@ class OilEditsViewController: UIViewController{
             
             
             self.dismiss(animated: true) {
-                self.repairDelegate?.setRepairData(year: nil)
+                self.repairDelegate?.setRepairData(year: year)
+                self.searchDelegate?.setSearchData(name: self.searchTitle)
             }
         }
         
@@ -329,6 +316,7 @@ extension OilEditsViewController: UITableViewDataSource {
                 cell.totalDistanceField.delegate = self
                 // driveDistance의 문자는 테이블리스트의["Distance"]값으로 할려고하는데 더블형임으로 문자형으로 변환해서 보여준다
                 cell.totalDistanceField.text = String(format: "%.f", tablelist[0]["Distance"] as? Double ?? 0.0)
+                cell.totalDistanceField.textColor = .black
                 
                 return cell
             }else {
@@ -356,11 +344,14 @@ extension OilEditsViewController: UITableViewDataSource {
                 let fuelcost = tablelist[1]["Fuel"] as? Double ?? 0.0
                 let fuelLiter = tablelist[1]["Liter"] as? Double ?? 0.0
                 cell.totalFulCost.text = String(format: "%.f", cellCost)
+                cell.totalFulCost.textColor = .black
                 cell.fuelCost.text = String(format: "%.f", fuelcost)
+                cell.fuelCost.textColor = .black
                 cell.fuelLiterField.text = String(format: "%.2f", fuelLiter)
-
+                cell.fuelLiterField.textColor = .black
                 if let memo = item["Memo"] as? String, memo != "" {
                     cell.oilMemoView.text = memo
+                    cell.oilMemoView.textColor = .black
                     
                 }
                 

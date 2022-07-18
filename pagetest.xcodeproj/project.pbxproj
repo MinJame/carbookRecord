@@ -18,6 +18,8 @@
 		394DDC382807A036004F56B3 /* OilMonthTotalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394DDC362807A036004F56B3 /* OilMonthTotalTableViewCell.swift */; };
 		394DDC392807A036004F56B3 /* OilMonthTotalTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 394DDC372807A036004F56B3 /* OilMonthTotalTableViewCell.xib */; };
 		3952411527FD4AE000E3D6DC /* CalendarsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3952411427FD4AE000E3D6DC /* CalendarsViewController.swift */; };
+		3982B1F728854EA900A513CE /* YearListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3982B1F528854EA900A513CE /* YearListTableViewCell.swift */; };
+		3982B1F828854EA900A513CE /* YearListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3982B1F628854EA900A513CE /* YearListTableViewCell.xib */; };
 		3986B37A27EAAE8700591148 /* RepairSelfTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3986B37827EAAE8700591148 /* RepairSelfTableViewCell.swift */; };
 		3986B37B27EAAE8700591148 /* RepairSelfTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3986B37927EAAE8700591148 /* RepairSelfTableViewCell.xib */; };
 		3986B37D27EAB81500591148 /* RepairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3986B37C27EAB81500591148 /* RepairViewController.swift */; };
@@ -52,6 +54,8 @@
 		394DDC362807A036004F56B3 /* OilMonthTotalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OilMonthTotalTableViewCell.swift; sourceTree = "<group>"; };
 		394DDC372807A036004F56B3 /* OilMonthTotalTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OilMonthTotalTableViewCell.xib; sourceTree = "<group>"; };
 		3952411427FD4AE000E3D6DC /* CalendarsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarsViewController.swift; sourceTree = "<group>"; };
+		3982B1F528854EA900A513CE /* YearListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearListTableViewCell.swift; sourceTree = "<group>"; };
+		3982B1F628854EA900A513CE /* YearListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YearListTableViewCell.xib; sourceTree = "<group>"; };
 		3986B37827EAAE8700591148 /* RepairSelfTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairSelfTableViewCell.swift; sourceTree = "<group>"; };
 		3986B37927EAAE8700591148 /* RepairSelfTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepairSelfTableViewCell.xib; sourceTree = "<group>"; };
 		3986B37C27EAB81500591148 /* RepairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +110,7 @@
 			children = (
 				3952411327FD47FC00E3D6DC /* layout */,
 				3921F3D527D6FC9700495259 /* RepairTableViewCell.swift */,
+				3982B1F528854EA900A513CE /* YearListTableViewCell.swift */,
 				39B048BA27E852D700C2E86E /* OilAddTableViewCell.swift */,
 				3986B37827EAAE8700591148 /* RepairSelfTableViewCell.swift */,
 				393B7C2127EC57E400A13C6A /* OilLocateTableViewCell.swift */,
@@ -131,6 +136,7 @@
 				3986B37927EAAE8700591148 /* RepairSelfTableViewCell.xib */,
 				393B7C2227EC57E400A13C6A /* OilLocateTableViewCell.xib */,
 				39D63DBE27F14F7900FCC34E /* RepairsTableViewCell.xib */,
+				3982B1F628854EA900A513CE /* YearListTableViewCell.xib */,
 			);
 			path = layout;
 			sourceTree = "<group>";
@@ -248,6 +254,7 @@
 				3921F3D827D6FC9700495259 /* RepairTableViewCell.xib in Resources */,
 				3986B37B27EAAE8700591148 /* RepairSelfTableViewCell.xib in Resources */,
 				393B7C2427EC57E400A13C6A /* OilLocateTableViewCell.xib in Resources */,
+				3982B1F828854EA900A513CE /* YearListTableViewCell.xib in Resources */,
 				39D63DC027F14F7900FCC34E /* RepairsTableViewCell.xib in Resources */,
 				394DDC392807A036004F56B3 /* OilMonthTotalTableViewCell.xib in Resources */,
 				39B048BD27E852D700C2E86E /* OilAddTableViewCell.xib in Resources */,
@@ -313,6 +320,7 @@
 				391DBF5027FE713100FAC250 /* CollectionViewCellModel.swift in Sources */,
 				3988AE3E27D5C99F00DC82EC /* CarBudgetViewController.swift in Sources */,
 				3986B37D27EAB81500591148 /* RepairViewController.swift in Sources */,
+				3982B1F728854EA900A513CE /* YearListTableViewCell.swift in Sources */,
 				3952411527FD4AE000E3D6DC /* CalendarsViewController.swift in Sources */,
 				3988AE3A27D5C99F00DC82EC /* AppDelegate.swift in Sources */,
 				3987678628069B1A00262FD5 /* TotalViewController.swift in Sources */,

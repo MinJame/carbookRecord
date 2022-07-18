@@ -27,6 +27,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     var cellId : String = ""
     // 페이지에서 삭제되는 아이디들을 모음
     var deleteIds : [Int] = []
+    var searchTitle : String = ""
     var tablelist : [Dictionary<String,Any>] = []
     var categorys = ["엔진오일 및 오일 필터","에어콘 필터","와이퍼 브레이드","구동벨트","미션오일","배터리","엔진부동액","우리집"]
     var repairDelegate : RepairCallbackDelegate?
@@ -301,6 +302,9 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 날짜 형식의 포맷 선언
         formatter.dateFormat = "yyyyMMddHHmmss"
         //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
+        var years = formatter.string(for: startDate ?? Date()) ?? ""
+        var year = String(years.dropLast(10))
+        Swift.print("년\(year)")
         let carBookData : Dictionary<String, Any>  = [
             "repairKey" : "확인",
             "repairIsHidden" : 0,
@@ -389,8 +393,8 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             let _ = carBookDataBase.deleteCarBookDataItem(deleteIds: deleteIds)
            
             self.dismiss(animated: true) {
-                self.repairDelegate?.setRepairData(year: nil)
-                self.searchDelegate?.setSearchData(name: nil)
+                self.repairDelegate?.setRepairData(year: year)
+                self.searchDelegate?.setSearchData(name: self.searchTitle)
             }
         }
        
@@ -480,7 +484,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             // 동작 후 메인 페이지로 이동
             self.dismiss(animated: true){
                 self.repairDelegate?.setRepairData(year: nil)
-                self.searchDelegate?.setSearchData(name: nil)
+         
             }
         }
         
@@ -649,6 +653,7 @@ extension RepairViewController: UITableViewDataSource {
                 cell.distanceField.delegate = self
                 // distanceField의 문자는 테이블리스트의["Distance"]값인데 더블형임으로 문자형으로 변환해서 보여준다
                 cell.distanceField.text = String(format: "%.f", tablelist[0]["Distance"] as? Double ?? 0.0)
+                cell.distanceField.textColor = .black
                 return cell
             }else {
                 let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairSelfTableViewCellID")
@@ -670,6 +675,7 @@ extension RepairViewController: UITableViewDataSource {
                 cell.pickers.tag = indexPath.row
                 // 셀의 정비목록을 초기값을 코드에서 문자형으로 변환해서 나타낸다
                 cell.rePairItems.text = getRePairItemCodeTitle(code: item["Category"] as? String ?? "")
+                cell.rePairItems.textColor = .black
                 // 정비목록 번호를 알려준다
                 cell.rePairNums.text = String(indexPath.row)
                 //  repaircostfield의 placeholder(초기에 아무것도 입력안했을때 보여지는 것) 값을 0으로 지정
@@ -678,11 +684,13 @@ extension RepairViewController: UITableViewDataSource {
                 let costs = item["Cost"] as? Double ?? 0.0
                 // repaircostfield의 문자를 문자열로 변환한 cost값 입력
                 cell.repairCostField.text = String(Int(costs))
+                cell.repairCostField.textColor = .black
                 // repaircostfield의 문자색을 연한갈색으로 선언
-                cell.repairCostField.textColor = .lightGray
+//                cell.repairCostField.textColor = .lightGray
                 // 만약 item의 "memo"가 문자열이면 memo에 저장하고, memo에 문자열이 있으면 repairMemoView의 문자에 memo를 입력한다.
                 if let memo = item["Memo"] as? String, memo != "" {
                     cell.repairMemoView.text = memo
+                   
                     
                 }
                 return cell

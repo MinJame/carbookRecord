@@ -33,7 +33,9 @@ class TotalViewController: UIViewController {
     var carDataList : [Dictionary<String,Any>] = []
     var delegate : RepairCallbackDelegate?
     let pickerView = UIPickerView()
-    
+    var yearDate : String = ""
+    var year: String = ""
+    var yearList :[String] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -125,34 +127,39 @@ class TotalViewController: UIViewController {
     func setCarbookDateList(){
         let carbookDataBase = CARBOOK_DAO.sharedInstance
         var dateList : [Dictionary<String,Any>] = []
-      
+        var yearItem : [String] = []
         if let list : [Dictionary<String,Any>] = carbookDataBase.selectRangeCarBookDataList() {
             let oillist : [Dictionary<String,Any>] = carbookDataBase.selectRangefuelingDataList() ?? []
             dateList += list
             dateList += oillist
             let groupRawData = Dictionary(grouping: dateList){$0["year"] as? String ?? ""}
             for (key,value) in groupRawData {
-
                 
+                let year = key
+                
+                yearItem.append(year)
+            
                 let months = value.map { (dic) -> String in
                     return dic["month"] as? String ?? ""
                 }
 
+           
+                
                 let monthIs: Set = Set(months)
             
                 var monthDate = [String](monthIs)
                 monthDate.sort(by: >)
                 searchDates.append(dates(year: key, month: monthDate))
-                
+               
             }
-            
-//            carDataList = carDataList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
-//            searchDates = searchDates.sorted{$0.month > $1.month}
             searchDates = searchDates.sorted{$0.year > $1.year}
-       
-            Swift.print("주유소1\(searchDates)")
+           
         }
         yearField.text = (searchDates.first?.year ?? "") + "년"
+        yearDate = searchDates.first?.year ?? ""
+        yearList = yearItem
+        yearList.sort(by: >)
+        Swift.print("먼데요\(yearItem)")
         setRepairData(year: searchDates.first?.year)
     }
 
@@ -231,6 +238,8 @@ class TotalViewController: UIViewController {
             vc.modalTransitionStyle = .coverVertical
             vc.modalPresentationStyle = .overFullScreen
             vc.totalDelegate = delegate
+            vc.startDate = yearDate
+            vc.yearList = yearList
             self.present(vc, animated: true)
             
         }
@@ -521,7 +530,7 @@ extension TotalViewController: UITableViewDataSource {
             let carBookDataBase = CARBOOK_DAO.sharedInstance
             _ = carBookDataBase.deleteCarBookData(deleteId: Id)
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
-            setRepairData(year: nil)
+            setRepairData(year: year)
         })
         let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
         
@@ -561,7 +570,7 @@ extension TotalViewController: UITableViewDataSource {
             let carBookDataBase = CARBOOK_DAO.sharedInstance
             _ = carBookDataBase.deleteOilData(deleteId: String(Id))
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
-            setRepairData(year: nil)
+            setRepairData(year: year)
   
         })
         let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
@@ -632,6 +641,7 @@ extension TotalViewController:UIPickerViewDelegate,UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch component {
         case 0 :
+            year = searchDates[row].year
             return "\(searchDates[row].year)년"
         case 1:
             return "\(searchDates[selectDate.yearRow].month[row])월"
