@@ -552,6 +552,12 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
             self.oilTableView.reloadData()
             tablelist[1].updateValue(NumberFormatter().number(from: textField.text?.replacingOccurrences(of: ",", with: "") ?? "0.0")?.doubleValue as Any , forKey: "Fuel")
           
+            if tablelist[1]["Fuel"] as? Double != 0 {
+                tablelist[1].updateValue((tablelist[1]["Fuel"] as? Double ?? 0.0)*(tablelist[1]["Liter"] as? Double ?? 0.0), forKey: "Cost")
+            }else {
+               tablelist[1].updateValue((tablelist[1]["Cost"] as? Double ?? 0.0)/(tablelist[1]["Liter"] as? Double ?? 0.0), forKey: "Fuel")
+            
+            }
         }
         if textField.tag == 8 {
             self.oilTableView.reloadData()
