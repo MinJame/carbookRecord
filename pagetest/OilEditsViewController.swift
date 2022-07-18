@@ -141,11 +141,13 @@ class OilEditsViewController: UIViewController{
             tablelist[1].updateValue(item["fuelingID"] as? String ?? "", forKey: "Id")
             // 테이블리스트의 "Type"에 데이터를 업데이트 시켜준다
             tablelist[1].updateValue(item["fuelingTotalCost"] as? Double ?? 0.0, forKey: "Cost")
-            tablelist[1].updateValue(item["fuelingItem"] as? Double ?? 0.0, forKey: "FuelType")
+            tablelist[1].updateValue(item["fuelType"] as? String ?? 0.0, forKey: "FuelType")
             tablelist[1].updateValue(item["fuelingFuelCost"] as? Double ?? 0.0, forKey: "Fuel")
             tablelist[1].updateValue(item["fuelingItemVolume"] as? Double ?? 0.0, forKey: "Liter")
             tablelist[1].updateValue(item["fuelingMemo"] as? String ?? "", forKey: "Memo")
             oilTableView.reloadData()
+            Swift.print("아이디 값1\(item)")
+            Swift.print("아이디 값2\(tablelist[1]["FuelType"] as? String ?? "")")
             
         }
     }
@@ -172,7 +174,7 @@ class OilEditsViewController: UIViewController{
         //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
         let updateFuelingDataList : Dictionary<String,Any>  = [
             "fuelingID" :  downerDataList["Id"] as? String ?? "",
-            "fuelingISHidden" : 0,
+            "fuelingIsHidden" : 0,
             "fuelingPlace" : "동일주유소",
             "fuelingAddress" : "옆집동네점",
             "fuelingLatitude" : 39.1234,
@@ -180,7 +182,7 @@ class OilEditsViewController: UIViewController{
             "fuelingExpendDate" : formatter.string(for: startDate ?? Date()) ?? "",
             "fuelingDist" : upperDataList["Distance"] as? Double ?? 0.0,
             "fuelingTotalCost":downerDataList["Cost"] as? Double ?? 0.0,
-            "fuelingItem": downerDataList["FuelType"] as? String ?? "" ,
+            "fuelType": downerDataList["FuelType"] as? String ?? "" ,
             "fuelingFuelCost":downerDataList["Fuel"] as? Double ?? 0.0,
             "fuelingItemVolume": downerDataList["Liter"] as? Double ?? 0.0,
             "fuelingImage":downerDataList["Image"] as? String ?? "",
@@ -217,8 +219,7 @@ class OilEditsViewController: UIViewController{
         let insertFuelingDataList : Dictionary<String,Any>  = [
             "carSN" : 1,
             "fuelingID" :  formatter.string(for: Date()) ?? "",
-            "fuelingKey" : "서버",
-            "fuelingISHidden" : 0,
+            "fuelingIsHidden" : 0,
             "fuelingPlace" : "동일주유소",
             "fuelingAddress" : "옆집동네점",
             "fuelingLatitude" : 39.1234,
@@ -342,19 +343,17 @@ extension OilEditsViewController: UITableViewDataSource {
                 cell.fuelLiterField.delegate = self
                 cell.fuelCost.delegate = self
                 if cellId != nil {
+                    cell.fuelTypeButton.titleLabel?.text = tablelist[1]["FuelType"] as? String ?? ""
                     cell.fuelTypeButton.addTarget(self, action: #selector(changereOilFuelButton(_ :)), for:  .touchUpInside)
                     cell.fuelTypeButton.setTitle(tablelist[1]["FuelType"] as? String ?? "", for: .normal)
+              
                 }else {
                     cell.fuelTypeButton.addTarget(self, action: #selector(changereOilFuelButton(_ :)), for:  .touchUpInside)
                     cell.fuelTypeButton.setTitle(tablelist[1]["FuelType"] as? String ?? "", for: .normal)
-                    
                 }
                 let cellCost = tablelist[1]["Cost"] as? Double ?? 0.0
                 let fuelcost = tablelist[1]["Fuel"] as? Double ?? 0.0
                 let fuelLiter = tablelist[1]["Liter"] as? Double ?? 0.0
-                Swift.print("1번\(cellCost)")
-                Swift.print("1번\(fuelcost)")
-                Swift.print("1번\(fuelLiter)")
                 cell.totalFulCost.text = String(format: "%.f", cellCost)
                 cell.fuelCost.text = String(format: "%.f", fuelcost)
                 cell.fuelLiterField.text = String(format: "%.2f", fuelLiter)
@@ -526,16 +525,7 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
         }
         
     }
-    
-//        func calculateOilFee(num1: Double,num2: Double,num3: Double ) -> (String,Any){
-//            if num1 == 0 {
-//                return ("돈구경",tablelist[1].updateValue(num2*num3, forKey: "Cost") ?? 0.0)
-//            }else if num1 != 0{
-//                return ("돈구경",tablelist[1].updateValue(num1/num2, forKey: "Liter") ?? 0.0)
-//            }else {
-//                return ("돈구경", 0)
-//            }
-//        }    // 텍스트필드에 입력이 끝났을때 동작하는 함수
+   // 텍스트필드에 입력이 끝났을때 동작하는 함수
     func textFieldDidEndEditing(_ textField: UITextField) {
         // 만약 텍스트 필드의 태그 값이 0인 경우
         
@@ -552,7 +542,10 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
           
              if tablelist[1]["Cost"] as? Double != 0{
                  tablelist[1].updateValue((tablelist[1]["Cost"] as? Double ?? 0.0)/(tablelist[1]["Fuel"] as? Double ?? 0.0), forKey: "Liter")
-            }
+             }else {
+                 tablelist[1].updateValue("0", forKey: "Cost")
+                 tablelist[1].updateValue("0", forKey: "Liter")
+             }
             
         }
         if textField.tag == 7 {
@@ -566,7 +559,10 @@ extension OilEditsViewController : UITextViewDelegate,UITextFieldDelegate {
             self.oilTableView.reloadData()
             if tablelist[1]["Liter"] as? Double != 0{
                 tablelist[1].updateValue((tablelist[1]["Fuel"] as? Double ?? 0.0)*(tablelist[1]["Liter"] as? Double ?? 0.0), forKey: "Cost")
-           }
+            }else {
+                tablelist[1].updateValue("0", forKey: "Liter")
+                tablelist[1].updateValue("0", forKey: "Cost")
+            }
             
         }
 

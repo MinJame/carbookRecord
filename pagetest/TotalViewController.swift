@@ -209,7 +209,7 @@ class TotalViewController: UIViewController {
                     "monthfuelLiter" : monthFuelLiter,
                     "items": value.sorted {$0["dates"] as? String ?? "" > $1["dates"] as? String ?? ""}
                 ]
-//                Swift.print("트럭용\(listItem)")
+
                 // cardataList에 carbookdata들을 더해준다
                 carDataList.append(carbookdata)
                 
@@ -268,15 +268,12 @@ extension TotalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath : IndexPath) {
         // 만약 carDataList["items"]값이 있으면 items에 저장
         if let items = carDataList[indexPath.section]["items"] as? [Dictionary<String,Any>] {
-            Swift.print("items\(items)")
-            // item는 items의 indexPath.row열의 데이터
+           // item는 items의 indexPath.row열의 데이터
             let item = items[indexPath.row]
             // id는 item안의 carbookRecordId 값
-            Swift.print("items\(item)")
             let id = item["repairSN"] as? Int ?? 0
-            let fuelid = item["fuelingID"] as? String ?? ""
-            Swift.print("키값1\(id)")
-            if fuelid == "" {
+            let fuelId = item["fuelingID"] as? String ?? ""
+            if fuelId == "" {
                 // 해당열을 눌렀을때에 "RepairViewController"로 이동
                 if let vc = self.storyboard?.instantiateViewController(withIdentifier: "RepairViewController")
                     as? RepairViewController  {
@@ -294,7 +291,7 @@ extension TotalViewController: UITableViewDataSource {
                     vc.modalTransitionStyle = .coverVertical
                     vc.modalPresentationStyle = .fullScreen
                     // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
-                    vc.cellId = fuelid
+                    vc.cellId = fuelId
                     // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
                     vc.repairDelegate = delegate
                     self.present(vc, animated: true, completion: nil)
@@ -317,10 +314,9 @@ extension TotalViewController: UITableViewDataSource {
         let cell : RepairListTableViewCell  = totalTableView.dequeueReusableCell(withIdentifier: "RepairListTableViewCellID", for: indexPath) as! RepairListTableViewCell
         let items = carDataList[indexPath.section]["items"] as? [Dictionary<String,Any>] ?? []
         let item = items[indexPath.row] as? Dictionary<String,Any> ?? [:]
-        Swift.print("정렬\(items.count)")
-        let fuelID = item["fuelingID"] as? String ?? ""
+        let fuelId = item["fuelingID"] as? String ?? ""
         cell.fuelCostBtn.isHidden  = true
-        if fuelID != "" {
+        if fuelId != "" {
             let formatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .gregorian)
             formatter.locale = Locale(identifier: "ko_KR")
@@ -332,6 +328,8 @@ extension TotalViewController: UITableViewDataSource {
             let fuelDates = formatter.string(for: fuelDate) ?? ""
             // memoView를 숨겨준다
             cell.memoView.isHidden = true
+            cell.changeItemButton.tag  = Int(item["fuelingID"] as? String ?? "") ?? 0
+            
             if item["fuelingID"] as? String  != "" {
                 cell.rePairItemTitleLabel.text = item["fuelingPlace"] as? String ?? ""
                 cell.rePairLocationLabel.text = item["fuelingAddress"] as? String ?? ""
@@ -488,7 +486,7 @@ extension TotalViewController: UITableViewDataSource {
     @objc func changeRepairItem(_ sender: UIButton) {
         // 각 셀의 Id 아이디 값을 버튼 태그 값에 저장했으므로 ID 값을 다시 불러 옵니다.
         let Id = sender.tag
-        Swift.print("키값\(Id)")
+        Swift.print("아이디 값\(Id)")
         // 버튼 클릭시 수정 또는 삭제 문구가 액션시트 형식으로 나오게 해줍니다.
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         //수정 버튼을 클릭시 동작하는 방식
@@ -551,9 +549,10 @@ extension TotalViewController: UITableViewDataSource {
             action in
             // 선택한 셀의 데이터를 삭제합니다.
             let carBookDataBase = CARBOOK_DAO.sharedInstance
-            _ = carBookDataBase.deleteCarBookData(deleteId: Id)
+            _ = carBookDataBase.deleteOilData(deleteId: String(Id))
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
             setRepairData(year: nil)
+  
         })
         let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
         
