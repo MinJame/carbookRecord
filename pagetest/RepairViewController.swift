@@ -30,7 +30,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     var tablelist : [Dictionary<String,Any>] = []
     var categorys = ["엔진오일 및 오일 필터","에어콘 필터","와이퍼 브레이드","구동벨트","미션오일","배터리","엔진부동액","우리집"]
     var repairDelegate : RepairCallbackDelegate?
-    
+    var searchDelegate : SearchCallbackDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
         dateDelegate = self
@@ -390,6 +390,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
            
             self.dismiss(animated: true) {
                 self.repairDelegate?.setRepairData(year: nil)
+                self.searchDelegate?.setSearchData(name: nil)
             }
         }
        
@@ -479,6 +480,7 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
             // 동작 후 메인 페이지로 이동
             self.dismiss(animated: true){
                 self.repairDelegate?.setRepairData(year: nil)
+                self.searchDelegate?.setSearchData(name: nil)
             }
         }
         

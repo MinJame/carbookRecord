@@ -17,6 +17,7 @@ class OilEditsViewController: UIViewController{
     var tablelist : [Dictionary<String,Any>] = []
     var repairDelegate : RepairCallbackDelegate?
     var dateDelegate : selectDateDelegate?
+    var searchDelegate : SearchCallbackDelegate?
     var startDate : Date?
     var cellId : String?
     

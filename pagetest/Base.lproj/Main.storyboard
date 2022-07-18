@@ -1018,7 +1018,7 @@
                                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </buttonConfiguration>
                                                 <connections>
-                                                    <segue destination="vLB-Fm-T5X" kind="presentation" modalPresentationStyle="fullScreen" id="HEH-x1-WF4"/>
+                                                    <action selector="movetoSearchView:" destination="su1-3U-zzN" eventType="touchUpInside" id="yUO-vR-WD5"/>
                                                 </connections>
                                             </button>
                                         </subviews>

@@ -225,6 +225,16 @@ class TotalViewController: UIViewController {
         
        
     }
+    @IBAction func movetoSearchView(_ sender: Any) {
+        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController")
+            as? SearchViewController  {
+            vc.modalTransitionStyle = .coverVertical
+            vc.modalPresentationStyle = .overFullScreen
+            vc.totalDelegate = delegate
+            self.present(vc, animated: true)
+            
+        }
+    }
     // 이전 페이지로 이동하는 함수
     @IBAction func dismissView(_ sender: Any) {
         // 생성된 뷰를 지워준다

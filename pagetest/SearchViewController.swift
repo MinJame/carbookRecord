@@ -9,25 +9,29 @@ import Foundation
 import UIKit
 
 
-
+protocol SearchCallbackDelegate{
+    func setSearchData(name : String?)
+}
 
 class SearchViewController: UIViewController {
+  
+    
     
     @IBOutlet weak var searchTableView: UITableView!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var searchItemText: UITextField!
     @IBOutlet weak var goBackButton: UIButton!
     var dataList : [Dictionary<String,Any>] = []
-    var delegate : RepairCallbackDelegate?
+    var delegate : SearchCallbackDelegate?
+    var totalDelegate : RepairCallbackDelegate?
     var categoryNames : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setDelegates()
         initTableView()
-        self.delegate?.setRepairData(year: nil)
+        delegate = self
     }
-    
     func setDelegates() {
         // searchTableView의 delegate와 dataSource 값 선언
         searchTableView.delegate = self
@@ -70,7 +74,12 @@ class SearchViewController: UIViewController {
     
     // 전에 페이지로 이동
     @IBAction func dismissView(_ sender: Any) {
-        dismiss(animated: true)
+        
+        self.dismiss(animated: true) {
+            self.totalDelegate?.setRepairData(year: nil)
+        }
+        
+        
     }
     // 아이템 항목 검색시 해당하는 데이터 불러오기 위한 함수
     @IBAction func searchItems(_ sender: Any) {
@@ -79,7 +88,7 @@ class SearchViewController: UIViewController {
             //먼저 기존데이터들을 삭제한다
             dataList.removeAll()
             // 기존 데이터 삭제후 텍스트 필드에 있는 내용을 검색한다
-            researchItems()
+            researchItems(name: searchItemText.text ?? "")
             // 키보드를 내린다
             dismissKeyboard()
             // 검색한 데이터를 테이블뷰에서 다시 보여준다
@@ -91,7 +100,7 @@ class SearchViewController: UIViewController {
         
     }
     // 텍스트 필드에 있는 내용을 db에서 검색하는 함수
-    func researchItems() {
+    func researchItems(name: String?) {
         // db에 접속할수 있게 선언
         let carBookDatabase = CARBOOK_DAO.sharedInstance
         var categoryName : String = ""
@@ -203,7 +212,7 @@ extension SearchViewController : UITableViewDataSource {
                 // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
                 vc.cellId = String(id)
                 // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
-                vc.repairDelegate = delegate
+                vc.searchDelegate = delegate
                 self.present(vc, animated: true, completion: nil)
             }
         }else {
@@ -214,7 +223,7 @@ extension SearchViewController : UITableViewDataSource {
                 // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
                 vc.cellId = fuelId
                 // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
-                vc.repairDelegate = delegate
+                vc.searchDelegate = delegate
                 self.present(vc, animated: true, completion: nil)
             }
             
@@ -405,7 +414,7 @@ extension SearchViewController : UITableViewDataSource {
                 vc.modalTransitionStyle = .coverVertical
                 vc.modalPresentationStyle = .fullScreen
                 vc.cellId = String(Id)
-                vc.repairDelegate = delegate
+                vc.searchDelegate = delegate
                 self.present(vc, animated: true, completion: nil)
             }
             
@@ -445,7 +454,7 @@ extension SearchViewController : UITableViewDataSource {
                 vc.modalPresentationStyle = .fullScreen
                 // 이동시 Id 값이랑 delegate값을 전달해줍니다
                 vc.cellId = String(Id)
-                vc.repairDelegate = delegate
+//                vc.searchDelegate = delegate
                 self.present(vc, animated: true, completion: nil)
             }
             
@@ -482,4 +491,16 @@ extension SearchViewController : UITableViewDataSource {
     
 }
 
+
+extension SearchViewController : SearchCallbackDelegate {
+    func setSearchData(name : String?) {
+        // 먼저 기존의 데이터를 전부 지웁니다.
+        self.dataList.removeAll()
+        // 내부 db에서 데이터를 불러옵니다
+        self.researchItems(name: name)
+        // 불러온 데이터를 테이블뷰에서 리로드해서 보여줍니다.
+        self.searchTableView.reloadData()
+    }
+}
+//
 //
