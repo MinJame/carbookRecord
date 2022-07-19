@@ -35,6 +35,7 @@ class TotalViewController: UIViewController {
     let pickerView = UIPickerView()
     var yearDate : String = ""
     var year: String = ""
+    var monthDates : [String] = []
     var yearList :[String] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +45,7 @@ class TotalViewController: UIViewController {
         initTableView()
         setCarbookDateList()
     }
+
     // 테이블뷰 기본 세팅
     func initTableView() {
         totalTableView.delegate = self
@@ -143,14 +145,12 @@ class TotalViewController: UIViewController {
                     return dic["month"] as? String ?? ""
                 }
 
-           
-                
                 let monthIs: Set = Set(months)
             
                 var monthDate = [String](monthIs)
                 monthDate.sort(by: >)
                 searchDates.append(dates(year: key, month: monthDate))
-               
+                monthDates = monthDate
             }
             searchDates = searchDates.sorted{$0.year > $1.year}
            
@@ -159,7 +159,7 @@ class TotalViewController: UIViewController {
         yearDate = searchDates.first?.year ?? ""
         yearList = yearItem
         yearList.sort(by: >)
-        Swift.print("먼데요\(yearItem)")
+        Swift.print("monthdates\(monthDates)")
         setRepairData(year: searchDates.first?.year)
     }
 
@@ -490,10 +490,7 @@ extension TotalViewController: UITableViewDataSource {
             }
             
         }
-        
-        
-      
-      
+ 
         return cell
     }
 
@@ -506,6 +503,8 @@ extension TotalViewController: UITableViewDataSource {
         // 각 셀의 Id 아이디 값을 버튼 태그 값에 저장했으므로 ID 값을 다시 불러 옵니다.
         let Id = sender.tag
         Swift.print("아이디 값\(Id)")
+        let year = yearField.text ?? ""
+        let years = String(year.dropLast(1))
         // 버튼 클릭시 수정 또는 삭제 문구가 액션시트 형식으로 나오게 해줍니다.
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         //수정 버튼을 클릭시 동작하는 방식
@@ -529,8 +528,10 @@ extension TotalViewController: UITableViewDataSource {
             // 선택한 셀의 데이터를 삭제합니다.
             let carBookDataBase = CARBOOK_DAO.sharedInstance
             _ = carBookDataBase.deleteCarBookData(deleteId: Id)
+            _ = carBookDataBase.deleteRePairItemData(deleteId: Id)
+            _ = carBookDataBase.deleteOilData(deleteId: String(Id))
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
-            setRepairData(year: year)
+            setRepairData(year:years)
         })
         let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
         
@@ -538,14 +539,26 @@ extension TotalViewController: UITableViewDataSource {
         alert.addAction(deleteData)
         alert.addAction(cancel)
         
-        self.present(alert, animated: true, completion: nil)
+        if UIDevice.current.userInterfaceIdiom == .pad { //디바이스 타입이 iPad일때
+          if let popoverController = alert.popoverPresentationController {
+              // ActionSheet가 표현되는 위치를 저장해줍니다.
+              popoverController.sourceView = self.view
+              popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+              popoverController.permittedArrowDirections = []
+              self.present(alert, animated: true, completion: nil)
+          }
+        } else {
+          self.present(alert, animated: true, completion: nil)
+        }
+
         
     }
     
     @objc func changeOilItem(_ sender: UIButton) {
         // 각 셀의 Id 아이디 값을 버튼 태그 값에 저장했으므로 ID 값을 다시 불러 옵니다.
         let Id = sender.tag
-        Swift.print("키값\(Id)")
+        let year = yearField.text ?? ""
+        let years = String(year.dropLast(1))
         // 버튼 클릭시 수정 또는 삭제 문구가 액션시트 형식으로 나오게 해줍니다.
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         //수정 버튼을 클릭시 동작하는 방식
@@ -569,8 +582,10 @@ extension TotalViewController: UITableViewDataSource {
             // 선택한 셀의 데이터를 삭제합니다.
             let carBookDataBase = CARBOOK_DAO.sharedInstance
             _ = carBookDataBase.deleteOilData(deleteId: String(Id))
+            _ = carBookDataBase.deleteCarBookData(deleteId: Id)
+            _ = carBookDataBase.deleteRePairItemData(deleteId: Id)
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
-            setRepairData(year: year)
+            setRepairData(year: years)
   
         })
         let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
@@ -579,8 +594,17 @@ extension TotalViewController: UITableViewDataSource {
         alert.addAction(deleteData)
         alert.addAction(cancel)
         
-        self.present(alert, animated: true, completion: nil)
-        
+        if UIDevice.current.userInterfaceIdiom == .pad { //디바이스 타입이 iPad일때
+          if let popoverController = alert.popoverPresentationController {
+              // ActionSheet가 표현되는 위치를 저장해줍니다.
+              popoverController.sourceView = self.view
+              popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+              popoverController.permittedArrowDirections = []
+              self.present(alert, animated: true, completion: nil)
+          }
+        } else {
+          self.present(alert, animated: true, completion: nil)
+        }
     }
     
     

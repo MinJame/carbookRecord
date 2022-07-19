@@ -21,7 +21,6 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var searchItemText: UITextField!
     @IBOutlet weak var goBackButton: UIButton!
-    var dataList : [Dictionary<String,Any>] = []
     var delegate : SearchCallbackDelegate?
     var totalDelegate : RepairCallbackDelegate?
     var categoryNames : String = ""
@@ -29,6 +28,7 @@ class SearchViewController: UIViewController {
     var searchTitle : String = ""
     var startDate : String = ""
     var yearList : [String] = []
+    var searchItemList : [Dictionary<String,Any>] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         setDelegates()
@@ -92,7 +92,7 @@ class SearchViewController: UIViewController {
         // 만약 텍스트필드가 비어있지 않으면  텍스트 필드에 있는 내용을 검색한다
         if searchItemText.text != "" {
             //먼저 기존데이터들을 삭제한다
-            dataList.removeAll()
+            searchItemList.removeAll()
             // 기존 데이터 삭제후 텍스트 필드에 있는 내용을 검색한다
             researchItems(name: searchItemText.text ?? "")
             // 키보드를 내린다
@@ -100,7 +100,7 @@ class SearchViewController: UIViewController {
             // 검색한 데이터를 테이블뷰에서 다시 보여준다
             searchTableView.reloadData()
         }else {
-            dataList.removeAll()
+            searchItemList.removeAll()
             searchTableView.reloadData()
         }
         
@@ -109,86 +109,32 @@ class SearchViewController: UIViewController {
     func researchItems(name: String?) {
         // db에 접속할수 있게 선언
         let carBookDatabase = CARBOOK_DAO.sharedInstance
-        var categoryName : String = ""
-        var categoryMemo : String = ""
-        var categoryMemoitem : String = ""
-        var categoryCodes : String = ""
-        var categoryMemos : String = ""
-        var oilSearchItem : Dictionary<String,Any> = [:]
+        var oilSearchItem : [Dictionary<String,Any>] = []
         // db에서 텍스트 필드의 내용이 있으면 검색할수 있는 동작 구현
         if let list : [Dictionary<String,Any>] = carBookDatabase.searchCarbookDataList(name: searchItemText.text ?? "") {
             
             let listItem : [Dictionary<String,Any>] = carBookDatabase.searchOilDataList(name: searchItemText.text ?? "") ?? []
             //배열 안에 있는 것들을 i인덱스수 만큼 for문 동작
             Swift.print("첫번째\(listItem)")
+            oilSearchItem += list
+            oilSearchItem += listItem
+            let groupRawData = Dictionary(grouping: oilSearchItem){$0["year"] as? String ?? ""}
             
-            for item in list {
-                //searchItem에 dictionary 형으로 필요한 데이터들을 저장
-                let searchItem : Dictionary<String,Any> = [
-                    "repairMode": item["repairMode"] as? Int ?? 0,
-                    "repairPlace" : item["repairPlace"] as? String ?? "",
-                    "repairAddress" : item["repairAddress"] as? String ?? "",
-                    "repairExpendDate" : item["repairExpendDate"] as? String ?? "",
-                    "TotalCost" : item["TotalCost"] as? Double ?? 0.0,
-                    "repairDist" : item["repairDist"] as? Double ?? 0.0,
-                    "repairItemIsHidden" : item["repairItemIsHidden"] as? Int ?? 0,
-                    "repairltemMemo" : item["repairltemMemo"] as? String ?? "",
-                    "repairltemName": item["repairltemName"] as? String ?? "",
-                    "repairItemCost": item["repairItemCost"] as? Double ?? 0.0,
-                    "repairltemCategoryCode": item["repairltemCategoryCode"] as? String ?? "",
-                    "repairSN" : item["repairSN"] as? Int ?? 0,
-                    "COUNT" : item["COUNT"] as? Int ?? 0,
-                    "categoryCodes" : item["categoryCodes"] as? String ?? "",
-                    "categoryCodesCost" : item["categoryCodesCost"] as? String ?? "",
-                    "carbookRecordItemMemos" : item["carbookRecordItemMemos"] as? String ?? ""
+            for (key,value) in groupRawData {
+                
+                let searchList: Dictionary<String,Any> = [
+                    "date": key,
+                    "items":  value.sorted {$0["dates"] as? String ?? "" > $1["dates"] as? String ?? ""}
                 ]
-                // searchItem들의 dataList에 합해줍니다
-                dataList.append(searchItem)
-                
-                // 차량 정비 목록을 categoryName으로 저장
-                categoryCodes = item["categoryCodes"] as? String ?? ""
-                categoryMemo = item["repairItemMemo"] as? String ?? ""
-                categoryMemos = item["carbookRecordItemMemos"] as? String ?? ""
-                let codeList = categoryCodes.components(separatedBy: ",")
-                var memoList = categoryMemos.components(separatedBy: ",")
-                for (index,value) in codeList.enumerated() {
-                    categoryName = getCodeText(Code: value)
-                    categoryMemoitem = memoList[index]
-                }
-                Swift.print("이름가져와1\(categoryMemoitem)")
-                memoTitle = categoryMemoitem
-                // 만약 차량정비 목록이 searItemText의 내용을 가지고 있으면
-                if categoryName.contains(searchItemText.text ?? "") && !categoryMemoitem.contains(searchItemText.text ?? "")   {
-                    //categoryNames에 categoryName 저장
-                    categoryNames = categoryName
-                }
-                
-                
+                searchItemList.append(searchList)
             }
-            for item in listItem {
-                let oilItem : Dictionary<String,Any> = [
-                    "fuelingID" : item["fuelingID"] as? String ?? "",
-                    "fuelingPlace" : item["fuelingPlace"] as? String ?? "",
-                    "fuelingAddress" : item["fuelingAddress"] as? String ?? "",
-                    "fuelingMemo": item["fuelingMemo"] as? String ?? "",
-                    "fuelingIsHidden" : item["fuelingIsHidden"] as? Int ?? 0,
-                    "fuelingLatitude" : item["fuelingLatitude"] as? Double ?? 0.0,
-                    "fuelingLongitude" : item["fuelingLongitude"] as? Double ?? 0.0,
-                    "fuelingExpendDate" : item["fuelingExpendDate"] as? String ?? "",
-                    "fuelingDist" : item["fuelingDist"]as? Double ?? 0.0,
-                    "fuelingTotalCost":item["fuelingTotalCost"] as? Double ?? 0.0,
-                    "fuelType": item["fuelType"] as? String ?? "",
-                    "fuelingFuelCost":item["fuelingFuelCost"] as? Double ?? 0.0,
-                    "fuelingItemVolume": item["fuelingItemVolume"] as? Double ?? 0.0,
-                    "fuelingImage":item["fuelingMemo"] as? String ?? ""
-                    
-                ]
-                oilSearchItem = oilItem
-                dataList.append(oilSearchItem)
+            searchItemList = searchItemList.sorted {$0["date"] as? String ?? "" > $1["date"] as? String ?? ""}
+
             }
+        
             searchTitle = searchItemText.text ?? ""
+        Swift.print("searchItemList\(searchItemList)")
         }
-    }
     // 키보드가 내려가는 함수 입니다
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
@@ -203,70 +149,78 @@ extension SearchViewController: UITableViewDelegate {
 extension SearchViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return yearList.count
+        return searchItemList.count
     }
     // 테이블뷰 헤더 섹션의 높이 선언
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
+    
     // 테이블뷰 헤더뷰의 데이터들 선언
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // 헤더뷰로 재사용할 셀을 선언
         let headerView = searchTableView.dequeueReusableHeaderFooterView(withIdentifier: "YearListTableViewCellID") as?
         YearListTableViewCell
-        let date = yearList[section] as? String ?? ""
-
-        headerView?.yearListLabel.text = date
-
+        var dates = searchItemList[section]["date"] as? String ?? ""
+     
+        headerView?.yearListLabel.text = dates
+        Swift.print("테스트\(dates)")
         return headerView
     }
     
+
+    
     // 테이블뷰의 열을 선택했을때 동작하는 함수
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath : IndexPath) {
-        // dataList의 값들을 item에 저장
-        let item = dataList[indexPath.row]
-        // 저장된 데이터 중에 정비기록Id 값을 불러와서 id에 저장
-        let id = item["repairSN"] as? Int ?? 0
-        let fuelId = item["fuelingID"] as? String ?? ""
-    
-        if id != 0 {
-            // 해당열을 눌렀을때에 "RepairViewController"로 이동
-            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "RepairViewController")
-                as? RepairViewController  {
-                vc.modalTransitionStyle = .coverVertical
-                vc.modalPresentationStyle = .fullScreen
-                // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
-                vc.cellId = String(id)
-                // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
-                vc.searchDelegate = delegate
-                vc.searchTitle = searchTitle
-                self.present(vc, animated: true, completion: nil)
-            }
-        }else {
-            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "OilEditsViewController")
-                as? OilEditsViewController  {
-                vc.modalTransitionStyle = .coverVertical
-                vc.modalPresentationStyle = .fullScreen
-                // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
-                vc.cellId = fuelId
-                // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
-                vc.searchDelegate = delegate
-                vc.searchTitle = searchTitle
-                self.present(vc, animated: true, completion: nil)
-            }
+     
+        if let items = searchItemList[indexPath.section]["items"] as? [Dictionary<String,Any>] {
+            let item = items[indexPath.row]
             
+            // 저장된 데이터 중에 정비기록Id 값을 불러와서 id에 저장
+            let id = item["repairSN"] as? Int ?? 0
+            let fuelId = item["fuelingID"] as? String ?? ""
+        
+            if id != 0 {
+                // 해당열을 눌렀을때에 "RepairViewController"로 이동
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "RepairViewController")
+                    as? RepairViewController  {
+                    vc.modalTransitionStyle = .coverVertical
+                    vc.modalPresentationStyle = .fullScreen
+                    // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
+                    vc.cellId = String(id)
+                    // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
+                    vc.searchDelegate = delegate
+                    vc.searchTitle = searchTitle
+                    self.present(vc, animated: true, completion: nil)
+                }
+            }else {
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "OilEditsViewController")
+                    as? OilEditsViewController  {
+                    vc.modalTransitionStyle = .coverVertical
+                    vc.modalPresentationStyle = .fullScreen
+                    // 이동하는데 totalviewcontroller에서 선택한 열의 아이디 값
+                    vc.cellId = fuelId
+                    // totalviewcontroller에서 선언해준 delegate 값을 전달해준다
+                    vc.searchDelegate = delegate
+                    vc.searchTitle = searchTitle
+                    self.present(vc, animated: true, completion: nil)
+                }
+                
+            }
         }
+        
     }
-    // 테이블뷰의 셀의 갯수
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataList.count
-    }
+    
+ 
+ 
     // 테이블뷰 셀에 들어갈 데이터들
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : RepairListTableViewCell  = searchTableView.dequeueReusableCell(withIdentifier: "RepairListTableViewCellID", for: indexPath) as! RepairListTableViewCell
-        let item = dataList[indexPath.row]
+        let items = searchItemList[indexPath.section]["items"] as? [Dictionary<String,Any>] ?? []
+        Swift.print("뭐냐\(items)")
+        let item = items[indexPath.row] as? Dictionary<String,Any> ?? [:]
         let fuelId = item["fuelingID"] as? String ?? ""
-        
+
         if fuelId != "" {
             let formatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .gregorian)
@@ -287,7 +241,7 @@ extension SearchViewController : UITableViewDataSource {
                 cell.rePairDateLabel.text = fuelDates
                 cell.rePairItemListView.isHidden = true
                 cell.memoView.isHidden = false
-                
+
             }
             cell.changeItemButton.tag  = Int(item["fuelingID"] as? String ?? "") ?? 0
             cell.changeItemButton.addTarget(self, action: #selector(changeOilItem(_:)), for: .touchUpInside)
@@ -296,7 +250,7 @@ extension SearchViewController : UITableViewDataSource {
                 cell.fuelCostBtn.titleLabel?.font = UIFont.systemFont(ofSize: 8)
                 cell.fuelCostBtn.isHidden  = false
             }
-            
+
             if let memoText = item["fuelingMemo"] as? String  {
                 // 만약 memoText 값이 있으면
                 if memoText != "" {
@@ -307,7 +261,7 @@ extension SearchViewController : UITableViewDataSource {
                     cell.memoView.isHidden = true
                 }
             }
-            
+
         }else {
             let formatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .gregorian)
@@ -317,17 +271,17 @@ extension SearchViewController : UITableViewDataSource {
             formatter.dateFormat = "MM.dd"
             cell.fuelCostBtn.isHidden  = true
             cell.rePairDateLabel.text = formatter.string(for: dateStrings) ?? ""
-            
+
             let rePairDist = item["repairDist"] as? Double ?? 0.0
             cell.totalDistanceLabel.text = String(format: "%.f", rePairDist )
-            
+
             let TotalCost =  item["TotalCost"] as? Double ?? 0.0
             cell.rePairExpenseCost.text = String(format: "%.f", TotalCost)
-            
+
             let rePairAddress = item["repairAddress"] as? String ?? ""
             cell.rePairLocationLabel.text = rePairAddress
-            
-            
+
+
             //cell의 ID값을 버튼의 태그 값에 저장을 합니다
             cell.changeItemButton.tag = item["repairSN"] as? Int ?? 0
             //cell의 버튼의 액션을 할 수 있게 추가해줍니다.
@@ -419,15 +373,20 @@ extension SearchViewController : UITableViewDataSource {
                     // 1보다 작을 경우 rePairItemListView를 숨긴다
                     cell.rePairItemListView.isHidden = true
                 }
-                
+
             }
-            
+
         }
         
         
         return cell
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+     
+        let items = searchItemList[section]["items"] as? [Dictionary<String,Any>] ?? []
+        return items.count
+    }
     
     //셀의 버튼 클릭시 동작하는 함수
     @objc func changeItem(_ sender: UIButton) {
@@ -455,8 +414,10 @@ extension SearchViewController : UITableViewDataSource {
             // 선택한 셀의 데이터를 삭제합니다.
             let carBookDataBase = CARBOOK_DAO.sharedInstance
             _ = carBookDataBase.deleteCarBookData(deleteId: Id)
+            _ = carBookDataBase.deleteRePairItemData(deleteId: Id)
+            _ = carBookDataBase.deleteOilData(deleteId: String(Id))
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
-            self.dataList.removeAll()
+            self.searchItemList.removeAll()
             self.searchTableView.reloadData()
         })
         let cancel = UIAlertAction(title: "취소", style: .destructive, handler:nil)
@@ -464,7 +425,19 @@ extension SearchViewController : UITableViewDataSource {
         alert.addAction(updateData)
         alert.addAction(deleteData)
         alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad { //디바이스 타입이 iPad일때
+          if let popoverController = alert.popoverPresentationController {
+              // ActionSheet가 표현되는 위치를 저장해줍니다.
+              popoverController.sourceView = self.view
+              popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+              popoverController.permittedArrowDirections = []
+              self.present(alert, animated: true, completion: nil)
+          }
+        } else {
+          self.present(alert, animated: true)
+        }
+ 
         
     }
     
@@ -496,8 +469,10 @@ extension SearchViewController : UITableViewDataSource {
             // 선택한 셀의 데이터를 삭제합니다.
             let carBookDataBase = CARBOOK_DAO.sharedInstance
             _ = carBookDataBase.deleteOilData(deleteId: String(Id))
+            _ = carBookDataBase.deleteCarBookData(deleteId: Id)
+            _ = carBookDataBase.deleteRePairItemData(deleteId: Id)
             // 선택한 셀의 데이터를 삭제후 데이터를 삭제한 데이터를 없앤 것을 바로 보여줍니다.
-            self.dataList.removeAll()
+            self.searchItemList.removeAll()
             self.searchTableView.reloadData()
             
         })
@@ -506,8 +481,18 @@ extension SearchViewController : UITableViewDataSource {
         alert.addAction(updateData)
         alert.addAction(deleteData)
         alert.addAction(cancel)
-        
-        self.present(alert, animated: true, completion: nil)
+        if UIDevice.current.userInterfaceIdiom == .pad { //디바이스 타입이 iPad일때
+          if let popoverController = alert.popoverPresentationController {
+              // ActionSheet가 표현되는 위치를 저장해줍니다.
+              popoverController.sourceView = self.view
+              popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+              popoverController.permittedArrowDirections = []
+              self.present(alert, animated: true, completion: nil)
+          }
+        } else {
+          self.present(alert, animated: true)
+        }
+ 
         
     }
     
@@ -526,7 +511,7 @@ extension SearchViewController : UITableViewDataSource {
 extension SearchViewController : SearchCallbackDelegate {
     func setSearchData(name : String?) {
         // 먼저 기존의 데이터를 전부 지웁니다.
-        self.dataList.removeAll()
+        self.searchItemList.removeAll()
         // 내부 db에서 데이터를 불러옵니다
         self.researchItems(name: name)
         // 불러온 데이터를 테이블뷰에서 리로드해서 보여줍니다.

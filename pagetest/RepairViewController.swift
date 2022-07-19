@@ -302,8 +302,8 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
         // 날짜 형식의 포맷 선언
         formatter.dateFormat = "yyyyMMddHHmmss"
         //  수정에 필요한 정비기록의 기본정보들 묶어서 저장
-        var years = formatter.string(for: startDate ?? Date()) ?? ""
-        var year = String(years.dropLast(10))
+        let years = formatter.string(for: startDate ?? Date()) ?? ""
+        let year = String(years.dropLast(10))
         Swift.print("년\(year)")
         let carBookData : Dictionary<String, Any>  = [
             "repairKey" : "확인",
@@ -686,11 +686,9 @@ extension RepairViewController: UITableViewDataSource {
                 cell.repairCostField.text = String(Int(costs))
                 cell.repairCostField.textColor = .black
                 // repaircostfield의 문자색을 연한갈색으로 선언
-//                cell.repairCostField.textColor = .lightGray
                 // 만약 item의 "memo"가 문자열이면 memo에 저장하고, memo에 문자열이 있으면 repairMemoView의 문자에 memo를 입력한다.
                 if let memo = item["Memo"] as? String, memo != "" {
                     cell.repairMemoView.text = memo
-                   
                     
                 }
                 return cell

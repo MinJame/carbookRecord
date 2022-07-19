@@ -260,6 +260,29 @@ class CARBOOK_DAO {
         }
     }
     
+    func deleteRePairItemData(deleteId : Int) -> Bool{
+        let carbookDB = FMDatabase(path: databaseURL?.path)
+        
+        if carbookDB.open() {
+            defer {carbookDB.close()}
+            let updateSQL = "UPDATE REPAIRITEM SET repairltemIsHidden = 1 WHERE repairSN = '\(deleteId)'"
+            let result = carbookDB.executeUpdate(updateSQL, withArgumentsIn: [])
+            Swift.print("items:\(result)")
+            Swift.print("insertSQL1:\(updateSQL)")
+            if !result{
+                print("Error \(carbookDB.lastErrorMessage())")
+                return false
+            }else{
+                return true
+            }
+            
+        }else{
+            print("Error \(carbookDB.lastErrorMessage())")
+            return false
+        }
+    }
+    
+    
     func deleteOilData(deleteId : String) -> Bool{
         let carbookDB = FMDatabase(path: databaseURL?.path)
         
@@ -485,9 +508,11 @@ class CARBOOK_DAO {
     func searchCarbookDataList(name : String) -> [Dictionary<String, Any>]?{
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
-            
-            let selectSQL = "SELECT * , substr(repairExpendDate,0,7) as 'date' FROM REPAIR as 'A' JOIN(SELECT repairSN,repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime, COUNT(*) as 'COUNT', SUM(repairltemCost) as 'TotalCost',group_concat(repairltemCategoryCode,',') as'categoryCodes',group_concat(repairltemName,',') as'categoryCodesName',group_concat(repairltemMemo,',') as'carbookRecordItemMemos',group_concat(repairltemCost,',') as 'categoryCodesCost' FROM REPAIRITEM WHERE repairltemIsHidden = 0 GROUP BY repairSN ) as 'B' ON(A._id = B.repairSN) AND A.repairIsHidden = 0  WHERE B.repairltemName Like '%\(name)%' OR B.carbookRecordItemMemos Like '%\(name)%' GROUP BY repairSN ORDER BY A.repairExpendDate DESC"
+         
+            let selectSQL = "SELECT * ,substr(repairExpendDate,0,5) as 'year', substr(repairExpendDate,0,7) as 'date',substr(repairExpendDate,0,13) as 'dates' FROM REPAIR as 'A' JOIN(SELECT repairSN,repairltemID,repairItemKey,repairltemIsHidden,repairltemCategoryCode,repairItemDivision,repairltemName,repairltemCost,repairltemMemo,repairltemRegTime,repairltemUploadTime,repairltemUpdateTime,repairltemGlobalTime, COUNT(*) as 'COUNT', SUM(repairltemCost) as 'TotalCost',group_concat(repairltemCategoryCode,',') as'categoryCodes',group_concat(repairltemName,',') as'categoryCodesName',group_concat(repairltemMemo,',') as'carbookRecordItemMemos',group_concat(repairltemCost,',') as 'categoryCodesCost' FROM REPAIRITEM WHERE repairltemIsHidden = 0 GROUP BY repairSN ) as 'B' ON(A._id = B.repairSN) AND A.repairIsHidden = 0  WHERE B.repairltemName Like '%\(name)%' OR B.categoryCodesName Like '%\(name)%'OR B.carbookRecordItemMemos Like '%\(name)%' GROUP BY repairSN ORDER BY A.repairExpendDate DESC"
 
+            print("selectSQL :\(selectSQL)")
+            
             var dictArray: [Dictionary<String, Any>]? = []
             if let result : FMResultSet = carbookDB.executeQuery(selectSQL, withArgumentsIn:  []) {
                 var dict : Dictionary<String, Any> = [:]
@@ -497,6 +522,7 @@ class CARBOOK_DAO {
                         dict.updateValue("\(date.components(separatedBy: ["-"]).joined())", forKey: "repairExpendDate")
                     }
                     dictArray?.append(dict)
+                    print("curry :\(dict)")
                 }
 
                 return dictArray
@@ -513,8 +539,11 @@ class CARBOOK_DAO {
     func searchOilDataList(name : String) -> [Dictionary<String, Any>]?{
         let carbookDB = FMDatabase(path : databaseURL?.path)
         if carbookDB.open() {
-            let selectSQL = "SELECT * FROM FUELING WHERE fuelingIsHidden = 0 AND fuelingPlace Like '%\(name)%' OR fuelingMemo Like '%\(name)%' OR fuelingAddress Like '%\(name)%' ORDER BY fuelingExpendDate DESC"
-
+            
+            let selectSQL = "SELECT *,substr(fuelingExpendDate,0,5) as 'year', substr(fuelingExpendDate,0,7) as 'date',substr(fuelingExpendDate,0,13) as 'dates' FROM FUELING WHERE (fuelingPlace Like '%\(name)%' OR fuelingMemo Like '%\(name)%' OR fuelingAddress Like '%\(name)%')AND fuelingIsHidden = 0 ORDER BY fuelingExpendDate DESC"
+          
+            print("selectSQL :\(selectSQL)")
+            
             var dictArray: [Dictionary<String, Any>]? = []
             if let result : FMResultSet = carbookDB.executeQuery(selectSQL, withArgumentsIn:  []) {
                 var dict : Dictionary<String, Any> = [:]
@@ -524,6 +553,7 @@ class CARBOOK_DAO {
                         dict.updateValue("\(date.components(separatedBy: ["-"]).joined())", forKey: "fuelingExpendDate")
                     }
                     dictArray?.append(dict)
+                    print("curry :\(dict)")
                 }
 
                 return dictArray
