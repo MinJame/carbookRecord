@@ -43,6 +43,12 @@ class TotalViewController: UIViewController {
         // 피커뷰 동작 할수 있게 함수 선언
         selectMonthView()
         initTableView()
+       
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Swift.print("ViewController의 view가 화면에 나타남")
+        searchDates.removeAll()
         setCarbookDateList()
     }
 
@@ -152,6 +158,7 @@ class TotalViewController: UIViewController {
                 searchDates.append(dates(year: key, month: monthDate))
                 monthDates = monthDate
             }
+          
             searchDates = searchDates.sorted{$0.year > $1.year}
            
         }
@@ -159,8 +166,10 @@ class TotalViewController: UIViewController {
         yearDate = searchDates.first?.year ?? ""
         yearList = yearItem
         yearList.sort(by: >)
-        Swift.print("monthdates\(monthDates)")
+      
         setRepairData(year: searchDates.first?.year)
+        Swift.print("searchDates\(searchDates)")
+    
     }
 
     // db에서 데이터를 년도 별로 가져오는 함수
@@ -640,6 +649,8 @@ extension TotalViewController : RepairCallbackDelegate {
         self.carDataList.removeAll()
         // 내부 db에서 데이터를 불러옵니다
         self.setCarbookDataList(year: year)
+        
+        self.pickerView.reloadAllComponents()
         // 불러온 데이터를 테이블뷰에서 리로드해서 보여줍니다.
         self.totalTableView.reloadData()
     }
@@ -663,11 +674,13 @@ extension TotalViewController:UIPickerViewDelegate,UIPickerViewDataSource {
     }
     //피커뷰 구성요소 중 첫번째와 두번째의 선언
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+      
         switch component {
         case 0 :
             year = searchDates[row].year
             return "\(searchDates[row].year)년"
         case 1:
+            Swift.print("날짜\(searchDates[selectDate.yearRow].month[row])")
             return "\(searchDates[selectDate.yearRow].month[row])월"
         default:
             return nil

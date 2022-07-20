@@ -161,8 +161,7 @@ extension SearchViewController : UITableViewDataSource {
         // 헤더뷰로 재사용할 셀을 선언
         let headerView = searchTableView.dequeueReusableHeaderFooterView(withIdentifier: "YearListTableViewCellID") as?
         YearListTableViewCell
-        var dates = searchItemList[section]["date"] as? String ?? ""
-     
+        let dates = searchItemList[section]["date"] as? String ?? ""
         headerView?.yearListLabel.text = dates
         Swift.print("테스트\(dates)")
         return headerView
@@ -300,7 +299,6 @@ extension SearchViewController : UITableViewDataSource {
                 }
             }
             // 만약 item의 carbookRecordItemExpenseMemo가 문자형이면 memoText에 저장하고
-            Swift.print("타이틀\(memoTitle)")
             if let memoText = item["repairltemMemo"] as? String  {
                 // 만약 memoText 값이 있으면
                 if memoText != "" {

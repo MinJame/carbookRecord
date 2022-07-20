@@ -621,6 +621,7 @@ extension RepairViewController: UITableViewDataSource {
         let item = tablelist[indexPath.row]
         // item의 "Type"을 타입으로 선언
         let type = item["Type"] as? Int ?? 0
+        Swift.print("테이블뷰\(item)")
         // 타입에 따라 다르게 셀 사용
         switch type   {
         case 1 :
@@ -653,7 +654,7 @@ extension RepairViewController: UITableViewDataSource {
                 cell.distanceField.delegate = self
                 // distanceField의 문자는 테이블리스트의["Distance"]값인데 더블형임으로 문자형으로 변환해서 보여준다
                 cell.distanceField.text = String(format: "%.f", tablelist[0]["Distance"] as? Double ?? 0.0)
-                cell.distanceField.textColor = .black
+
                 return cell
             }else {
                 let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairSelfTableViewCellID")
@@ -671,6 +672,7 @@ extension RepairViewController: UITableViewDataSource {
                 cell.pickers.delegate = self
                 cell.repairMemoView.tag = indexPath.row
                 cell.repairCostField.tag = indexPath.row
+                var count = cell.repairCostField.tag
                 cell.rePairItems.tag = indexPath.row
                 cell.pickers.tag = indexPath.row
                 // 셀의 정비목록을 초기값을 코드에서 문자형으로 변환해서 나타낸다
@@ -684,13 +686,20 @@ extension RepairViewController: UITableViewDataSource {
                 let costs = item["Cost"] as? Double ?? 0.0
                 // repaircostfield의 문자를 문자열로 변환한 cost값 입력
                 cell.repairCostField.text = String(Int(costs))
-                cell.repairCostField.textColor = .black
+//                cell.repairCostField.textColor = .black
                 // repaircostfield의 문자색을 연한갈색으로 선언
                 // 만약 item의 "memo"가 문자열이면 memo에 저장하고, memo에 문자열이 있으면 repairMemoView의 문자에 memo를 입력한다.
                 if let memo = item["Memo"] as? String, memo != "" {
                     cell.repairMemoView.text = memo
                     
                 }
+                
+                if count != 0 && item["Memo"] as? String != "메모 250자 기입가능\n(이모티콘 불가)"  {
+                    Swift.print("김종연 엎드려")
+                    cell.repairMemoView.textColor = UIColor.black
+                }
+                
+                
                 return cell
             }else {
                 let cell = rePairItemTableView.dequeueReusableCell(withIdentifier: "RepairTableViewCellID")
@@ -781,7 +790,9 @@ extension RepairViewController : UITextViewDelegate,UITextFieldDelegate {
         }else {
             // 만약 텍스트 뷰가 비어 있지 않다면 텍스트뷰의 데이터를 memo에 저장한다
             tablelist[textView.tag].updateValue(textView.text ?? "", forKey: "Memo")
+       
         }
+    
 
     }
     //텍스트뷰 입력이 시작될때 동작하는 함수
@@ -815,6 +826,7 @@ extension RepairViewController : UITextViewDelegate,UITextFieldDelegate {
             // 텍스트필드의 입력되는 문자를 검은색으로 입력시킨다
             textField.textColor = UIColor.black
         }
+        
     }
     
     //textfield가 숫자일때 단위마다 ,찍어주는 함수
