@@ -14,8 +14,8 @@
             filePath = "pagetest/TotalViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "652"
-            endingLineNumber = "652"
+            startingLineNumber = "653"
+            endingLineNumber = "653"
             landmarkName = "setRepairData(year:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "pagetest/TotalViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "654"
-            endingLineNumber = "654"
+            startingLineNumber = "655"
+            endingLineNumber = "655"
             landmarkName = "setRepairData(year:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -50,6 +50,7 @@ class TotalViewController: UIViewController {
         Swift.print("ViewController의 view가 화면에 나타남")
         searchDates.removeAll()
         setCarbookDateList()
+        yearField.text = searchDates[selectDate.yearRow].year + "년"
     }
 
     // 테이블뷰 기본 세팅
