@@ -101,6 +101,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+## GoogleMaps
+
+Copyright 2022 Google
+
+## GooglePlaces
+
+Copyright 2022 Google
+
 ## JTAppleCalendar
 
 Copyright (c) 2016 JayT <patchthecode@gmail.com>

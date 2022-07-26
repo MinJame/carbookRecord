@@ -3,13 +3,19 @@ PODS:
   - BSImagePicker (3.3.1)
   - FMDB/SQLCipher (2.7.5):
     - SQLCipher
-  - FSCalendar (2.8.2)
+  - FSCalendar (2.8.4)
+  - GoogleMaps (7.0.0):
+    - GoogleMaps/Maps (= 7.0.0)
+  - GoogleMaps/Base (7.0.0)
+  - GoogleMaps/Maps (7.0.0):
+    - GoogleMaps/Base
+  - GooglePlaces (7.0.0)
   - JTAppleCalendar (7.1.8)
   - SideMenu (6.5.0)
-  - SQLCipher (4.5.0):
-    - SQLCipher/standard (= 4.5.0)
-  - SQLCipher/common (4.5.0)
-  - SQLCipher/standard (4.5.0):
+  - SQLCipher (4.5.1):
+    - SQLCipher/standard (= 4.5.1)
+  - SQLCipher/common (4.5.1)
+  - SQLCipher/standard (4.5.1):
     - SQLCipher/common
   - SVProgressHUD (2.2.5)
 
@@ -18,6 +24,8 @@ DEPENDENCIES:
   - BSImagePicker (~> 3.1)
   - FMDB/SQLCipher
   - FSCalendar
+  - GoogleMaps
+  - GooglePlaces
   - JTAppleCalendar (~> 7.0)
   - SideMenu (~> 6.0)
   - SVProgressHUD
@@ -28,6 +36,8 @@ SPEC REPOS:
     - BSImagePicker
     - FMDB
     - FSCalendar
+    - GoogleMaps
+    - GooglePlaces
     - JTAppleCalendar
     - SideMenu
     - SQLCipher
@@ -37,12 +47,14 @@ SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   BSImagePicker: 0fe04b574d4d6b81093785d2af6c26227efc8428
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
+  FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
+  GoogleMaps: 6e9c923ca035989709fcb5771544fda4cc5fa2a4
+  GooglePlaces: 8dba710bed6160a2e4b85e84aaafdbcc0b4010d8
   JTAppleCalendar: b7fb40852f5f319fe55c8ec3861f1de0edc99cc8
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
-  SQLCipher: 98dc22f27c0b1790d39e710d440f22a466ebdb59
+  SQLCipher: 712e8416685e8e575b9b0706ffee71678b2fdcf8
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: 32e0c64dab099b192e3c213d14fbda66793cb0ba
+PODFILE CHECKSUM: dc4ae90a5af7d76159232822b07c606e28f239e3
 
 COCOAPODS: 1.11.2

@@ -104,7 +104,6 @@ class RepairViewController: UIViewController, UINavigationControllerDelegate {
     func initTableView() {
         rePairItemTableView.delegate = self
         rePairItemTableView.dataSource = self
-        
         rePairItemTableView.rowHeight = UITableView.automaticDimension
         // cell1은 RepairSelfTableViewCell로 선언하고
         let cell1: UINib = UINib(nibName: "RepairSelfTableViewCell", bundle: nil)

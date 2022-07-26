@@ -11,6 +11,8 @@ target 'pagetest' do
   pod 'JTAppleCalendar', '~> 7.0'
   pod 'FSCalendar'
   pod 'FMDB/SQLCipher'
+  pod 'GooglePlaces'
+  pod 'GoogleMaps'
   # Pods for pagetest
 
 end

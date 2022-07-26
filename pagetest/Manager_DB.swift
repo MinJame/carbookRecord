@@ -26,7 +26,7 @@ class Manager_DB {
     
     let create_FUELING = "CREATE TABLE FUELING (_id INTEGER PRIMARY KEY AUTOINCREMENT, carSN INTEGER,fuelingID TEXT,fuelingKey TEXT,fuelingIsHidden INTEGER DEFAULT 0,fuelingPlace TEXT,fuelingAddress TEXT,fuelingLatitude REAL,fuelingLongitude REAL,fuelingExpendDate TEXT,fuelingDist REAL, fuelingTotalCost REAL DEFAULT 0.0,fuelType TEXT,fuelingFuelCost REAL DEFAULT 0.0,fuelingItemVolume REAL DEFAULT 0.0,fuelingImage TEXT, fuelingMemo TEXT,fuelingRegTime TEXT,fuelingUploadTime TEXT,fuelingUpdateTime TEXT,fuelingGlobalTime TEXT)"
     
-    let create_EXPENDABLE = "CREATE TABLE EXPENDABLE (_id INTEGER PRIMARY KEY AUTOINCREMENT, carSN INTEGER,expendableID TEXT,expendableKey TEXT,expendableIsHidden INTEGER DEFAULT 0,expendablescategoryCode INTEGER DEFAULT 0,expendableDivision INTEGER DEFAULT 0,expendableTitle TEXT,expendableCycleTerm INTEGER,expendableCycleDist REAL,cycleTermExist INTEGER,expendableRegTime TEXT,expendableUploadTime TEXT,expendableUpdateTime TEXT,expendableGlobalTime TEXT)"
+    let create_CONSUMABLE = "CREATE TABLE EXPENDABLE (_id INTEGER PRIMARY KEY AUTOINCREMENT, carSN INTEGER,consumableID TEXT,consumableKey TEXT,consumableIsHidden INTEGER DEFAULT 0,consumableCode INTEGER DEFAULT 0,consumableDivision INTEGER DEFAULT 0,consumableTitle TEXT,consumableCycleTerm INTEGER,consumableCycleDist REAL,consumableCycleTermExist INTEGER,consumableRegTime TEXT,consumableUploadTime TEXT,consumableUpdateTime TEXT,consumableGlobalTime TEXT)"
     
     
     init() {
@@ -37,12 +37,12 @@ class Manager_DB {
         
         let FUELING_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carSN" : "INTEGER DEFAULT 0","fuelingID " : "TEXT","fuelingKey": "TEXT", "fuelingIsHidden" : "INTEGER DEFAULT 0","fuelingPlace": "TEXT","fuelingAddress" : "TEXT","fuelingLatitude" : "REAL DEFAULT 0.0","fuelingLongitude" : "REAL DEFAULT 0.0","fuelingExpendDate" : "TEXT","fuelingDist" : "REAL DEFAULT 0.0","fuelingTotalCost" : "REAL DEFAULT 0.0","fuelType" : "TEXT","fuelingFuelCost" : "REAL DEFAULT 0.0","fuelingItemVolume" : "REAL DEFAULT 0.0","fuelingImage" : "TEXT","fuelingMemo" : "TEXT", "fuelingRegTime" : "TEXT","fuelingUploadTime" : "TEXT","fuelingUpdateTime" : "TEXT","fuelingGlobalTime" : "TEXT"]
         
-        let EXPENDALE_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carSN" : "INTEGER DEFAULT 0","expendableID": "TEXT","expendableKey" : "TEXT","expendableIsHidden" : "INTEGER DEFAULT 0", "expendablescategoryCode" : "INTEGER DEFAULT 0","expendableDivision": "INTEGER DEFAULT 0","expendableTitle" : "TEXT","expendableCycleTerm" : "INTEGER DEFAULT 0","expendableCycleDist" : "REAL DEFAULT 0.0","cycleTermExist" : "INTEGER DEFAULT 0","expendableRegTime" : "TEXT","expendableUploadTime" : "TEXT","expendableUpdateTime" : "TEXT","expendableGlobalTime" : "TEXT"]
+        let CONSUMABLE_column = ["_id" : "INTEGER PRIMARY KEY AUTOINCREMENT","carSN" : "INTEGER DEFAULT 0","consumableID": "TEXT","consumableKey" : "TEXT","consumableIsHidden" : "INTEGER DEFAULT 0", "consumableCode" : "INTEGER DEFAULT 0","consumableDivision": "INTEGER DEFAULT 0","consumableTitle" : "TEXT","consumableCycleTerm" : "INTEGER DEFAULT 0","consumableCycleDist" : "REAL DEFAULT 0.0","consumableCycleTermExist" : "INTEGER DEFAULT 0","consumableRegTime" : "TEXT","consumableUploadTime" : "TEXT","consumableUpdateTime" : "TEXT","consumableGlobalTime" : "TEXT"]
         
         databaseCheck.updateValue(REPAIR_column, forKey: "REPAIR")
         databaseCheck.updateValue(REPAIRITEM_column, forKey: "REPAIRITEM")
         databaseCheck.updateValue(FUELING_column, forKey: "FUELING")
-        databaseCheck.updateValue(EXPENDALE_column, forKey: "EXPENDALE")
+        databaseCheck.updateValue(CONSUMABLE_column, forKey: "CONSUMABLE")
         
         Swift.print("db호출")
         let filemangr = FileManager.default
@@ -92,11 +92,11 @@ class Manager_DB {
                 if !carbookDB.executeStatements(create_FUELING){
                     Swift.print("에러\(carbookDB.lastErrorMessage())")
                 }
-                if !carbookDB.executeStatements(create_EXPENDABLE){
+                if !carbookDB.executeStatements(create_CONSUMABLE){
                     Swift.print("에러\(carbookDB.lastErrorMessage())")
                 }
             }
-            var create_sql = ""
+            let create_sql = ""
             Swift.print("create_sql : \(create_sql)")
             carbookDB.userVersion = UInt32(Manager_DB.dataBaseVersion)
             carbookDB.close()
@@ -117,7 +117,7 @@ class Manager_DB {
                             case "FUELING" :
                              create_sql = create_FUELING
                             case "EXPENDABLE" :
-                                create_sql = create_EXPENDABLE
+                                create_sql = create_CONSUMABLE
                          default:
                              return
                             }
