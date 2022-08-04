@@ -14,6 +14,8 @@ protocol KeyBoardDelegate {
 class KeyBoardTableViewCell: UITableViewCell {
 
     
+    @IBOutlet weak var currentLabel: UILabel!
+    @IBOutlet weak var selectLabel: UILabel!
     var delegate : KeyBoardDelegate?
     
     override func awakeFromNib() {

@@ -11,12 +11,16 @@ import SideMenu
 
 
 class CarBookRecordViewController : UIViewController,UINavigationControllerDelegate{
-    @IBOutlet weak var topView: UIView!
+
+   
+    @IBOutlet weak var itemBtn: UIButton!
+    @IBOutlet weak var backBtn: UIBarButtonItem!
+    @IBOutlet weak var navigationTitle: UINavigationItem!
     @IBOutlet weak var fillDataView: UIView!
     @IBOutlet weak var fillCostView: UIView!
     @IBOutlet weak var keyBoardView: UIView!
     @IBOutlet weak var selectInsertItem: UISegmentedControl!
-    @IBOutlet weak var filIText: UITextField!
+    @IBOutlet weak var fillMonetyField: UITextField!
     @IBOutlet weak var keyBoardStackView: UIStackView!
     @IBOutlet weak var OneBtn: UIButton!
     @IBOutlet weak var twoBtn: UIButton!
@@ -29,30 +33,181 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     @IBOutlet weak var nineBtn: UIButton!
     @IBOutlet weak var ZeroBtn: UIButton!
     @IBOutlet weak var deleteBtn: UIButton!
- 
+    @IBOutlet weak var commaBtn: UIButton!
     var costs : String = ""
+    var recordNum : Int = 0
+    var result : String = ""
+    var cost : Double = 0.0
+    var money : Double = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.navigationBar.shadowImage = .none
+        fillMonetyField.delegate = self
         setTexts()
-       
+        setBtn()
     }
+    
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIDevice.current.userInterfaceIdiom == .pad
+          {
+            fillMonetyField.isEnabled = false
+            keyBoardView.isHidden = false
+            keyBoardStackView.isHidden = false
+        }else {
+            if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
+                fillMonetyField.isEnabled = true
+                fillMonetyField.becomeFirstResponder()
+                setNotification()
+                keyBoardView.isHidden = true
+                keyBoardStackView.isHidden = true
+            }else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+                fillMonetyField.isEnabled = true
+                fillMonetyField.becomeFirstResponder()
+                setNotification()
+                keyBoardView.isHidden = true
+                keyBoardStackView.isHidden = true
+            }else {
+                fillMonetyField.isEnabled = false
+                fillMonetyField.resignFirstResponder()
+                dismissKeyboard()
+                keyBoardView.isHidden = false
+                keyBoardStackView.isHidden = false
+            }
+            
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            fillMonetyField.isEnabled = false
+            keyBoardView.isHidden = false
+            keyBoardStackView.isHidden = false
+        }else {
+            if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
+                fillMonetyField.isEnabled = true
+                fillMonetyField.becomeFirstResponder()
+                setNotification()
+                keyBoardView.isHidden = true
+                keyBoardStackView.isHidden = true
+            }else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+                fillMonetyField.isEnabled = true
+                fillMonetyField.becomeFirstResponder()
+                setNotification()
+                keyBoardView.isHidden = true
+                keyBoardStackView.isHidden = true
+            }else {
+                fillMonetyField.isEnabled = false
+                fillMonetyField.resignFirstResponder()
+                dismissKeyboard()
+                keyBoardView.isHidden = false
+                keyBoardStackView.isHidden = false
+            }
+            
+        }
+    }
+    
+    func setBtn() {
+        itemBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
+    }
+
     func setTexts() {
-        filIText.placeholder = "금액을 입력하세요"
+        fillMonetyField.textColor = .lightGray
         keyBoardView.layer.borderColor = UIColor.lightGray.cgColor
         keyBoardView.layer.borderWidth = 0.5
+        commaBtn.setTitle("+1만원", for: .normal)
         
+    }
+    
+    func setKeyBoard() {
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            
+            fillMonetyField.isEnabled = false
+
+            keyBoardView.isHidden = false
+            keyBoardStackView.isHidden = false
+        }else {
+            if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
+                fillMonetyField.isEnabled = true
+                fillMonetyField.becomeFirstResponder()
+                setNotification()
+                keyBoardView.isHidden = true
+                keyBoardStackView.isHidden = true
+            }else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+                fillMonetyField.isEnabled = true
+                fillMonetyField.becomeFirstResponder()
+                setNotification()
+                keyBoardView.isHidden = true
+                keyBoardStackView.isHidden = true
+            }else {
+                fillMonetyField.resignFirstResponder()
+                dismissKeyboard()
+                fillMonetyField.isEnabled = false
+                keyBoardView.isHidden = false
+                keyBoardStackView.isHidden = false
+            }
+            
+        }
+        
+        
+    }
+
+ 
+    func setNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    @objc func keyboardWillShow(notification:NSNotification){
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+               let keyboardRectangle = keyboardFrame.cgRectValue
+            _ = keyboardRectangle.height-50
+        }
+    }
+    
+    @objc func keyboardWillHide(notification:NSNotification){
+        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        
+    }
+
+    @objc func dismissKeyboard() {
+        
+        self.view.endEditing(true)
+
+        
+    }
+    
+    @IBAction func dissBtn(_ sender: Any) {
+        fillMonetyField.text?.removeAll()
+        costs.removeAll()
+        result.removeAll()
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func selectItems(_ sender: UISegmentedControl) {
         
         switch selectInsertItem.selectedSegmentIndex {
         case 0:
-            filIText.text?.removeAll()
-            filIText.placeholder = "금액을 입력하세요"
+            recordNum = selectInsertItem.selectedSegmentIndex
+            Swift.print("recordNum\(recordNum)")
+            fillMonetyField.text?.removeAll()
+            costs.removeAll()
+            result.removeAll()
+            fillMonetyField.placeholder = "금액을 입력하세요"
+            fillMonetyField.textColor = .black
+            commaBtn.setTitle("+1만원", for: .normal)
         case 1:
-            filIText.text?.removeAll()
-            filIText.placeholder = "주유량을 입력하세요"
+            recordNum = selectInsertItem.selectedSegmentIndex
+            Swift.print("recordNum\(recordNum)")
+            fillMonetyField.text?.removeAll()
+            costs.removeAll()
+            result.removeAll()
+            fillMonetyField.placeholder = "주유량을 입력하세요"
+            fillMonetyField.textColor = .black
+            commaBtn.setTitle(".", for: .normal)
             
         default:
             return
@@ -60,49 +215,84 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     }
     }
     
-    
+    @objc func moveItemBtn(_ sender: UIButton) {
+       
+        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "BottomSheetViewController")
+            as? BottomSheetViewController  {
+            vc.modalTransitionStyle = .crossDissolve
+            vc.modalPresentationStyle = .overFullScreen
+            self.present(vc, animated: true)
+        }
+    }
     @IBAction func moveToDetailReordViewController(_ sender: Any) {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CarBookRecordEditViewController")
             as? CarBookRecordEditViewController  {
-    
-            vc.modalTransitionStyle = .coverVertical
-            vc.modalPresentationStyle = .fullScreen
-            vc.expendCost = costs
-            vc.expendLiter = costs
-            self.present(vc, animated: true)
-            
+            let cost = fillMonetyField.text?.dropLast() ?? ""
+            var item : String = ""
+            item += cost
+            vc.expendCost = item
+            vc.expendLiter = item
+            self.navigationController?.pushViewController(vc, animated: true)
         }
-        
     }
     
     @IBAction func inputNumbers(_ sender: UIButton) {
+ 
+
+        let formatter = NumberFormatter()
+               formatter.numberStyle = .decimal // 1,000,000
+               formatter.locale = Locale.current
+               formatter.maximumFractionDigits = 0 // 허용하는 소숫점 자리수
+        
+        
         let data = sender.titleLabel?.text ?? ""
-        costs.append(data)
-        filIText.text? = costs + "원"
-        if filIText.text?.first == "0"{
-            filIText.text?.removeFirst()
+        if data == "+1만원" {
+        
+            cost += 10000.00
+            Swift.print(cost)
+        }else if data == "만원" {
+            costs.append("0000")
+            cost = Double(costs) ?? 0.0
+        }else {
+            costs.append(data)
+            cost += Double(costs) ?? 0.0
+
+        }
+        
+        result = formatter.string(for: cost) ?? ""
+        Swift.print("result\(result)")
+
+        fillMonetyField.textColor = .black
+        if recordNum == 0 {
+            fillMonetyField.text = (result ?? "") + "원"
+        }else {
+            fillMonetyField.text = (result ?? "") + "L"
+        }
+  
+        
+        if fillMonetyField.text?.first == "0"{
+            fillMonetyField.text?.removeFirst()
         }
     }
     
     @IBAction func deleteCost(_ sender: Any) {
-        if filIText.text != "" {
-            filIText.text?.removeLast()
+        if fillMonetyField.text != "" {
+            fillMonetyField.text?.removeLast()
     }
 }
 }
-
-extension CarBookRecordViewController : UITextFieldDelegate {
-
+// MARK: - TextView,TextField 사용을 위한 Delegate 선언
+extension CarBookRecordViewController : UITextViewDelegate,UITextFieldDelegate {
+   
     // 텍스트필드에 입력이 끝났을때 동작하는 함수
     func textFieldDidEndEditing(_ textField: UITextField) {
         // 만약 텍스트 필드의 태그 값이 0인 경우
-        if textField.tag == 0 {
-            // 해당되는 텍스트 필드의 값을 더블형으로 변환시켜서 테이블리스트 "Distance"에 업데이트 시킨다
-           
-        }else{
-            // 텍스트 필드의 태그 값이 0이 아닌경우 지출비용이므로  더블형으로 변환시켜서 테이블리스트의 "cost"에 업데이트 시킨다
-       
+        if recordNum == 0 {
+            textField.text = fillMonetyField.text!  + "원"
+        }else {
+            textField.text = fillMonetyField.text!  + "L"
         }
+        
     }
     // 텍스트 필드가 입력시작될때 동작하는 함수
     func textFieldDidBeginEditing(_ textField: UITextField) {

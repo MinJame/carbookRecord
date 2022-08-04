@@ -14,6 +14,9 @@
 		391DBF5027FE713100FAC250 /* CollectionViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 391DBF4F27FE713100FAC250 /* CollectionViewCellModel.swift */; };
 		3921F3D727D6FC9700495259 /* RepairTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3921F3D527D6FC9700495259 /* RepairTableViewCell.swift */; };
 		3921F3D827D6FC9700495259 /* RepairTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3921F3D627D6FC9700495259 /* RepairTableViewCell.xib */; };
+		3922E5F02893720900F5E9C6 /* SelectItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3922E5EE2893720900F5E9C6 /* SelectItemTableViewCell.swift */; };
+		3922E5F12893720900F5E9C6 /* SelectItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3922E5EF2893720900F5E9C6 /* SelectItemTableViewCell.xib */; };
+		3922E5F428939F8A00F5E9C6 /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3922E5F328939F8A00F5E9C6 /* ImagePickerViewController.swift */; };
 		393B7C2327EC57E400A13C6A /* OilLocateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393B7C2127EC57E400A13C6A /* OilLocateTableViewCell.swift */; };
 		393B7C2427EC57E400A13C6A /* OilLocateTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 393B7C2227EC57E400A13C6A /* OilLocateTableViewCell.xib */; };
 		394DDC382807A036004F56B3 /* OilMonthTotalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394DDC362807A036004F56B3 /* OilMonthTotalTableViewCell.swift */; };
@@ -34,6 +37,8 @@
 		3988AE4627D5C9A000DC82EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3988AE4427D5C9A000DC82EC /* LaunchScreen.storyboard */; };
 		398B4D8C288E30590022B548 /* FUELING_DAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398B4D8B288E30590022B548 /* FUELING_DAO.swift */; };
 		398B4D8E288E30AD0022B548 /* CONSUMABLE_DAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398B4D8D288E30AD0022B548 /* CONSUMABLE_DAO.swift */; };
+		39A16B582892109900E6D1E3 /* carbookRecordMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A16B572892109900E6D1E3 /* carbookRecordMemoViewController.swift */; };
+		39A16B5A2892502F00E6D1E3 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A16B592892502F00E6D1E3 /* BottomSheetViewController.swift */; };
 		39B048BC27E852D700C2E86E /* OilAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B048BA27E852D700C2E86E /* OilAddTableViewCell.swift */; };
 		39B048BD27E852D700C2E86E /* OilAddTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 39B048BB27E852D700C2E86E /* OilAddTableViewCell.xib */; };
 		39B92E6B27FD6BA600BAE1D1 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B92E6A27FD6BA600BAE1D1 /* CalendarCell.swift */; };
@@ -64,6 +69,9 @@
 		391DBF4F27FE713100FAC250 /* CollectionViewCellModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCellModel.swift; sourceTree = "<group>"; };
 		3921F3D527D6FC9700495259 /* RepairTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairTableViewCell.swift; sourceTree = "<group>"; };
 		3921F3D627D6FC9700495259 /* RepairTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepairTableViewCell.xib; sourceTree = "<group>"; };
+		3922E5EE2893720900F5E9C6 /* SelectItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectItemTableViewCell.swift; sourceTree = "<group>"; };
+		3922E5EF2893720900F5E9C6 /* SelectItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectItemTableViewCell.xib; sourceTree = "<group>"; };
+		3922E5F328939F8A00F5E9C6 /* ImagePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
 		393B7C2127EC57E400A13C6A /* OilLocateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OilLocateTableViewCell.swift; sourceTree = "<group>"; };
 		393B7C2227EC57E400A13C6A /* OilLocateTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OilLocateTableViewCell.xib; sourceTree = "<group>"; };
 		394DDC362807A036004F56B3 /* OilMonthTotalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OilMonthTotalTableViewCell.swift; sourceTree = "<group>"; };
@@ -86,6 +94,8 @@
 		3988AE4727D5C9A000DC82EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		398B4D8B288E30590022B548 /* FUELING_DAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FUELING_DAO.swift; sourceTree = "<group>"; };
 		398B4D8D288E30AD0022B548 /* CONSUMABLE_DAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CONSUMABLE_DAO.swift; sourceTree = "<group>"; };
+		39A16B572892109900E6D1E3 /* carbookRecordMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = carbookRecordMemoViewController.swift; sourceTree = "<group>"; };
+		39A16B592892502F00E6D1E3 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		39B048BA27E852D700C2E86E /* OilAddTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OilAddTableViewCell.swift; sourceTree = "<group>"; };
 		39B048BB27E852D700C2E86E /* OilAddTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OilAddTableViewCell.xib; sourceTree = "<group>"; };
 		39B92E6A27FD6BA600BAE1D1 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -138,7 +148,10 @@
 			children = (
 				3952411327FD47FC00E3D6DC /* layout */,
 				3921F3D527D6FC9700495259 /* RepairTableViewCell.swift */,
+				39FD0C772889335000AA40A8 /* KeyBoardTableViewCell.swift */,
+				39FD0C71288908F200AA40A8 /* ExtraTableViewCell.swift */,
 				39FD0C6A2888D59600AA40A8 /* CarBookRecordItemTableViewCell.swift */,
+				3922E5EE2893720900F5E9C6 /* SelectItemTableViewCell.swift */,
 				39FD0C6B2888D59600AA40A8 /* FillOilItemTableViewCell.swift */,
 				3982B1F528854EA900A513CE /* YearListTableViewCell.swift */,
 				39B048BA27E852D700C2E86E /* OilAddTableViewCell.swift */,
@@ -151,6 +164,7 @@
 				390F85E3280FC9BF00E6FD30 /* RepairListTableViewCell.swift */,
 				398767872806B95300262FD5 /* TotalTableViewCell.swift */,
 				394DDC362807A036004F56B3 /* OilMonthTotalTableViewCell.swift */,
+				3922E5F328939F8A00F5E9C6 /* ImagePickerViewController.swift */,
 			);
 			path = Xib;
 			sourceTree = "<group>";
@@ -159,12 +173,11 @@
 			isa = PBXGroup;
 			children = (
 				39FD0C692888D59600AA40A8 /* CarBookRecordItemTableViewCell.xib */,
-				39FD0C772889335000AA40A8 /* KeyBoardTableViewCell.swift */,
 				39FD0C782889335000AA40A8 /* KeyBoardTableViewCell.xib */,
-				39FD0C71288908F200AA40A8 /* ExtraTableViewCell.swift */,
 				39FD0C72288908F200AA40A8 /* ExtraTableViewCell.xib */,
 				39FD0C6C2888D59600AA40A8 /* FillOilItemTableViewCell.xib */,
 				398767882806B95300262FD5 /* TotalTableViewCell.xib */,
+				3922E5EF2893720900F5E9C6 /* SelectItemTableViewCell.xib */,
 				394DDC372807A036004F56B3 /* OilMonthTotalTableViewCell.xib */,
 				390F85E4280FC9BF00E6FD30 /* RepairListTableViewCell.xib */,
 				3921F3D627D6FC9700495259 /* RepairTableViewCell.xib */,
@@ -201,6 +214,8 @@
 				3952411227FD3A0700E3D6DC /* Xib */,
 				3988AE3927D5C99F00DC82EC /* AppDelegate.swift */,
 				39FD0C652888D58F00AA40A8 /* Main.storyboard */,
+				39A16B592892502F00E6D1E3 /* BottomSheetViewController.swift */,
+				39A16B572892109900E6D1E3 /* carbookRecordMemoViewController.swift */,
 				39FD0C75288932C400AA40A8 /* CarBookRecordViewController.swift */,
 				39FD0C662888D58F00AA40A8 /* CarBookRecordEditViewController.swift */,
 				3988AE3D27D5C99F00DC82EC /* CarBudgetViewController.swift */,
@@ -291,6 +306,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3922E5F12893720900F5E9C6 /* SelectItemTableViewCell.xib in Resources */,
 				3988AE4627D5C9A000DC82EC /* LaunchScreen.storyboard in Resources */,
 				3988AE4327D5C9A000DC82EC /* Assets.xcassets in Resources */,
 				39FD0C672888D58F00AA40A8 /* Main.storyboard in Resources */,
@@ -379,10 +395,13 @@
 			files = (
 				39D7F747284F31750099B07F /* SearchViewController.swift in Sources */,
 				39FD0C682888D58F00AA40A8 /* CarBookRecordEditViewController.swift in Sources */,
+				39A16B582892109900E6D1E3 /* carbookRecordMemoViewController.swift in Sources */,
 				39B92E6B27FD6BA600BAE1D1 /* CalendarCell.swift in Sources */,
 				398767892806B95300262FD5 /* TotalTableViewCell.swift in Sources */,
+				39A16B5A2892502F00E6D1E3 /* BottomSheetViewController.swift in Sources */,
 				39FD0C76288932C400AA40A8 /* CarBookRecordViewController.swift in Sources */,
 				394DDC382807A036004F56B3 /* OilMonthTotalTableViewCell.swift in Sources */,
+				3922E5F02893720900F5E9C6 /* SelectItemTableViewCell.swift in Sources */,
 				39FD0C792889335000AA40A8 /* KeyBoardTableViewCell.swift in Sources */,
 				3921F3D727D6FC9700495259 /* RepairTableViewCell.swift in Sources */,
 				391DBF5027FE713100FAC250 /* CollectionViewCellModel.swift in Sources */,
@@ -394,6 +413,7 @@
 				390136502887B793004C611A /* SearchPlaceViewController.swift in Sources */,
 				3988AE3A27D5C99F00DC82EC /* AppDelegate.swift in Sources */,
 				3987678628069B1A00262FD5 /* TotalViewController.swift in Sources */,
+				3922E5F428939F8A00F5E9C6 /* ImagePickerViewController.swift in Sources */,
 				39EAE2BD280E9BEC001ADA46 /* RepairItemsTableViewCell.swift in Sources */,
 				3986B37A27EAAE8700591148 /* RepairSelfTableViewCell.swift in Sources */,
 				39EB0B06280FE72C00EB9B5C /* Manager_DB.swift in Sources */,
@@ -559,9 +579,13 @@
 				DEVELOPMENT_TEAM = AK4498TLP2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = pagetest/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영시 카메라 권한이 필요합니다";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진 앨범을 사용할려면 권한이 필요합니다";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 이용시 앨범권한이 필요합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -588,9 +612,13 @@
 				DEVELOPMENT_TEAM = AK4498TLP2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = pagetest/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영시 카메라 권한이 필요합니다";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진 앨범을 사용할려면 권한이 필요합니다";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 이용시 앨범권한이 필요합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

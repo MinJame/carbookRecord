@@ -20,11 +20,13 @@ class CarBookRecordItemTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        fillItemCostBtn.setTitle("", for: .normal)
+        fillFuelLiterBtn.setTitle("", for: .normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     

@@ -9,7 +9,15 @@
 import UIKit
 
 class FillOilItemTableViewCell: UITableViewCell {
-
+    @IBOutlet weak var firstImageView: UIImageView!
+    @IBOutlet weak var seconeImageView: UIImageView!
+    @IBOutlet weak var thirdImageView: UIImageView!
+    @IBOutlet weak var fourthImageView: UIImageView!
+    @IBOutlet weak var fifthImageView: UIImageView!
+    @IBOutlet weak var selectPictureBtn: UIButton!
+    @IBOutlet weak var pictureTitleLabel: UILabel!
+    @IBOutlet weak var memoTitleLabel: UILabel!
+    @IBOutlet weak var fillMemoBtn: UIButton!
     @IBOutlet weak var distanceLabelField: UIButton!
     @IBOutlet weak var fuelCostLabel: UITextField!
     @IBOutlet weak var fuelTypeBtn: UIButton!
