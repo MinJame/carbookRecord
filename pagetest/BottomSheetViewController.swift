@@ -17,6 +17,8 @@ class BottomSheetViewController : UIViewController{
     @IBOutlet weak var backView: UIView!
     @IBOutlet weak var dismissBtn: UIButton!
     var cost : String = ""
+    var costs : String = ""
+    var result : String = ""
     var tablelist : [Dictionary<String,Any>] = []
     var items: [String] = []
     var firstTag : Int = 0
@@ -57,10 +59,8 @@ class BottomSheetViewController : UIViewController{
     func setLists() {
         // 테이블리스트 데이터 및 카테고리 항목(임시로 선언) 선언
         tablelist = [
-            ["Type": firstTag],
-            ["Type": secondTag],
-            ["Type": thirdTag],
-            ["Type": 4]
+            ["Type": firstTag]
+        
        
         ]
         items = ["주유","정비","기타","세차"]
@@ -96,17 +96,38 @@ extension BottomSheetViewController: UITableViewDataSource {
         let type = item["Type"] as? Int ?? 0
 //
         if type == 1 {
-            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID") as?
-                SelectItemTableViewCell{
+            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
+                KeyBoardTableViewCell{
 
-                cell.itemTypeLabel.text = items[indexPath.row]
-                Swift.print("아이고\(items[indexPath.row])")
-                Swift.print("아이고\(cell.itemTypeLabel.text)")
+                cell.selectLabel.text = cost
+                cell.oneBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.secondBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.thirdBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.fourthBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.fifthBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.sixBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.sevenBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.eightBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.nineBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                cell.commaBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+                
                 return cell
             }else {
-                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID")
+                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID")
                 return cell!
             }
+            
+//            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID") as?
+//                SelectItemTableViewCell{
+//
+//                cell.itemTypeLabel.text = items[indexPath.row]
+//                Swift.print("아이고\(items[indexPath.row])")
+//                Swift.print("아이고\(cell.itemTypeLabel.text)")
+//                return cell
+//            }else {
+//                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID")
+//                return cell!
+//            }
 //        } else if type == 2 {
 //
 //            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
@@ -140,6 +161,36 @@ extension BottomSheetViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
+    }
+    
+    @objc func inputNumbers(_ sender: UIButton) {
+        var cost : Double = 0.0
+
+        let formatter = NumberFormatter()
+               formatter.numberStyle = .decimal // 1,000,000
+               formatter.locale = Locale.current
+               formatter.maximumFractionDigits = 0 // 허용하는 소숫점 자리수
+        
+        let data = sender.titleLabel?.text ?? ""
+
+//
+            costs.append(data)
+            cost += Double(costs) ?? 0.0
+//
+        result = formatter.string(for: cost) ?? ""
+        Swift.print(result)
+//
+//        fillMonetyField.textColor = .black
+//        if recordNum == 0 {
+//            fillMonetyField.text = (result) + "원"
+//        }else {
+//            fillMonetyField.text = (result) + "L"
+//        }
+//
+//
+//        if fillMonetyField.text?.first == "0"{
+//            fillMonetyField.text?.removeFirst()
+//        }
     }
     
     

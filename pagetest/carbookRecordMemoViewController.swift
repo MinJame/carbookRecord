@@ -17,7 +17,9 @@ class CarBookRecordMemoViewController : UIViewController,UITextViewDelegate,UINa
     var memos : String = ""
     @IBOutlet weak var finishBtn: UIButton!
     @IBOutlet weak var memoView: UITextView!
+    var oilDelegate : OilCallbackDelegate?
     override func viewDidLoad() {
+      
         memoView.delegate = self
         self.title = "메모"
         self.navigationItem.setHidesBackButton(true, animated: true)
@@ -52,14 +54,22 @@ class CarBookRecordMemoViewController : UIViewController,UITextViewDelegate,UINa
     }
     
     @objc func saveMemoBtn(_ sender: Any) {
-        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CarBookRecordEditViewController")
-            as? CarBookRecordEditViewController  {
-         
-            vc.memo = memoView.text
-            
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        
+        let viewControllers = self.navigationController!.viewControllers
+          for var vc in viewControllers
+          {
+          if vc is CarBookRecordEditViewController
+             {
+                let VC = vc as! CarBookRecordEditViewController
+                    VC.memo = memoView.text
+                   
+              self.navigationController?.popToViewController(VC, animated: true)
+              self.oilDelegate?.setOilData()
+             }
+          }
+
     }
+
     
     @objc func dismissView(_ sender: Any) {
         

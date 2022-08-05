@@ -56,9 +56,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="cTn-cA-wx1"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bTW-Y5-9cI">
                                         <rect key="frame" x="138.5" y="0.0" width="137" height="68.5"/>
@@ -67,9 +64,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yHT-2W-qS5"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uqG-dy-oac">
                                         <rect key="frame" x="277.5" y="0.0" width="136.5" height="68.5"/>
@@ -78,9 +72,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="NPa-VO-WmF"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -106,9 +97,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="EUy-tz-cxP"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yg4-Qs-pPx">
                                         <rect key="frame" x="138.5" y="0.0" width="137" height="68.5"/>
@@ -117,9 +105,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="cWH-sY-pPg"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CTI-Ba-RUy">
                                         <rect key="frame" x="277.5" y="0.0" width="136.5" height="68.5"/>
@@ -128,9 +113,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="YRt-pl-Gpq"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -156,9 +138,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="AXT-Bq-APp"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ToN-5s-X2B">
                                         <rect key="frame" x="138.5" y="0.0" width="137" height="68.5"/>
@@ -167,9 +146,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="gmq-ET-9do"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lG2-8v-KUh">
                                         <rect key="frame" x="277.5" y="0.0" width="136.5" height="68.5"/>
@@ -178,9 +154,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Zul-6z-mV4"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -206,9 +179,6 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="I4z-VR-7aK"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p37-iB-LJx">
                                         <rect key="frame" x="138.5" y="0.0" width="137" height="68.5"/>
@@ -217,17 +187,11 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="4p3-w6-1nc"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lyj-s2-2Ks">
                                         <rect key="frame" x="277.5" y="0.0" width="136.5" height="68.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="icon_back_arrow"/>
-                                        <connections>
-                                            <action selector="BtnPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Kgi-im-HaQ"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -279,12 +243,21 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <constraints>
-                <constraint firstItem="7L6-9w-Vbj" firstAttribute="height" secondItem="KGk-i7-Jjw" secondAttribute="height" multiplier="0.7" id="Vts-UT-rTh"/>
-            </constraints>
             <connections>
+                <outlet property="commaBtn" destination="5ta-cb-D3l" id="pLp-Xy-TW0"/>
                 <outlet property="currentLabel" destination="dRO-Wx-J8O" id="Juh-fk-LTi"/>
+                <outlet property="deleteBtn" destination="lyj-s2-2Ks" id="O0B-s5-4eB"/>
+                <outlet property="eightBtn" destination="ToN-5s-X2B" id="m5J-Lr-d7H"/>
+                <outlet property="fifthBtn" destination="yg4-Qs-pPx" id="vup-vf-Mqg"/>
+                <outlet property="fourthBtn" destination="TSp-jT-MeL" id="K2W-WD-Q2z"/>
+                <outlet property="nineBtn" destination="lG2-8v-KUh" id="kgx-Ym-hBU"/>
+                <outlet property="oneBtn" destination="zfn-vn-Pgm" id="h1U-Rb-M5X"/>
+                <outlet property="secondBtn" destination="bTW-Y5-9cI" id="2H9-eH-LLC"/>
                 <outlet property="selectLabel" destination="gKG-Rk-F8X" id="cpq-4G-rzh"/>
+                <outlet property="sevenBtn" destination="1je-ha-S9r" id="LqX-fa-xVl"/>
+                <outlet property="sixBtn" destination="CTI-Ba-RUy" id="Qme-bY-QDu"/>
+                <outlet property="thirdBtn" destination="uqG-dy-oac" id="E7g-74-LvX"/>
+                <outlet property="zeroBtn" destination="p37-iB-LJx" id="v0Q-8C-C8m"/>
             </connections>
             <point key="canvasLocation" x="131.8840579710145" y="107.8125"/>
         </tableViewCell>

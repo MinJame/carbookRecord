@@ -13,6 +13,11 @@ import BSImagePicker
 import Photos
 import Alamofire
 
+//나중에 데이터 불러올때 사용할 프로토콜
+protocol OilCallbackDelegate{
+    func setOilData()
+}
+
 
 class CarBookRecordEditViewController : UIViewController,UINavigationControllerDelegate{
     
@@ -30,12 +35,12 @@ class CarBookRecordEditViewController : UIViewController,UINavigationControllerD
     var firstTag : Int = 0
     var secondTag : Int = 0
     var thirdTag : Int = 0
-    
+    var oilDelegate : OilCallbackDelegate?
     var userSelectedImages : [UIImage] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        oilDelegate = self
         dateDelegate = self
-        
         self.title = ""
         self.navigationItem.setHidesBackButton(true, animated: true)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"icon_back_arrow"), style: .plain, target: self, action:#selector(self.dismissView))
@@ -45,6 +50,13 @@ class CarBookRecordEditViewController : UIViewController,UINavigationControllerD
         setItems()
         setNotification()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Swift.print("ViewController의 view가 화면에 나타남")
+        self.editTableView.reloadData()
+    }
+    
     
     func setLists() {
         // 테이블리스트 데이터들 선언
@@ -144,15 +156,22 @@ extension CarBookRecordEditViewController: UITableViewDataSource {
             // 만약 타입이 1일 경우 repairsTableViewCell을 재사용한다
             if let cell = editTableView.dequeueReusableCell(withIdentifier: "CarBookRecordItemTableViewCellID") as?
                 CarBookRecordItemTableViewCell {
+                
+                
+                let formatter = NumberFormatter()
+                       formatter.numberStyle = .decimal // 1,000,000
+                       formatter.locale = Locale.current
+                       formatter.maximumFractionDigits = 0 // 허용하는 소숫점 자리수
+                
                 firstTag = cell.selectRecordItemBtn.tag
                 secondTag = cell.fillItemCostBtn.tag
                 thirdTag =  cell.fillFuelLiterBtn.tag
                 let date = tablelist[1]["Date"] as? String ?? ""
                 
                 cell.fillItemCostBtn.titleLabel?.text = ""
-                
+                var cost = Double(expendCost)
                 cell.fillItemCostBtn.setTitle(expendCost + "원",for : .normal)
-                cell.fillFuelLiterBtn.setTitle(String((Double(expendCost) ?? 0)/2168) + "L",for : .normal)
+                cell.fillFuelLiterBtn.setTitle(String(format: "%.2f", (cost ?? 0.0)/2168) + "L", for:  .normal)
                 cell.selectRecordItemBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
                 cell.fillItemCostBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
                 cell.selectDateBtn.setTitle(date, for: .normal)
@@ -192,7 +211,13 @@ extension CarBookRecordEditViewController: UITableViewDataSource {
                 cell.selectPictureBtn.addTarget(self, action:#selector(selectImageBtn(_ :)), for: .touchUpInside)
                 
                 cell.fillMemoBtn.addTarget(self, action:#selector(moveMemoBtn(_ :)), for: .touchUpInside)
-                cell.fillMemoBtn.setTitle(memo, for: .normal)
+                
+                if memo == "" {
+                    cell.fillMemoBtn.setTitle("메모를 입력해주세요", for: .normal)
+                }else {
+                    cell.fillMemoBtn.setTitle(memo, for: .normal)
+                }
+
                 cell.fillMemoBtn.titleLabel?.lineBreakMode = .byWordWrapping
                 cell.fillMemoBtn.titleLabel?.textAlignment = .left
                 return cell
@@ -253,10 +278,9 @@ extension CarBookRecordEditViewController: UITableViewDataSource {
                     Swift.print("userSelectedImages1\(self.userSelectedImages.count)")
                     self.tablelist[1].updateValue(self.userSelectedImages.first, forKey: "imageFirst")
                     self.tablelist[1].updateValue(self.userSelectedImages.last, forKey: "imageSecond")
-//                    Swift.print("userSelectedImages\(self.userSelectedImages)")
                   
                 }
-                self.editTableView.reloadData()
+                self.oilDelegate?.setOilData()
             }
         }, completion: {
             let finish = Date()
@@ -358,3 +382,14 @@ extension CarBookRecordEditViewController : selectDateDelegate {
     }
 }
 
+extension CarBookRecordEditViewController : OilCallbackDelegate {
+    func setOilData() {
+        // 먼저 기존의 데이터를 전부 지웁니다.
+//        self.tablelist.removeAll()
+        // 내부 db에서 데이터를 불러옵니다
+//        self.setCarbookDataList(year: year)
+    
+        // 불러온 데이터를 테이블뷰에서 리로드해서 보여줍니다.
+        self.editTableView.reloadData()
+    }
+}

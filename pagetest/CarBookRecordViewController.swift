@@ -22,22 +22,12 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     @IBOutlet weak var selectInsertItem: UISegmentedControl!
     @IBOutlet weak var fillMonetyField: UITextField!
     @IBOutlet weak var keyBoardStackView: UIStackView!
-    @IBOutlet weak var OneBtn: UIButton!
-    @IBOutlet weak var twoBtn: UIButton!
-    @IBOutlet weak var threeBtn: UIButton!
-    @IBOutlet weak var fourBtn: UIButton!
-    @IBOutlet weak var fifthBtn: UIButton!
-    @IBOutlet weak var sixBtn: UIButton!
-    @IBOutlet weak var sevenBtn: UIButton!
-    @IBOutlet weak var eightBtn: UIButton!
-    @IBOutlet weak var nineBtn: UIButton!
-    @IBOutlet weak var ZeroBtn: UIButton!
+    @IBOutlet var insertBtn : [UIButton]!
     @IBOutlet weak var deleteBtn: UIButton!
-    @IBOutlet weak var commaBtn: UIButton!
     var costs : String = ""
     var recordNum : Int = 0
     var result : String = ""
-    var cost : Double = 0.0
+  
     var money : Double = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,8 +105,6 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
         fillMonetyField.textColor = .lightGray
         keyBoardView.layer.borderColor = UIColor.lightGray.cgColor
         keyBoardView.layer.borderWidth = 0.5
-        commaBtn.setTitle("+1만원", for: .normal)
-        
     }
     
     func setKeyBoard() {
@@ -184,7 +172,7 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
         fillMonetyField.text?.removeAll()
         costs.removeAll()
         result.removeAll()
-        self.navigationController?.popViewController(animated: true)
+//        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func selectItems(_ sender: UISegmentedControl) {
@@ -198,7 +186,6 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
             result.removeAll()
             fillMonetyField.placeholder = "금액을 입력하세요"
             fillMonetyField.textColor = .black
-            commaBtn.setTitle("+1만원", for: .normal)
         case 1:
             recordNum = selectInsertItem.selectedSegmentIndex
             Swift.print("recordNum\(recordNum)")
@@ -207,8 +194,6 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
             result.removeAll()
             fillMonetyField.placeholder = "주유량을 입력하세요"
             fillMonetyField.textColor = .black
-            commaBtn.setTitle(".", for: .normal)
-            
         default:
             return
             
@@ -227,9 +212,10 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     @IBAction func moveToDetailReordViewController(_ sender: Any) {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CarBookRecordEditViewController")
             as? CarBookRecordEditViewController  {
-            let cost = fillMonetyField.text?.dropLast() ?? ""
+            let cost = costs
             var item : String = ""
             item += cost
+       
             vc.expendCost = item
             vc.expendLiter = item
             self.navigationController?.pushViewController(vc, animated: true)
@@ -237,7 +223,7 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     }
     
     @IBAction func inputNumbers(_ sender: UIButton) {
- 
+        var cost : Double = 0.0
 
         let formatter = NumberFormatter()
                formatter.numberStyle = .decimal // 1,000,000
@@ -246,27 +232,18 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
         
         
         let data = sender.titleLabel?.text ?? ""
-        if data == "+1만원" {
         
-            cost += 10000.00
-            Swift.print(cost)
-        }else if data == "만원" {
-            costs.append("0000")
-            cost = Double(costs) ?? 0.0
-        }else {
             costs.append(data)
             cost += Double(costs) ?? 0.0
 
-        }
-        
         result = formatter.string(for: cost) ?? ""
-        Swift.print("result\(result)")
+        Swift.print(result)
 
         fillMonetyField.textColor = .black
         if recordNum == 0 {
-            fillMonetyField.text = (result ?? "") + "원"
+            fillMonetyField.text = (result) + "원"
         }else {
-            fillMonetyField.text = (result ?? "") + "L"
+            fillMonetyField.text = (result) + "L"
         }
   
         
