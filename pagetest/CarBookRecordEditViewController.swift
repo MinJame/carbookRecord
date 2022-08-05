@@ -26,8 +26,8 @@ class CarBookRecordEditViewController : UIViewController,UINavigationControllerD
     @IBOutlet weak var editTableView: UITableView!
     @IBOutlet weak var saveBtn: UIButton!
     var dateDelegate : selectDateDelegate?
-    var expendCost : String = ""
-    var expendLiter : String = ""
+    var expendCost : Double = 0.0
+    var expendLiter : Double = 0.0
     var startDate : Date?
     var dateLabel : String? = ""
     var memo : String? = "메모를 입력해주세요"
@@ -135,6 +135,15 @@ class CarBookRecordEditViewController : UIViewController,UINavigationControllerD
         }
     }
    
+    func priceFormatter(value : Double) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = 10
+        numberFormatter.locale = Locale.current
+        let result = numberFormatter.string(from: NSNumber(value:value))!
+        return result
+    }
+    
 }
 
 extension CarBookRecordEditViewController: UITableViewDelegate {
@@ -169,9 +178,10 @@ extension CarBookRecordEditViewController: UITableViewDataSource {
                 let date = tablelist[1]["Date"] as? String ?? ""
                 
                 cell.fillItemCostBtn.titleLabel?.text = ""
-                var cost = Double(expendCost)
-                cell.fillItemCostBtn.setTitle(expendCost + "원",for : .normal)
-                cell.fillFuelLiterBtn.setTitle(String(format: "%.2f", (cost ?? 0.0)/2168) + "L", for:  .normal)
+            
+                
+                cell.fillItemCostBtn.setTitle(priceFormatter(value: expendCost) + "원",for : .normal)
+                cell.fillFuelLiterBtn.setTitle(String(format: "%.2f", (expendCost ?? 0.0)/2168) + "L", for:  .normal)
                 cell.selectRecordItemBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
                 cell.fillItemCostBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
                 cell.selectDateBtn.setTitle(date, for: .normal)

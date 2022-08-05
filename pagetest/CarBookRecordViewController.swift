@@ -24,9 +24,10 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     @IBOutlet weak var keyBoardStackView: UIStackView!
     @IBOutlet var insertBtn : [UIButton]!
     @IBOutlet weak var deleteBtn: UIButton!
-    var costs : String = ""
+    
+    var costs: Double = 0.0
+    var isDecimalCheck = false
     var recordNum : Int = 0
-    var result : String = ""
   
     var money : Double = 0.0
     override func viewDidLoad() {
@@ -105,6 +106,8 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
         fillMonetyField.textColor = .lightGray
         keyBoardView.layer.borderColor = UIColor.lightGray.cgColor
         keyBoardView.layer.borderWidth = 0.5
+        fillMonetyField.textColor = .black
+        
     }
     
     func setKeyBoard() {
@@ -170,8 +173,7 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     
     @IBAction func dissBtn(_ sender: Any) {
         fillMonetyField.text?.removeAll()
-        costs.removeAll()
-        result.removeAll()
+        costs = 0.0
 //        self.navigationController?.popViewController(animated: true)
     }
     
@@ -182,26 +184,24 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
             recordNum = selectInsertItem.selectedSegmentIndex
             Swift.print("recordNum\(recordNum)")
             fillMonetyField.text?.removeAll()
-            costs.removeAll()
-            result.removeAll()
+            costs = 0.0
             fillMonetyField.placeholder = "금액을 입력하세요"
             fillMonetyField.textColor = .black
         case 1:
             recordNum = selectInsertItem.selectedSegmentIndex
             Swift.print("recordNum\(recordNum)")
             fillMonetyField.text?.removeAll()
-            costs.removeAll()
-            result.removeAll()
+            costs = 0.0
             fillMonetyField.placeholder = "주유량을 입력하세요"
             fillMonetyField.textColor = .black
         default:
             return
             
-    }
+        }
     }
     
     @objc func moveItemBtn(_ sender: UIButton) {
-       
+        
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "BottomSheetViewController")
             as? BottomSheetViewController  {
             vc.modalTransitionStyle = .crossDissolve
@@ -212,51 +212,82 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     @IBAction func moveToDetailReordViewController(_ sender: Any) {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CarBookRecordEditViewController")
             as? CarBookRecordEditViewController  {
-            let cost = costs
-            var item : String = ""
-            item += cost
        
-            vc.expendCost = item
-            vc.expendLiter = item
+            vc.expendCost = costs
+            vc.expendLiter = costs
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     
+    
+    func priceFormatter(value : Double) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = 10
+        numberFormatter.locale = Locale.current
+        let result = numberFormatter.string(from: NSNumber(value:value))!
+        return result
+    }
+    
     @IBAction func inputNumbers(_ sender: UIButton) {
-        var cost : Double = 0.0
-
-        let formatter = NumberFormatter()
-               formatter.numberStyle = .decimal // 1,000,000
-               formatter.locale = Locale.current
-               formatter.maximumFractionDigits = 0 // 허용하는 소숫점 자리수
-        
-        
         let data = sender.titleLabel?.text ?? ""
-        
-            costs.append(data)
-            cost += Double(costs) ?? 0.0
-
-        result = formatter.string(for: cost) ?? ""
-        Swift.print(result)
-
-        fillMonetyField.textColor = .black
-        if recordNum == 0 {
-            fillMonetyField.text = (result) + "원"
+        if data != "." {
+            if isDecimalCheck{
+                let check = costs - Double(Int(costs))
+                if check > 0 {
+                    if let dCost = Double(costs.clean + data) {
+                        costs = dCost
+                        fillMonetyField.text = priceFormatter(value: costs)+"\(recordNum == 0 ? "원" : "L")"
+                    }
+                }else {
+                    if let dCost = Double(costs.clean+"."+data) {
+                        costs = dCost
+                        fillMonetyField.text = priceFormatter(value: costs)+"\(recordNum == 0 ? "원" : "L")"
+                    }
+                }
+            }else {
+                if let dCost = Double(costs.clean + data) {
+                    costs = dCost
+                    fillMonetyField.text = priceFormatter(value: costs)+"\(recordNum == 0 ? "원" : "L")"
+                }
+            }
         }else {
-            fillMonetyField.text = (result) + "L"
-        }
-  
-        
-        if fillMonetyField.text?.first == "0"{
-            fillMonetyField.text?.removeFirst()
+            if let dCost = Double(costs.clean + data) {
+                costs = dCost
+                let _costs = costs + 0.1
+                isDecimalCheck = true
+                var checkCost = priceFormatter(value: _costs)
+                checkCost.removeLast()
+                fillMonetyField.text = checkCost+"\(recordNum == 0 ? "원" : "L")"
+            }
+            
         }
     }
     
     @IBAction func deleteCost(_ sender: Any) {
-        if fillMonetyField.text != "" {
-            fillMonetyField.text?.removeLast()
+        if var text = fillMonetyField.text {
+            if text.count > 0 {
+                text.removeLast()
+                if let lastChar = text.last {
+                    if lastChar != "." && lastChar != "," {
+                        var _cost = String(costs.cleans)
+                        _cost.removeLast()
+                        costs = Double(_cost) ?? 0.0
+                        if costs != 0 {
+                            fillMonetyField.text = priceFormatter(value: costs)+"\(recordNum == 0 ? "원" : "L")"
+                        }else {
+                            isDecimalCheck = false
+                            fillMonetyField.text = ""
+                        }
+                    }else {
+                        text.removeLast()
+                        fillMonetyField.text = text+"\(recordNum == 0 ? "원" : "L")"
+                        isDecimalCheck = false
+                    }
+                }
+            }
+        }
     }
-}
 }
 // MARK: - TextView,TextField 사용을 위한 Delegate 선언
 extension CarBookRecordViewController : UITextViewDelegate,UITextFieldDelegate {
@@ -265,7 +296,11 @@ extension CarBookRecordViewController : UITextViewDelegate,UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         // 만약 텍스트 필드의 태그 값이 0인 경우
         if recordNum == 0 {
-            textField.text = fillMonetyField.text!  + "원"
+            if !(textField.text?.contains("원"))!{
+                textField.text = fillMonetyField.text!  + "원"
+            }else {
+                textField.text = fillMonetyField.text!
+            }
         }else {
             textField.text = fillMonetyField.text!  + "L"
         }
@@ -321,3 +356,9 @@ extension CarBookRecordViewController : UITextViewDelegate,UITextFieldDelegate {
 }
 
 
+
+extension Double {
+    var cleans: String {
+       return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+    }
+}

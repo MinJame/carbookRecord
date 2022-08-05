@@ -16,7 +16,7 @@ class BottomSheetViewController : UIViewController{
     @IBOutlet var backgroundView: UIView!
     @IBOutlet weak var backView: UIView!
     @IBOutlet weak var dismissBtn: UIButton!
-    var cost : String = ""
+    var cost: Double = 0.0
     var costs : String = ""
     var result : String = ""
     var tablelist : [Dictionary<String,Any>] = []
@@ -96,38 +96,38 @@ extension BottomSheetViewController: UITableViewDataSource {
         let type = item["Type"] as? Int ?? 0
 //
         if type == 1 {
-            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
-                KeyBoardTableViewCell{
-
-                cell.selectLabel.text = cost
-                cell.oneBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.secondBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.thirdBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.fourthBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.fifthBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.sixBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.sevenBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.eightBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.nineBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                cell.commaBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-                
-                return cell
-            }else {
-                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID")
-                return cell!
-            }
-            
-//            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID") as?
-//                SelectItemTableViewCell{
+//            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
+//                KeyBoardTableViewCell{
 //
-//                cell.itemTypeLabel.text = items[indexPath.row]
-//                Swift.print("아이고\(items[indexPath.row])")
-//                Swift.print("아이고\(cell.itemTypeLabel.text)")
+//                cell.selectLabel.text = String(cost)
+//                cell.oneBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.secondBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.thirdBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.fourthBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.fifthBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.sixBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.sevenBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.eightBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.nineBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//                cell.commaBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
+//
 //                return cell
 //            }else {
-//                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID")
+//                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID")
 //                return cell!
 //            }
+//
+            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID") as?
+                SelectItemTableViewCell{
+
+                cell.itemTypeLabel.text = items[indexPath.row]
+                Swift.print("아이고\(items[indexPath.row])")
+                Swift.print("아이고\(cell.itemTypeLabel.text)")
+                return cell
+            }else {
+                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID")
+                return cell!
+            }
 //        } else if type == 2 {
 //
 //            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
