@@ -73,6 +73,13 @@
                             <color key="baseForegroundColor" systemColor="labelColor"/>
                         </buttonConfiguration>
                     </button>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G9k-T3-O4S">
+                        <rect key="frame" x="0.0" y="249" width="414" height="1"/>
+                        <color key="backgroundColor" systemColor="systemGray5Color"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="N8h-wm-Um3"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="3BZ-Ox-kkI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="30" id="0qs-Cf-kJq"/>
@@ -85,13 +92,17 @@
                     <constraint firstAttribute="bottomMargin" secondItem="uXT-xl-XEz" secondAttribute="bottom" constant="4" id="KxM-3o-bnh"/>
                     <constraint firstAttribute="bottom" secondItem="nc0-ef-naa" secondAttribute="bottom" constant="5" id="OMl-D1-KQK"/>
                     <constraint firstItem="erP-gS-jp3" firstAttribute="top" secondItem="kMr-s4-Abr" secondAttribute="bottom" constant="8.5" id="PLD-xQ-dmo"/>
+                    <constraint firstItem="G9k-T3-O4S" firstAttribute="top" secondItem="nc0-ef-naa" secondAttribute="bottom" constant="4" id="PTv-fi-Sjr"/>
                     <constraint firstItem="nc0-ef-naa" firstAttribute="centerY" secondItem="uXT-xl-XEz" secondAttribute="centerY" id="VXc-qF-GXN"/>
+                    <constraint firstAttribute="trailing" secondItem="G9k-T3-O4S" secondAttribute="trailing" id="bXO-B8-6B2"/>
+                    <constraint firstAttribute="bottom" secondItem="G9k-T3-O4S" secondAttribute="bottom" id="bnz-7V-YDN"/>
                     <constraint firstItem="erP-gS-jp3" firstAttribute="centerY" secondItem="S5R-hL-AMN" secondAttribute="centerY" id="cpf-Kz-3j4"/>
                     <constraint firstItem="S5R-hL-AMN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="d3g-mI-zZB"/>
                     <constraint firstItem="uXT-xl-XEz" firstAttribute="top" secondItem="S5R-hL-AMN" secondAttribute="bottom" constant="18" id="iMr-wf-ilW"/>
                     <constraint firstItem="pgJ-4M-T4t" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="jfm-QE-yDc"/>
                     <constraint firstItem="3u7-Do-Lvd" firstAttribute="leading" secondItem="3BZ-Ox-kkI" secondAttribute="trailing" constant="12" id="m8M-MR-I9W"/>
                     <constraint firstItem="3BZ-Ox-kkI" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="21" id="tJf-Sh-a0U"/>
+                    <constraint firstItem="G9k-T3-O4S" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="wA8-dV-0T0"/>
                     <constraint firstItem="kMr-s4-Abr" firstAttribute="trailing" secondItem="pgJ-4M-T4t" secondAttribute="trailing" constant="-2" id="xnQ-ry-oWx"/>
                     <constraint firstAttribute="trailing" secondItem="nc0-ef-naa" secondAttribute="trailing" constant="6" id="yy6-xQ-nS7"/>
                 </constraints>
@@ -115,6 +126,9 @@
         <image name="renew_fuel_cost" width="16" height="23"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

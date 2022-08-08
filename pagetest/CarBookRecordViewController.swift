@@ -28,8 +28,7 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     var costs: Double = 0.0
     var isDecimalCheck = false
     var recordNum : Int = 0
-  
-    var money : Double = 0.0
+    var money : String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.shadowImage = .none
@@ -212,13 +211,12 @@ class CarBookRecordViewController : UIViewController,UINavigationControllerDeleg
     @IBAction func moveToDetailReordViewController(_ sender: Any) {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CarBookRecordEditViewController")
             as? CarBookRecordEditViewController  {
-       
+            Swift.print("넘어가는costs\(costs)")
             vc.expendCost = costs
             vc.expendLiter = costs
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
     
     func priceFormatter(value : Double) -> String {
         let numberFormatter = NumberFormatter()
@@ -297,9 +295,17 @@ extension CarBookRecordViewController : UITextViewDelegate,UITextFieldDelegate {
         // 만약 텍스트 필드의 태그 값이 0인 경우
         if recordNum == 0 {
             if !(textField.text?.contains("원"))!{
+                Swift.print("costs\(fillMonetyField.text!)")
+                Swift.print("costs\( Double(fillMonetyField.text!) ?? 0.0)")
+                
+                costs = Double(fillMonetyField.text!.replacingOccurrences(of: ",", with: "")) ?? 0.0
+                Swift.print("costs\(costs)")
                 textField.text = fillMonetyField.text!  + "원"
+               
             }else {
                 textField.text = fillMonetyField.text!
+                costs = Double(fillMonetyField.text!) ?? 0.0
+                
             }
         }else {
             textField.text = fillMonetyField.text!  + "L"

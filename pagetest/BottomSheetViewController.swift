@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 class BottomSheetViewController : UIViewController{
     
@@ -16,14 +17,17 @@ class BottomSheetViewController : UIViewController{
     @IBOutlet var backgroundView: UIView!
     @IBOutlet weak var backView: UIView!
     @IBOutlet weak var dismissBtn: UIButton!
+    @IBOutlet weak var bottomSheetTitleLabel: UILabel!
     var cost: Double = 0.0
     var costs : String = ""
     var result : String = ""
     var tablelist : [Dictionary<String,Any>] = []
     var items: [String] = []
+    var liter : Double = 0.0
     var firstTag : Int = 0
     var secondTag : Int = 0
     var thirdTag : Int = 0
+    var isDecimalCheck = false
     override func viewDidLoad() {
         super.viewDidLoad()
         initTableView()
@@ -52,6 +56,8 @@ class BottomSheetViewController : UIViewController{
         categoryTableViewCell.register(cell1, forCellReuseIdentifier: "SelectItemTableViewCellID")
         let cell2: UINib = UINib(nibName: "KeyBoardTableViewCell", bundle: nil)
         categoryTableViewCell.register(cell2, forCellReuseIdentifier: "KeyBoardTableViewCellID")
+        let cell3: UINib = UINib(nibName: "SelectFuelTypeCell", bundle: nil)
+        categoryTableViewCell.register(cell3, forCellReuseIdentifier: "SelectFuelTypeCellID")
         
     }
     
@@ -64,6 +70,15 @@ class BottomSheetViewController : UIViewController{
        
         ]
         items = ["주유","정비","기타","세차"]
+    }
+    
+    func priceFormatter(value : Double) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = 10
+        numberFormatter.locale = Locale.current
+        let result = numberFormatter.string(from: NSNumber(value:value))!
+        return result
     }
     
 }
@@ -86,72 +101,85 @@ extension BottomSheetViewController: UITableViewDataSource {
         
         //        // 테이블리스트의 row들의 데이터를 item으로 선언
         let item = tablelist[indexPath.row]
-        //        // item의 "Type"을 타입으로 선언
-        
-//        let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID") as?
-//            SelectItemTableViewCell
-//
-//        cell?.itemTypeLabel.text = items[indexPath.row]
-//        return cell!
+
         let type = item["Type"] as? Int ?? 0
 //
         if type == 1 {
-//            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
-//                KeyBoardTableViewCell{
-//
-//                cell.selectLabel.text = String(cost)
-//                cell.oneBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.secondBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.thirdBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.fourthBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.fifthBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.sixBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.sevenBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.eightBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.nineBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//                cell.commaBtn.addTarget(self, action: #selector(inputNumbers(_ :)), for:  .touchUpInside)
-//
-//                return cell
-//            }else {
-//                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID")
-//                return cell!
-//            }
-//
+
             if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID") as?
                 SelectItemTableViewCell{
-
+                bottomSheetTitleLabel.text = "카테고리 선택하기"
                 cell.itemTypeLabel.text = items[indexPath.row]
                 Swift.print("아이고\(items[indexPath.row])")
-                Swift.print("아이고\(cell.itemTypeLabel.text)")
                 return cell
             }else {
-                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID")
+                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID")
                 return cell!
             }
-//        } else if type == 2 {
-//
-//            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
-//                KeyBoardTableViewCell{
-//
-//               cell.selectLabel.text = cost
-//
-//
-//                return cell
-//            }else {
-//                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID")
-//                return cell!
-//            }
-//
-//        }
-//        else {
-//            let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID")
-//            return cell!
-//
-//        }
-    }else {
-        let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID")
-        return cell!
-    }
+        }else if type == 2 {
+
+            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
+                KeyBoardTableViewCell{
+                bottomSheetTitleLabel.text = "금액 수정"
+                Swift.print("1번이에요 3 \(cost)")
+                cell.selectLabel.text = String(cost)
+             
+                cell.oneBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.secondBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.thirdBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.fourthBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.fifthBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.sixBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.sevenBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.eightBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.nineBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                return cell
+            }else {
+                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID")
+                return cell!
+            }
+
+        } else if type == 3 {
+
+            if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID") as?
+                KeyBoardTableViewCell{
+                bottomSheetTitleLabel.text = "주유량 수정"
+                cell.selectLabel.text = String(format:"%.2f", liter)
+                cell.currentLabel.text = "L"
+                cell.oneBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.secondBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.thirdBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.fourthBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.fifthBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.sixBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.sevenBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.eightBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+                cell.nineBtn.addTarget(self, action:#selector(inputNumbers(_ :)), for: .touchUpInside)
+
+
+                return cell
+            }else {
+                let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "KeyBoardTableViewCellID")
+                return cell!
+            }
+
+        }  else if type == 4 {
+
+           if let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectFuelTypeCellID") as?
+                SelectFuelTypeCell{
+               bottomSheetTitleLabel.text = "유종 선택"
+               return cell
+           }else {
+               let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectFuelTypeCellID")
+               return cell!
+           }
+
+       }
+        else {
+            let cell = categoryTableViewCell.dequeueReusableCell(withIdentifier: "SelectItemTableViewCellID")
+            return cell!
+
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -164,34 +192,86 @@ extension BottomSheetViewController: UITableViewDataSource {
     }
     
     @objc func inputNumbers(_ sender: UIButton) {
-        var cost : Double = 0.0
-
-        let formatter = NumberFormatter()
-               formatter.numberStyle = .decimal // 1,000,000
-               formatter.locale = Locale.current
-               formatter.maximumFractionDigits = 0 // 허용하는 소숫점 자리수
-        
         let data = sender.titleLabel?.text ?? ""
-
-//
-            costs.append(data)
-            cost += Double(costs) ?? 0.0
-//
-        result = formatter.string(for: cost) ?? ""
-        Swift.print(result)
-//
-//        fillMonetyField.textColor = .black
-//        if recordNum == 0 {
-//            fillMonetyField.text = (result) + "원"
-//        }else {
-//            fillMonetyField.text = (result) + "L"
-//        }
-//
-//
-//        if fillMonetyField.text?.first == "0"{
-//            fillMonetyField.text?.removeFirst()
-//        }
+        if let type = tablelist[0]["Type"] as? Int, type == 2 {
+            if data != "." {
+                if isDecimalCheck{
+                    let check = cost - Double(Int(cost))
+                    if check > 0 {
+                        if let dCost = Double(cost.clean + data) {
+                            cost = dCost
+                            result = priceFormatter(value: cost)
+                        }
+                    }else {
+                        if let dCost = Double(cost.clean+"."+data) {
+                            cost = dCost
+                            result = priceFormatter(value: cost)
+                        }
+                    }
+                }else {
+                    if let dCost = Double(cost.clean + data) {
+                        cost = dCost
+                        result = priceFormatter(value: cost)
+                    }
+                }
+            }else {
+                if let dCost = Double(cost.clean + data) {
+                    cost = dCost
+                    let _costs = cost + 0.1
+                    isDecimalCheck = true
+                    Swift.print("isDecimalCheck1\(isDecimalCheck)")
+                    var checkCost = priceFormatter(value: _costs)
+                    checkCost.removeLast()
+                    result = checkCost
+                }
+                
+            }
+            Swift.print("1번이에요 cost \(cost)")
+            Swift.print("1번이에요 cost2 \(costs)")
+            Swift.print("1번이에요 resultcost \(result)")
+            categoryTableViewCell.reloadData()
+        }else if let type = tablelist[0]["Type"] as? Int, type == 3 {
+            if data != "." {
+                if isDecimalCheck{
+                    let check = liter - Double(Int(liter))
+                    if check >= 0 {
+                        if let dCost = Double(liter.clean + data) {
+                            liter = dCost
+                            result = priceFormatter(value: liter)
+                        }
+                    }else {
+                        if let dCost = Double(liter.clean+"."+data) {
+                            liter = dCost
+                            result = priceFormatter(value: liter)
+                        }
+                    }
+                }else {
+                    if let dCost = Double(liter.clean + data) {
+                        liter = dCost
+                        result = priceFormatter(value: liter)
+                    }
+                }
+            }else {
+                if let dCost = Double(liter.clean + data) {
+                    liter = dCost
+                    let _liters = liter + 0.1
+                    Swift.print("isDecimalCheck2\(isDecimalCheck)")
+                    isDecimalCheck = true
+                    var checkLiter = priceFormatter(value: _liters)
+                    checkLiter.removeLast()
+                    result = checkLiter
+                }
+                
+            }
+            Swift.print("1번이에요 liter \(liter)")
+            Swift.print("1번이에요 literresult \(result)")
+            categoryTableViewCell.reloadData()
+        }else {
+            
+        }
+        
     }
+        
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

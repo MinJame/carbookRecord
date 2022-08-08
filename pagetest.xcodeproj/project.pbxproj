@@ -46,6 +46,8 @@
 		39D63DBF27F14F7900FCC34E /* RepairsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D63DBD27F14F7900FCC34E /* RepairsTableViewCell.swift */; };
 		39D63DC027F14F7900FCC34E /* RepairsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 39D63DBE27F14F7900FCC34E /* RepairsTableViewCell.xib */; };
 		39D7F747284F31750099B07F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D7F746284F31750099B07F /* SearchViewController.swift */; };
+		39E67C6628A0D2D40046C265 /* SelectFuelTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E67C6428A0D2D40046C265 /* SelectFuelTypeCell.swift */; };
+		39E67C6728A0D2D40046C265 /* SelectFuelTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 39E67C6528A0D2D40046C265 /* SelectFuelTypeCell.xib */; };
 		39EAE2BD280E9BEC001ADA46 /* RepairItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EAE2BB280E9BEC001ADA46 /* RepairItemsTableViewCell.swift */; };
 		39EB0B06280FE72C00EB9B5C /* Manager_DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB0B05280FE72C00EB9B5C /* Manager_DB.swift */; };
 		39EB0B08280FF1B100EB9B5C /* CARBOOK_DAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB0B07280FF1B100EB9B5C /* CARBOOK_DAO.swift */; };
@@ -103,6 +105,8 @@
 		39D63DBD27F14F7900FCC34E /* RepairsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairsTableViewCell.swift; sourceTree = "<group>"; };
 		39D63DBE27F14F7900FCC34E /* RepairsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepairsTableViewCell.xib; sourceTree = "<group>"; };
 		39D7F746284F31750099B07F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		39E67C6428A0D2D40046C265 /* SelectFuelTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFuelTypeCell.swift; sourceTree = "<group>"; };
+		39E67C6528A0D2D40046C265 /* SelectFuelTypeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectFuelTypeCell.xib; sourceTree = "<group>"; };
 		39EAE2BB280E9BEC001ADA46 /* RepairItemsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairItemsTableViewCell.swift; sourceTree = "<group>"; };
 		39EB0B05280FE72C00EB9B5C /* Manager_DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager_DB.swift; sourceTree = "<group>"; };
 		39EB0B07280FF1B100EB9B5C /* CARBOOK_DAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CARBOOK_DAO.swift; sourceTree = "<group>"; };
@@ -152,6 +156,7 @@
 				39FD0C71288908F200AA40A8 /* ExtraTableViewCell.swift */,
 				39FD0C6A2888D59600AA40A8 /* CarBookRecordItemTableViewCell.swift */,
 				3922E5EE2893720900F5E9C6 /* SelectItemTableViewCell.swift */,
+				39E67C6428A0D2D40046C265 /* SelectFuelTypeCell.swift */,
 				39FD0C6B2888D59600AA40A8 /* FillOilItemTableViewCell.swift */,
 				3982B1F528854EA900A513CE /* YearListTableViewCell.swift */,
 				39B048BA27E852D700C2E86E /* OilAddTableViewCell.swift */,
@@ -186,6 +191,7 @@
 				393B7C2227EC57E400A13C6A /* OilLocateTableViewCell.xib */,
 				39D63DBE27F14F7900FCC34E /* RepairsTableViewCell.xib */,
 				3982B1F628854EA900A513CE /* YearListTableViewCell.xib */,
+				39E67C6528A0D2D40046C265 /* SelectFuelTypeCell.xib */,
 			);
 			path = layout;
 			sourceTree = "<group>";
@@ -319,6 +325,7 @@
 				39FD0C7A2889335000AA40A8 /* KeyBoardTableViewCell.xib in Resources */,
 				3982B1F828854EA900A513CE /* YearListTableViewCell.xib in Resources */,
 				39D63DC027F14F7900FCC34E /* RepairsTableViewCell.xib in Resources */,
+				39E67C6728A0D2D40046C265 /* SelectFuelTypeCell.xib in Resources */,
 				394DDC392807A036004F56B3 /* OilMonthTotalTableViewCell.xib in Resources */,
 				39B048BD27E852D700C2E86E /* OilAddTableViewCell.xib in Resources */,
 				390F85E6280FC9BF00E6FD30 /* RepairListTableViewCell.xib in Resources */,
@@ -407,6 +414,7 @@
 				391DBF5027FE713100FAC250 /* CollectionViewCellModel.swift in Sources */,
 				3988AE3E27D5C99F00DC82EC /* CarBudgetViewController.swift in Sources */,
 				3986B37D27EAB81500591148 /* RepairViewController.swift in Sources */,
+				39E67C6628A0D2D40046C265 /* SelectFuelTypeCell.swift in Sources */,
 				3982B1F728854EA900A513CE /* YearListTableViewCell.swift in Sources */,
 				39FD0C73288908F200AA40A8 /* ExtraTableViewCell.swift in Sources */,
 				3952411527FD4AE000E3D6DC /* CalendarsViewController.swift in Sources */,

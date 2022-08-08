@@ -505,7 +505,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3W0-Ur-WfH">
-                                                <rect key="frame" x="313" y="23.000000000000004" width="41" height="53.333333333333343"/>
+                                                <rect key="frame" x="313" y="11.000000000000004" width="41" height="53.333333333333343"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="renew_cancel2"/>
                                                 <connections>
@@ -515,8 +515,8 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="3W0-Ur-WfH" firstAttribute="top" secondItem="icb-6D-gL5" secondAttribute="top" constant="23" id="E7J-2p-bfW"/>
-                                            <constraint firstItem="3W0-Ur-WfH" firstAttribute="centerY" secondItem="icb-6D-gL5" secondAttribute="centerY" constant="1" id="ktg-EO-RqH"/>
+                                            <constraint firstItem="3W0-Ur-WfH" firstAttribute="top" secondItem="icb-6D-gL5" secondAttribute="top" constant="10.999999999999943" id="E7J-2p-bfW"/>
+                                            <constraint firstItem="3W0-Ur-WfH" firstAttribute="centerY" secondItem="icb-6D-gL5" secondAttribute="centerY" constant="-11.00000000000005" id="ktg-EO-RqH"/>
                                             <constraint firstAttribute="trailing" secondItem="3W0-Ur-WfH" secondAttribute="trailing" constant="20" symbolic="YES" id="tQY-WX-epT"/>
                                         </constraints>
                                     </view>
@@ -571,6 +571,7 @@
                     <connections>
                         <outlet property="backView" destination="xko-5a-bxr" id="h2t-FE-HNl"/>
                         <outlet property="backgroundView" destination="5xn-8R-UNW" id="Ng2-od-oZg"/>
+                        <outlet property="bottomSheetTitleLabel" destination="lj2-Rv-KOE" id="9x5-T1-pSm"/>
                         <outlet property="categoryTableViewCell" destination="Fj4-7l-OJQ" id="MtQ-Hc-dMQ"/>
                         <outlet property="dismissBtn" destination="3W0-Ur-WfH" id="MDA-yc-DMN"/>
                         <outlet property="mainContainer" destination="T7H-xK-jvW" id="hwe-sN-snd"/>

@@ -12,6 +12,7 @@ import SideMenu
 import BSImagePicker
 import Photos
 import Alamofire
+import PhotosUI
 
 //나중에 데이터 불러올때 사용할 프로토콜
 protocol OilCallbackDelegate{
@@ -35,6 +36,7 @@ class CarBookRecordEditViewController : UIViewController,UINavigationControllerD
     var firstTag : Int = 0
     var secondTag : Int = 0
     var thirdTag : Int = 0
+    var fourthTag : Int = 0
     var oilDelegate : OilCallbackDelegate?
     var userSelectedImages : [UIImage] = []
     override func viewDidLoad() {
@@ -171,7 +173,7 @@ extension CarBookRecordEditViewController: UITableViewDataSource {
                        formatter.numberStyle = .decimal // 1,000,000
                        formatter.locale = Locale.current
                        formatter.maximumFractionDigits = 0 // 허용하는 소숫점 자리수
-                
+            
                 firstTag = cell.selectRecordItemBtn.tag
                 secondTag = cell.fillItemCostBtn.tag
                 thirdTag =  cell.fillFuelLiterBtn.tag
@@ -182,8 +184,11 @@ extension CarBookRecordEditViewController: UITableViewDataSource {
                 
                 cell.fillItemCostBtn.setTitle(priceFormatter(value: expendCost) + "원",for : .normal)
                 cell.fillFuelLiterBtn.setTitle(String(format: "%.2f", (expendCost ?? 0.0)/2168) + "L", for:  .normal)
+               
                 cell.selectRecordItemBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
+                expendLiter = expendCost/2168
                 cell.fillItemCostBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
+                cell.fillFuelLiterBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
                 cell.selectDateBtn.setTitle(date, for: .normal)
                 cell.selectDateBtn.addTarget(self, action:#selector(selectDateBtn(_ :)), for: .touchUpInside)
                 return cell
@@ -196,6 +201,8 @@ extension CarBookRecordEditViewController: UITableViewDataSource {
             if let cell = editTableView.dequeueReusableCell(withIdentifier: "FillOilItemTableViewCellID") as?
                 FillOilItemTableViewCell {
                 
+                fourthTag = cell.fuelTypeBtn.tag
+                cell.fuelTypeBtn.addTarget(self, action: #selector(moveItemBtn(_ :)), for:  .touchUpInside)
                 let first = tablelist[1]["imageFirst"] as? UIImage
                 let second = tablelist[1]["imageSecond"] as? UIImage
                 
@@ -314,17 +321,25 @@ extension CarBookRecordEditViewController: UITableViewDataSource {
         
     }
     
+
+    
     @objc func moveItemBtn(_ sender: UIButton) {
        
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "BottomSheetViewController")
             as? BottomSheetViewController  {
             vc.modalTransitionStyle = .crossDissolve
             vc.modalPresentationStyle = .overFullScreen
-            vc.firstTag = firstTag
-            vc.secondTag = secondTag
-            vc.thirdTag = thirdTag
+            if (sender.tag == 1){
+                vc.firstTag = firstTag
+            }else if (sender.tag == 2){
+                vc.firstTag = secondTag
+            }else if (sender.tag == 3)  {
+                vc.firstTag = thirdTag
+            }else if (sender.tag == 4){
+                vc.firstTag = fourthTag
+            }
             vc.cost = expendCost
-            Swift.print("buttonTag\(firstTag)")
+            vc.liter = expendLiter
             Swift.print("buttonTag\( vc.firstTag)")
             self.present(vc, animated: true)
         }
